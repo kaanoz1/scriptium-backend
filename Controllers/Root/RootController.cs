@@ -1,9 +1,9 @@
+using DTO;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
 using scriptium_backend_dotnet.Controllers.Validation;
 using scriptium_backend_dotnet.DB;
-using scriptium_backend_dotnet.DTOs;
 using scriptium_backend_dotnet.Services;
 
 namespace scriptium_backend_dotnet.Controllers.RootHandler
@@ -22,7 +22,8 @@ namespace scriptium_backend_dotnet.Controllers.RootHandler
         {
             string requestPath = Request.Path.ToString();
 
-            RootDTO? cache = await _cacheService.GetCachedDataAsync<RootDTO>(requestPath);
+            RootUpperDTO? cache = await _cacheService.GetCachedDataAsync<RootUpperDTO>(requestPath);
+            
             if (cache != null)
             {
                 _logger.LogInformation($"Cache data with URL {requestPath} is found. Sending.");
@@ -30,7 +31,7 @@ namespace scriptium_backend_dotnet.Controllers.RootHandler
             }
 
 
-            RootDTO? data = await _db.Root
+            RootUpperDTO? data = await _db.Root
                 .Where(r => r.Scripture.Number == model.ScriptureNumber && r.Latin == model.RootLatin)
                 .AsNoTracking()
                 .IgnoreAutoIncludes()
@@ -77,7 +78,7 @@ namespace scriptium_backend_dotnet.Controllers.RootHandler
                                     .ThenInclude(s => s.Meanings)
                                         .ThenInclude(m => m.Language)
                 .AsSplitQuery()
-                .Select(r => r.ToRootDTO())
+                .Select(r => r.ToRootUpperDTO())
                 .FirstOrDefaultAsync();
 
             if (data == null)
@@ -85,6 +86,7 @@ namespace scriptium_backend_dotnet.Controllers.RootHandler
 
             await _cacheService.SetCacheDataAsync(requestPath, data);
             _logger.LogInformation($"Cache data for URL {requestPath} is renewing");
+
             return Ok(new { data });
         }
     }

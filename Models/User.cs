@@ -11,7 +11,7 @@ namespace scriptium_backend_dotnet.Models
     {
 
         [Required, MaxLength(30)]
-        public string Name { get; set; } = null!;
+        public required string Name { get; set; } = null!;
 
         [MaxLength(30)]
         public string? Surname { get; set; } = null!;

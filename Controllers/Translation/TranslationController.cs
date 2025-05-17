@@ -2,11 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using DTO;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
 using scriptium_backend_dotnet.DB;
-using scriptium_backend_dotnet.DTOs;
 using scriptium_backend_dotnet.Services;
 
 namespace scriptium_backend_dotnet.Controllers.TranslatorsHandler
@@ -24,7 +24,7 @@ namespace scriptium_backend_dotnet.Controllers.TranslatorsHandler
         {
             string requestPath = Request.Path.ToString();
 
-            List<TranslationExpendedDTO>? cache = await _cacheService.GetCachedDataAsync<List<TranslationExpendedDTO>>(requestPath);
+            List<TranslationWithScriptureDTODTO>? cache = await _cacheService.GetCachedDataAsync<List<TranslationWithScriptureDTODTO>>(requestPath);
 
             if (cache != null)
             {
@@ -32,13 +32,13 @@ namespace scriptium_backend_dotnet.Controllers.TranslatorsHandler
                 return Ok(new { data = cache });
             }
 
-            List<TranslationExpendedDTO> data = await _db.Translation
+            List<TranslationWithScriptureDTODTO> data = await _db.Translation
             .AsNoTracking()
             .Include(t => t.Language)
             .Include(t => t.TranslatorTranslations).ThenInclude(tt => tt.Translator).ThenInclude(t => t.Language)
             .Include(t => t.Scripture).ThenInclude(s => s.Meanings).ThenInclude(m => m.Language)
             .AsSplitQuery()
-            .Select(t => t.ToTranslationExpendedDTO()).ToListAsync();
+            .Select(t => t.ToTranslationWithScriptureDTODTO()).ToListAsync();
 
             await _cacheService.SetCacheDataAsync(requestPath, data);
 

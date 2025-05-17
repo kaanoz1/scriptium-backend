@@ -1,4 +1,5 @@
 using System.Security.Claims;
+using DTO;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -6,7 +7,6 @@ using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
 using scriptium_backend_dotnet.Controllers.Validation;
 using scriptium_backend_dotnet.DB;
-using scriptium_backend_dotnet.DTOs;
 using scriptium_backend_dotnet.Models;
 
 namespace scriptium_backend_dotnet.Controllers.SavingHandler

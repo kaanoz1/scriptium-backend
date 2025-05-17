@@ -1,6 +1,6 @@
 using scriptium_backend_dotnet.Models;
 
-namespace scriptium_backend_dotnet.DTOs
+namespace DTO
 {
     public enum CollectionStatus
     {

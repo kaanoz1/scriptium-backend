@@ -28,9 +28,9 @@ namespace scriptium_backend_dotnet.Models
         [Column("updated_at", TypeName = Utility.DBTypeDateTime)]
         public DateTime? UpdatedAt { get; set; }
 
-        public virtual List<CommentNote>? Comments { get; set; }
+        public virtual List<CommentNote> Comments { get; set; } = [];
 
-        public virtual List<LikeNote>? Likes { get; set; }
+        public virtual List<LikeNote> Likes { get; set; } = [];
 
     }
 }

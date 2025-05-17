@@ -1,9 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using DTO;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
 using scriptium_backend_dotnet.Controllers.Validation;
 using scriptium_backend_dotnet.DB;
-using scriptium_backend_dotnet.DTOs;
 using scriptium_backend_dotnet.Services;
 using System.Linq;
 
@@ -24,11 +24,11 @@ namespace scriptium_backend_dotnet.Controllers.QueryHandler
 
             const byte topCount = 10;
 
-            List<TranslationTextExtendedVerseDTO> data;
+            List<TranslationTextWithVerseUpperMeanDTO> data;
 
             string requestPath = Request.Path.ToString() + Request.QueryString.ToString();
 
-            List<TranslationTextExtendedVerseDTO>? cache = await _cacheService.GetCachedDataAsync<List<TranslationTextExtendedVerseDTO>>(requestPath);
+            List<TranslationTextWithVerseUpperMeanDTO>? cache = await _cacheService.GetCachedDataAsync<List<TranslationTextWithVerseUpperMeanDTO>>(requestPath);
             if (cache != null)
             {
                 _logger.LogInformation($"Cache data with URL {requestPath} is found. Sending.");
@@ -51,7 +51,7 @@ namespace scriptium_backend_dotnet.Controllers.QueryHandler
                             .Include(tt => tt.Verse).ThenInclude(v => v.Chapter).ThenInclude(c => c.Section).ThenInclude(s => s.Meanings).ThenInclude(m => m.Language)
                             .Include(tt => tt.Verse).ThenInclude(v => v.Chapter)
                             .AsSplitQuery()
-                            .Select(tt => tt.ToTranslationTextExtendedVerseDTO())
+                            .Select(tt => tt.ToTranslationTextWithVerseUpperMeanDTO())
                             .ToListAsync();
 
             await _cacheService.SetCacheDataAsync(requestPath, data);

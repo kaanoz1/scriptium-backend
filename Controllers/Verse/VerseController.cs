@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 using scriptium_backend_dotnet.Controllers.Validation;
 using scriptium_backend_dotnet.DB;
-using scriptium_backend_dotnet.DTOs;
 using scriptium_backend_dotnet.Models;
 using scriptium_backend_dotnet.Services;
+using DTO;
 
 namespace scriptium_backend_dotnet.Controllers.VerseHandler
 {
@@ -22,9 +22,9 @@ namespace scriptium_backend_dotnet.Controllers.VerseHandler
         {
             string requestPath = Request.Path.ToString();
 
-            VerseDTO? cache = await _cacheService.GetCachedDataAsync<VerseDTO>(requestPath);
+            VerseBothDTO? cache = await _cacheService.GetCachedDataAsync<VerseBothDTO>(requestPath);
 
-            VerseDTO data;
+            VerseBothDTO data;
 
             if (cache != null)
             {
@@ -75,7 +75,7 @@ namespace scriptium_backend_dotnet.Controllers.VerseHandler
                     return NotFound("There is no verse matches with this information.");
                 }
 
-                data = verse.ToVerseDTO();
+                data = verse.ToVerseBothDTO();
 
                 await _cacheService.SetCacheDataAsync(requestPath, data);
                 _logger.LogInformation($"Cache data for URL {requestPath} is renewing");
@@ -94,11 +94,9 @@ namespace scriptium_backend_dotnet.Controllers.VerseHandler
         [HttpGet("{ScriptureNumber}/{SectionNumber}/{ChapterNumber}")]
         public async Task<IActionResult> GetChapter([FromRoute] ChapterValidatedModel model)
         {
-            ChapterConfinedDTO? data;
-
             string requestPath = Request.Path.ToString();
 
-            ChapterConfinedDTO? cache = await _cacheService.GetCachedDataAsync<ChapterConfinedDTO>(requestPath);
+            ChapterBothDTO? cache = await _cacheService.GetCachedDataAsync<ChapterBothDTO>(requestPath);
 
             if (cache != null)  //Checking cache
             {
@@ -106,93 +104,24 @@ namespace scriptium_backend_dotnet.Controllers.VerseHandler
                 return Ok(new { data = cache });
             }
 
-
-            data = await _db.Chapter
-                .Where(c => c.Number == model.ChapterNumber && c.Section.Number == model.SectionNumber && c.Section.Scripture.Number == model.ScriptureNumber).AsNoTracking()
-                .Select(c => new ChapterConfinedDTO
-                {
-                    ScriptureName = c.Section.Scripture.Name,
-                    ScriptureMeanings = c.Section.Scripture.Meanings.Select(m => new ScriptureMeaningDTO
-                    {
-                        Language = new LanguageDTO
-                        {
-                            LangCode = m.Language.LangCode,
-                            LangOwn = m.Language.LangOwn,
-                            LangEnglish = m.Language.LangEnglish
-                        },
-                        Meaning = m.Meaning
-                    }).ToList(),
-                    SectionName = c.Section.Name,
-                    SectionMeanings = c.Section.Meanings.Select(m => new SectionMeaningDTO
-                    {
-                        Language = new LanguageDTO
-                        {
-                            LangCode = m.Language.LangCode,
-                            LangOwn = m.Language.LangOwn,
-                            LangEnglish = m.Language.LangEnglish
-                        },
-                        Meaning = m.Meaning
-                    }).ToList(),
-                    ChapterName = c.Name,
-                    ChapterNumber = c.Number,
-                    Verses = c.Verses.Select(v => new ConfinedVerseDTO
-                    {
-                        Id = v.Id,
-                        Text = v.Text,
-                        TextSimplified = v.TextSimplified,
-                        TextWithoutVowel = v.TextWithoutVowel,
-                        Number = v.Number,
-                        Transliterations = v.Transliterations.Select(t => new TransliterationDTO
-                        {
-                            Transliteration = t.Text,
-                            Language = new LanguageDTO
-                            {
-                                LangCode = t.Language.LangCode,
-                                LangOwn = t.Language.LangOwn,
-                                LangEnglish = t.Language.LangEnglish
-                            },
-                        }).ToList()
-                    }).ToList(),
-                    Translations = c.Section.Scripture.Translations.Select(t => new TranslationWithMultiTextDTO
-                    {
-                        Translation = new TranslationDTO
-                        {
-                            Id = t.Id,
-                            Name = t.Name,
-                            Language = new LanguageDTO
-                            {
-                                LangCode = t.Language.LangCode,
-                                LangOwn = t.Language.LangOwn,
-                                LangEnglish = t.Language.LangEnglish
-                            },
-                            Translators = t.TranslatorTranslations.Select(e => new TranslatorDTO
-                            {
-                                Name = e.Translator.Name,
-                                URL = e.Translator.Url,
-                                Language = new LanguageDTO
-                                {
-                                    LangCode = e.Translator.Language.LangCode,
-                                    LangOwn = e.Translator.Language.LangOwn,
-                                    LangEnglish = e.Translator.Language.LangEnglish
-                                }
-                            }).ToList(),
-                            IsEager = t.EagerFrom.HasValue
-                        },
-                        TranslationTexts = t.TranslationTexts.Where(tx => tx.Verse.ChapterId == c.Id).Select(tx => new TranslationTextSimpleDTO
-                        {
-                            FootNotes = tx.FootNotes.Select(ftn => new FootNoteDTO { Index = ftn.Index, Text = ftn.FootNoteText.Text }).ToList(),
-                            Text = tx.Text
-                        }).ToList(),
-                    }).ToList(),
-                }
-                ).FirstOrDefaultAsync();
-
+            ChapterBothDTO? data = await _db.Chapter
+                .Where(c => c.Number == model.ChapterNumber &&
+                        c.Section.Number == model.SectionNumber &&
+                            c.Section.Scripture.Number == model.ScriptureNumber)
+                .AsNoTracking()
+                .Include(c => c.Section)
+                    .ThenInclude(s => s.Scripture)
+                .Include(c => c.Verses)
+                    .ThenInclude(v => v.TranslationTexts)
+                        .ThenInclude(tt => tt.Translation)
+                            .ThenInclude(t => t.TranslatorTranslations)
+                                .ThenInclude(tt => tt.Translator)
+                                    .ThenInclude(t => t.Language)
+                .Select(c => c.ToChapterBothBaseDTO()).FirstOrDefaultAsync();
 
             if (data == null)
             {
-
                 _logger.LogCritical($"A chapter flaw is found. Chapter: [ScriptureNumber: {model.ScriptureNumber}, SectionNumber: {model.SectionNumber}, ChapterNumber: {model.ChapterNumber}] ");
-
                 return NotFound("There is no scripture matches with this information.");
             }
 
@@ -207,11 +136,10 @@ namespace scriptium_backend_dotnet.Controllers.VerseHandler
         [HttpGet("{ScriptureNumber}/{SectionNumber}")]
         public async Task<IActionResult> GetSection([FromRoute] SectionValidatedModel model)
         {
-            SectionSimpleDTO? data;
 
             string requestPath = Request.Path.ToString();
 
-            SectionSimpleDTO? cache = await _cacheService.GetCachedDataAsync<SectionSimpleDTO>(requestPath);
+            SectionUpperDTO? cache = await _cacheService.GetCachedDataAsync<SectionUpperDTO>(requestPath);
 
             if (cache != null)
             {
@@ -220,30 +148,21 @@ namespace scriptium_backend_dotnet.Controllers.VerseHandler
             }
 
 
-            data = await _db.Section.Include(s => s.Chapters)
+            SectionUpperDTO? data = await _db.Section.Include(s => s.Chapters)
                 .Where(s => s.Number == model.SectionNumber && s.Scripture.Number == model.ScriptureNumber)
                 .AsNoTracking()
-                .Select(s => new SectionSimpleDTO
-                {
-                    ScriptureName = s.Scripture.Name,
-                    ScriptureMeanings = s.Scripture.Meanings.Select(m => new ScriptureMeaningDTO { Language = m.Language.ToLanguageDTO(), Meaning = m.Meaning }).ToList(),
-                    Name = s.Name,
-                    SectionMeanings = s.Meanings.Select(m => new SectionMeaningDTO { Language = m.Language.ToLanguageDTO(), Meaning = m.Meaning }).ToList(),
-                    ChapterCount = s.ChapterCount,
-                }
-                ).FirstOrDefaultAsync();
+                .Include(s => s.Scripture)
+                .Select(s => s.ToSectionUpperDTO()).FirstOrDefaultAsync();
 
 
             if (data == null)
             {
-
                 _logger.LogCritical($"A section flaw is found. Section: [ScriptureNumber: {model.ScriptureNumber}, SectionNumber: {model.SectionNumber}] ");
-
                 return NotFound("There is no scripture matches with this information.");
             }
 
 
-            await _cacheService.SetCacheDataAsync(requestPath, data);
+            await _cacheService.SetCacheDataAsync(requestPath, data, TimeSpan.FromDays(30));
             _logger.LogInformation($"Cache data for URL {requestPath} is renewing");
 
             return Ok(new { data });
@@ -253,11 +172,10 @@ namespace scriptium_backend_dotnet.Controllers.VerseHandler
         [HttpGet("{ScriptureNumber}")]
         public async Task<IActionResult> GetScripture([FromRoute] ScriptureValidatedModel model)
         {
-            ScriptureDTO? data;
 
             string requestPath = Request.Path.ToString();
 
-            ScriptureDTO? cache = await _cacheService.GetCachedDataAsync<ScriptureDTO>(requestPath);
+            ScriptureOneLevelLowerDTO? cache = await _cacheService.GetCachedDataAsync<ScriptureOneLevelLowerDTO>(requestPath);
 
             if (cache != null)  //Checking cache
             {
@@ -265,33 +183,17 @@ namespace scriptium_backend_dotnet.Controllers.VerseHandler
                 return Ok(new { data = cache });
             }
 
-
             //Link queries make it impossible to fetch.
-            data = await _db.Scripture
+            ScriptureOneLevelLowerDTO? data = await _db.Scripture
                 .Where(s => s.Number == model.ScriptureNumber)
                 .AsNoTracking()
-                .Select(s => new ScriptureDTO
-                {
-                    Id = s.Id,
-                    Name = s.Name,
-                    Code = s.Code,
-                    Number = s.Number,
-                    Meanings = s.Meanings.Select(m => new ScriptureMeaningDTO { Language = m.Language.ToLanguageDTO(), Meaning = m.Meaning }).ToList(),
-                    Sections = s.Sections.Select(s => new SectionWithMeaningDTO
-                    {
-                        Name = s.Name,
-                        Meanings = s.Meanings.Select(m => new SectionMeaningDTO { Language = m.Language.ToLanguageDTO(), Meaning = m.Meaning }).ToList(),
-
-                    }).ToList(),
-                }
-                ).FirstOrDefaultAsync();
+                .Include(s => s.Sections)
+                .Select(s => s.ToScriptureOneLevelLowerDTO()).FirstOrDefaultAsync();
 
 
             if (data == null)
             {
-
                 _logger.LogCritical($"An scripture flaw is found. Verse: [ScriptureNumber: {model.ScriptureNumber}] ");
-
                 return NotFound("There is no scripture matches with this information.");
             }
 

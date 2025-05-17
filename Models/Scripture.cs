@@ -12,10 +12,10 @@ namespace scriptium_backend_dotnet.Models
         public required string Name { get; set; }
 
         [Column(TypeName = Utility.DBTypeCHAR1), MaxLength(1), Required]
-        public required string Code { get; set; }
+        public required char Code { get; set; }
 
         [NotMapped]
-        public short SectionCount => (short)(Sections?.Count ?? -1);
+        public short SectionCount => (short)(Sections?.Count ?? -1); 
 
         [Required, Column(TypeName = Utility.DBType8bitInteger)]
         public required byte Number { get; set; }

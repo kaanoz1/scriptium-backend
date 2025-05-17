@@ -19,7 +19,7 @@ namespace scriptium_backend_dotnet.Models
 
         public virtual Scripture Scripture { get; set; } = null!;
 
-        public virtual List<Word>? Words { get; set; }
+        public virtual List<Word> Words { get; set; } = [];
 
         [NotMapped]
         public int WordCount => Words?.Count ?? -1;

@@ -1404,24 +1404,6 @@ public static class Utility
             }
         };
 
-    // public static Dictionary<string, object> DecomposeUser(User UserDecomposed, List<string>? UserRoles = null) This function is just for testing.
-    // {
-    //     return new()
-    //         {
-    //             { "id", UserDecomposed.Id },
-    //             { "username", UserDecomposed.UserName ?? string.Empty },
-    //             { "name", UserDecomposed.Name ?? string.Empty },
-    //             { "surname", UserDecomposed.Surname ?? string.Empty },
-    //             { "biography", UserDecomposed.Biography ?? string.Empty },
-    //             { "image", UserDecomposed.Image != null ? Convert.ToBase64String(UserDecomposed.Image) : null! },
-    //             { "privateFrom", UserDecomposed.IsPrivate! },
-    //             { "createdAt", UserDecomposed.CreatedAt }
-    //             ,{"updateCount", UserDecomposed.UpdateCount - 1},
-    //             { "roles", UserRoles ?? null!}
-
-    //         };
-
-    // }
     public static IRuleBuilderOptions<T, string> AuthenticationUsernameRules<T>(this IRuleBuilder<T, string> ruleBuilder)
     {
         return ruleBuilder

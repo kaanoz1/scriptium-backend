@@ -1,5 +1,6 @@
 using System.Security.Claims;
 using AngleSharp.Dom;
+using DTO;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -7,7 +8,6 @@ using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
 using scriptium_backend_dotnet.Controllers.Validation;
 using scriptium_backend_dotnet.DB;
-using scriptium_backend_dotnet.DTOs;
 using scriptium_backend_dotnet.Models;
 using scriptium_backend_dotnet.Models.Util;
 using static System.Runtime.InteropServices.JavaScript.JSType;
@@ -26,69 +26,54 @@ namespace scriptium_backend_dotnet.Controllers.LikeHandler
         public async Task<IActionResult> GetLikes()
         {
 
-            string? UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            string? userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            if (UserId == null)
+            if (userId == null)
                 return Unauthorized();
 
-            User? UserRequested = await _userManager.FindByIdAsync(UserId);
+            User? userRequested = await _userManager.FindByIdAsync(userId);
 
-            if (UserRequested == null)
+            if (userRequested == null)
                 return NotFound(new { message = "User not found." });
 
             try
             {
-                List<CommentDTOExtended>? comments = await _db.Comment
-                   .Where(c => c.LikeComments.Any(lc => lc.Like.UserId == UserRequested.Id) && c.CommentVerse != null)
-                    .Include(c => c.CommentVerse).ThenInclude(cv => cv.Verse).ThenInclude(v => v.Chapter).ThenInclude(c => c.Section).ThenInclude(s => s.Scripture).ThenInclude(s => s.Meanings).ThenInclude(m => m.Language)
-                    .Include(c => c.CommentVerse).ThenInclude(cv => cv.Verse).ThenInclude(v => v.Chapter).ThenInclude(c => c.Section).ThenInclude(s => s.Meanings).ThenInclude(m => m.Language)
-                    .Include(c => c.CommentVerse).ThenInclude(cv => cv.Verse).ThenInclude(v => v.Chapter).ThenInclude(c => c.Meanings).ThenInclude(m => m.Language)
-                    .AsSplitQuery()
-                    .Select(comment => new CommentDTOExtended
-                    {
-                        Id = comment.Id,
-                        User = comment.User.ToUserDTO(),
-                        Text = comment.Text,
-                        CreatedAt = comment.CreatedAt,
-                        UpdatedAt = comment.UpdatedAt,
-                        ParentCommentId = comment.ParentCommentId,
-                        LikeCount = comment.LikeCount,
-                        ReplyCount = comment.ReplyCount,
-                        IsLiked = true,
-                        Verse = comment.CommentVerse.Verse.ToVerseSimpleDTO()
-
-                    })
+                List<CommentOwnVerseDTO> verseComments = await _db.Comment
+                   .Where(c => c.LikeComments.Any(lc => lc.Like.UserId == userRequested.Id) && c.CommentVerse != null)
+                    .Include(c => c.CommentVerse).ThenInclude(cv => cv!.Verse).ThenInclude(v => v.Chapter).ThenInclude(c => c.Section).ThenInclude(s => s.Scripture).ThenInclude(s => s.Meanings).ThenInclude(m => m.Language) //cv is not null. Checked in Where()
+                    .Include(c => c.CommentVerse).ThenInclude(cv => cv!.Verse).ThenInclude(v => v.Chapter).ThenInclude(c => c.Section).ThenInclude(s => s.Meanings).ThenInclude(m => m.Language)  //cv is not null. Checked in Where()
+                    .Include(c => c.CommentVerse).ThenInclude(cv => cv!.Verse).ThenInclude(v => v.Chapter).ThenInclude(c => c.Meanings).ThenInclude(m => m.Language)  //cv is not null. Checked in Where()
+                    .AsSplitQuery() 
+                    .Select(comment => comment.ToCommentOwnVerseDTO(true)) //Already checked in Where()
                     .ToListAsync();
 
-                List<LikedNoteDTO> notes = await _db.Note
-                   .Where(n => n.Likes.Any(ln => ln.Like.UserId == UserRequested.Id))
+                List<CommentOwnNoteDTO> noteComments = await _db.Comment
+                   .Where(c => c.LikeComments.Any(lc => lc.Like.UserId == userRequested.Id) && c.CommentNote != null)
+                    .Include(c => c.CommentNote).ThenInclude(cn => cn!.Note).ThenInclude(cv => cv.Verse).ThenInclude(v => v.Chapter).ThenInclude(c => c.Section).ThenInclude(s => s.Scripture).ThenInclude(s => s.Meanings).ThenInclude(m => m.Language)  //cn is not null. Checked in Where()
+                    .Include(c => c.CommentNote).ThenInclude(cn => cn!.Note).ThenInclude(cv => cv.Verse).ThenInclude(v => v.Chapter).ThenInclude(c => c.Section).ThenInclude(s => s.Meanings).ThenInclude(m => m.Language)  //cn is not null. Checked in Where()
+                    .Include(c => c.CommentNote).ThenInclude(cn => cn!.Note).ThenInclude(cv => cv.Verse).ThenInclude(v => v.Chapter).ThenInclude(c => c.Meanings).ThenInclude(m => m.Language)  //cn is not null. Checked in Where()
+                    .AsSplitQuery()
+                    .Select(comment => comment.ToCommentOwnNoteDTO(true)) //Already checked in Where()
+                    .ToListAsync();
+
+                List<NoteOwnDTO> notes = await _db.Note
+                   .Where(n => n.Likes.Any(ln => ln.Like.UserId == userRequested.Id))
                     .Include(cv => cv.Verse).ThenInclude(v => v.Chapter).ThenInclude(c => c.Section).ThenInclude(s => s.Scripture).ThenInclude(s => s.Meanings).ThenInclude(m => m.Language)
                     .Include(cv => cv.Verse).ThenInclude(v => v.Chapter).ThenInclude(c => c.Section).ThenInclude(s => s.Meanings).ThenInclude(m => m.Language)
                     .Include(cv => cv.Verse).ThenInclude(v => v.Chapter).ThenInclude(c => c.Meanings).ThenInclude(m => m.Language)
                     .AsSplitQuery()
-                    .Select(note => new LikedNoteDTO
-                    {
-                        Id = note.Id,
-                        NoteText = note.Text,
-                        User = note.User.ToUserDTO(),
-                        CreatedAt = note.CreatedAt,
-                        UpdatedAt = note.UpdatedAt,
-                        LikeCount = note.Likes.Count,
-                        ReplyCount = note.Comments.Count,
-                        IsLiked = true,
-                        Verse = note.Verse.ToVerseSimpleDTO()
-                    })
+                    .Select(n => n.ToNoteOwnDTO(true)) //Already checked in Where()
                      .ToListAsync();
 
 
-                _logger.LogInformation($"Operation completed: User: [Id: {UserRequested.Id}, Username: {UserRequested.UserName}] has demanded his like records. C: {comments.Count} + N: {notes.Count} row has ben returned.");
+                _logger.LogInformation($"Operation completed: User: [Id: {userRequested.Id}, Username: {userRequested.UserName}] has demanded his like records. C: {verseComments.Count} + NC {noteComments.Count} + N: {notes.Count} row has ben returned.");
 
-                return Ok(new { data = new { comments, notes } });
+                return Ok(new { data = new { verseComments, noteComments, notes } });
             }
             catch (Exception)
             {
 
-                _logger.LogError($"Error occurred, while: User: [Id: {UserRequested.Id}, Username: {UserRequested.UserName}] is demanding like records.");
+                _logger.LogError($"Error occurred, while: User: [Id: {userRequested.Id}, Username: {userRequested.UserName}] is demanding like records.");
 
                 return BadRequest(new { message = "Something went unexpectedly wrong?" });
 
@@ -249,14 +234,14 @@ namespace scriptium_backend_dotnet.Controllers.LikeHandler
         [HttpPost, Route("comment/verse")]
         public async Task<IActionResult> LikeCommentVerse([FromBody] CommentLikeProcessModel model)
         {
-            string? UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            string? userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            if (UserId == null)
+            if (userId == null)
                 return Unauthorized();
 
-            User? UserRequested = await _userManager.FindByIdAsync(UserId);
+            User? userRequested = await _userManager.FindByIdAsync(userId);
 
-            if (UserRequested == null)
+            if (userRequested == null)
                 return NotFound(new { message = "User not found." });
 
             using var transaction = await _db.Database.BeginTransactionAsync();
@@ -271,33 +256,33 @@ namespace scriptium_backend_dotnet.Controllers.LikeHandler
 
                 if (CommentLiked == null)
                 {
-                    _logger.LogWarning($"Not Found, while: User: [Id: {UserRequested.Id}, Username: {UserRequested.UserName}] is trying to like Claimed Comment: [model.CommentId: {model.CommentId}] on Verse: [Id: {VerseTarget.Id}]");
+                    _logger.LogWarning($"Not Found, while: User: [Id: {userRequested.Id}, Username: {userRequested.UserName}] is trying to like Claimed Comment: [model.CommentId: {model.CommentId}] on Verse: [Id: {VerseTarget.Id}]");
                     return NotFound(new { message = "Comment not found." });
                 }
 
                 bool isAlreadyLiked = await _db.LikeComment.Include(c => c.Like).AnyAsync(lc =>
                     lc.CommentId == CommentLiked.Id &&
                     lc.Like != null &&
-                    lc.Like.UserId == UserRequested.Id
+                    lc.Like.UserId == userRequested.Id
                 );
 
                 if (isAlreadyLiked)
                 {
-                    _logger.LogWarning($"Conflict, while: User: [Id: {UserRequested.Id}, Username: {UserRequested.UserName}] is trying to like Comment: [Id: {CommentLiked.Id} on Verse: [Id: {VerseTarget.Id}]. User already liked this comment.");
+                    _logger.LogWarning($"Conflict, while: User: [Id: {userRequested.Id}, Username: {userRequested.UserName}] is trying to like Comment: [Id: {CommentLiked.Id} on Verse: [Id: {VerseTarget.Id}]. User already liked this comment.");
                     return Conflict(new { message = "You have already liked this comment!" });
                 }
 
-                HashSet<long> LikeableVerseCommentIds = _db.GetAvailableVerseCommentIds(UserRequested.Id, VerseTarget.Id);
+                HashSet<long> LikeableVerseCommentIds = _db.GetAvailableVerseCommentIds(userRequested, VerseTarget.Id);
 
                 if (!LikeableVerseCommentIds.Contains(CommentLiked.Id))
                 {
-                    _logger.LogWarning($"Unauthorized, while: User: [Id: {UserRequested.Id}, Username: {UserRequested.UserName}] is trying to like Comment: [Id: {CommentLiked.Id}, CommentOwnerUsername: {CommentLiked.User.UserName}] on Verse: [Id: {VerseTarget.Id}] User does not have permission to like.");
+                    _logger.LogWarning($"Unauthorized, while: User: [Id: {userRequested.Id}, Username: {userRequested.UserName}] is trying to like Comment: [Id: {CommentLiked.Id}, CommentOwnerUsername: {CommentLiked.User.UserName}] on Verse: [Id: {VerseTarget.Id}] User does not have permission to like.");
                     return Unauthorized(new { message = "You do not have permission to attach comment to this note" });
                 }
 
                 Like LikeCreated = new()
                 {
-                    UserId = UserRequested.Id,
+                    UserId = userRequested.Id,
                 };
 
                 LikeComment LikeCommentCreated = new()
@@ -312,7 +297,7 @@ namespace scriptium_backend_dotnet.Controllers.LikeHandler
 
                 await _db.SaveChangesAsync();
 
-                _logger.LogInformation($"Operation completed.  User: [Id: {UserRequested.Id}, Username: {UserRequested.UserName}] has successfully liked Comment: [Id: {CommentLiked.Id}] on Verse: [Id: {VerseTarget.Id}]");
+                _logger.LogInformation($"Operation completed.  User: [Id: {userRequested.Id}, Username: {userRequested.UserName}] has successfully liked Comment: [Id: {CommentLiked.Id}] on Verse: [Id: {VerseTarget.Id}]");
 
                 await transaction.CommitAsync();
 
@@ -321,7 +306,7 @@ namespace scriptium_backend_dotnet.Controllers.LikeHandler
             catch (Exception ex)
             {
 
-                _logger.LogError($"Error occurred, while: User: [Id: {UserRequested.Id}, Username: {UserRequested.UserName}] is trying to like Comment: [Id: {model.EntityId}. Error Details: {ex}");
+                _logger.LogError($"Error occurred, while: User: [Id: {userRequested.Id}, Username: {userRequested.UserName}] is trying to like Comment: [Id: {model.EntityId}. Error Details: {ex}");
 
 
                 await transaction.RollbackAsync();

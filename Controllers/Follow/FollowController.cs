@@ -1,4 +1,5 @@
 using System.Security.Claims;
+using DTO;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -6,7 +7,6 @@ using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
 using scriptium_backend_dotnet.Controllers.Validation;
 using scriptium_backend_dotnet.DB;
-using scriptium_backend_dotnet.DTOs;
 using scriptium_backend_dotnet.Models;
 using scriptium_backend_dotnet.Models.Util;
 
@@ -20,8 +20,8 @@ namespace scriptium_backend_dotnet.Controllers.FollowHandler
         private readonly UserManager<User> _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
         private readonly ILogger<FollowController> _logger = logger ?? throw new ArgumentNullException(nameof(logger));
 
-        [HttpGet("follower/{type}")]
-        public async Task<IActionResult> GetFollower([FromRoute] FollowStatus type)
+        [HttpGet("follower/{followType}")]
+        public async Task<IActionResult> GetFollower([FromRoute] FollowStatus followType)
         {
             string? UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (UserId == null)
@@ -34,8 +34,8 @@ namespace scriptium_backend_dotnet.Controllers.FollowHandler
 
             try
             {
-                List<FollowUserDTO>? data = await _db.Follow
-                    .Where(f => f.FollowedId == UserRequested.Id && f.Status == type).Include(f => f.Follower)
+                List<FollowerUserDTO>? data = await _db.Follow
+                    .Where(f => f.FollowedId == UserRequested.Id && f.Status == followType).Include(f => f.Follower)
                     .Select(f => f.ToFollowerUserDTO())
                     .ToListAsync();
 
@@ -50,8 +50,8 @@ namespace scriptium_backend_dotnet.Controllers.FollowHandler
             }
         }
 
-        [HttpGet, Route("followed/{type}")]
-        public async Task<IActionResult> GetFollowed([FromRoute] FollowStatus type)
+        [HttpGet, Route("followed/{followType}")]
+        public async Task<IActionResult> GetFollowed([FromRoute] FollowStatus followType)
         {
             string? UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
@@ -65,9 +65,9 @@ namespace scriptium_backend_dotnet.Controllers.FollowHandler
 
             try
             {
-                List<FollowUserDTO>? data = await _db.Follow.OrderByDescending(f => f.OccurredAt)
-                .Where(f => f.FollowerId == UserRequested.Id && f.Status == type).Include(f => f.Followed)
-                .Select(f => f.ToFollowingUserDTO()).ToListAsync();
+                List<FollowedUserDTO>? data = await _db.Follow.OrderByDescending(f => f.OccurredAt)
+                .Where(f => f.FollowerId == UserRequested.Id && f.Status == followType).Include(f => f.Followed)
+                .Select(f => f.ToFollowedUserDTO()).ToListAsync();
 
                 _logger.LogInformation($"Operation completed: User: [Id: {UserRequested.Id}, Username: {UserRequested.UserName}] has demanded his followED records. {data.Count} row has ben returned.");
                 return Ok(new { data });

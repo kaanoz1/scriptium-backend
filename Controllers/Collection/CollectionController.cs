@@ -1,4 +1,5 @@
 using System.Security.Claims;
+using DTO;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -6,7 +7,6 @@ using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
 using scriptium_backend_dotnet.Controllers.Validation;
 using scriptium_backend_dotnet.DB;
-using scriptium_backend_dotnet.DTOs;
 using scriptium_backend_dotnet.Models;
 using static System.Collections.Specialized.BitVector32;
 
@@ -77,84 +77,41 @@ namespace scriptium_backend_dotnet.Controllers.CollectionHandler
             int Limit = 30;
             int Skip = (Page - 1) * Limit;
 
-            List<VerseCollectionDTO> data = await _db.CollectionVerse
+            List<VerseUpperDTO> data = await _db.CollectionVerse
                 .Where(cv => cv.CollectionId == CollectionId)
                 .OrderBy(cv => cv.Id)
                 .Skip(Skip)
                 .Take(Limit)
+                .IgnoreAutoIncludes()
                 .Select(cv => cv.Verse)
-                .Select(verse => new VerseCollectionDTO
-                {
-                    Id = verse.Id,
-                    Number = verse.Number,
-                    Text = verse.Text,
-                    TextWithoutVowel = verse.TextWithoutVowel,
-                    TextSimplified = verse.TextSimplified,
-                    Transliterations = verse.Transliterations.Select(e => e.ToTransliterationDTO()).ToList(),
-                    ChapterNumber = verse.Chapter.Number,
-                    Section = new SectionDTO
-                    {
-                        Name = verse.Chapter.Section.Name,
-                        Number = verse.Chapter.Section.Number,
-                        Scripture = new ScriptureConfinedDTO
-                        {
-                            Name = verse.Chapter.Section.Scripture.Name,
-                            Code = verse.Chapter.Section.Scripture.Code,
-                            Number = verse.Chapter.Section.Scripture.Number,
-                            Meanings = verse.Chapter.Section.Scripture.Meanings.Select(scriptureMeaning => new ScriptureMeaningDTO
-                            {
-                                Meaning = scriptureMeaning.Meaning,
-                                Language = new LanguageDTO
-                                {
-                                    LangCode = scriptureMeaning.Language.LangCode,
-                                    LangOwn = scriptureMeaning.Language.LangOwn,
-                                    LangEnglish = scriptureMeaning.Language.LangEnglish
-                                }
-                            }).ToList()
-                        },
-                        Meanings = verse.Chapter.Section.Meanings.Select(sectionMeaning => new SectionMeaningDTO
-                        {
-                            Meaning = sectionMeaning.Meaning,
-                            Language = new LanguageDTO
-                            {
-                                LangCode = sectionMeaning.Language.LangCode,
-                                LangOwn = sectionMeaning.Language.LangOwn,
-                                LangEnglish = sectionMeaning.Language.LangEnglish
-                            }
-                        }).ToList()
-                    },
-                    Translations = verse.Chapter.Section.Scripture.Translations.Select(translation => new TranslationWithSingleTextDTO
-                    {
-                        Translation = new TranslationDTO
-                        {
-                            Id = translation.Id,
-                            Name = translation.Name,
-                            Language = new LanguageDTO
-                            {
-                                LangCode = translation.Language.LangCode,
-                                LangOwn = translation.Language.LangOwn,
-                                LangEnglish = translation.Language.LangEnglish
-                            },
-                            Translators = translation.TranslatorTranslations.Select(translatorTranslation => new TranslatorDTO
-                            {
-                                Name = translatorTranslation.Translator.Name,
-                                URL = translatorTranslation.Translator.Url,
-                                Language = new LanguageDTO
-                                {
-                                    LangCode = translatorTranslation.Translator.Language.LangCode,
-                                    LangOwn = translatorTranslation.Translator.Language.LangOwn,
-                                    LangEnglish = translatorTranslation.Translator.Language.LangEnglish
-                                }
-                            }).ToList(),
-                            IsEager = translation.EagerFrom.HasValue
-                        },
-                        TranslationText = translation.TranslationTexts.Where(tx => tx.Verse.Id == verse.Id).Select(tx => new TranslationTextSimpleDTO
-                        {
-                            FootNotes = tx.FootNotes.Select(ftn => new FootNoteDTO { Index = ftn.Index, Text = ftn.FootNoteText.Text }).ToList(),
-                            Text = tx.Text
-                        }).First(),
-                    }).ToList(),
-                }).ToListAsync();
+                    .AsNoTracking()
+                    .Include(v => v.Chapter)
+                        .ThenInclude(c => c.Section)
+                            .ThenInclude(c => c.Scripture)
+                                .ThenInclude(c => c.Meanings)
+                                    .ThenInclude(m => m.Language)
+                    .Include(v => v.Chapter)
+                        .ThenInclude(c => c.Section.Meanings)
+                            .ThenInclude(m => m.Language)
+                    .Include(v => v.Chapter)
+                        .ThenInclude(c => c.Meanings)
+                            .ThenInclude(m => m.Language)
+                    .Include(v => v.Words)
+                        .ThenInclude(w => w.Roots)
+                    .Include(v => v.Transliterations)
+                        .ThenInclude(t => t.Language)
+                    .Include(v => v.TranslationTexts)
+                        .ThenInclude(t => t.Translation)
+                            .ThenInclude(t => t.Language)
+                    .Include(v => v.TranslationTexts)
+                        .ThenInclude(t => t.Translation)
+                            .ThenInclude(t => t.TranslatorTranslations)
+                                .ThenInclude(tt => tt.Translator)
+                                    .ThenInclude(t => t.Language)
+                    .Include(v => v.TranslationTexts)
+                        .ThenInclude(t => t.FootNotes)
+                            .ThenInclude(f => f.FootNoteText)
+                .Select(v => v.ToVerseUpperDTO(true)).ToListAsync();
 
 
             _logger.LogInformation($@"Operation completed: User: [Id: {UserRequested.Id}, Username: {UserRequested.UserName}] has demanded collection verses from Collection [Id: {CollectionId}]. {data.Count} row has been returned for page: {Page}.");

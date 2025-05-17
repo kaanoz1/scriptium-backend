@@ -28,7 +28,7 @@ namespace scriptium_backend_dotnet.Models
 
         public virtual Comment? ParentComment { get; set; }
 
-        public virtual List<Comment>? Replies { get; set; }
+        public virtual List<Comment> Replies { get; set; } = [];
 
         public long? CommentVerseId { get; set; } = null!;
 
@@ -38,7 +38,7 @@ namespace scriptium_backend_dotnet.Models
 
         public virtual CommentNote? CommentNote { get; set; }
 
-        public virtual List<LikeComment>? LikeComments { get; set; }
+        public virtual List<LikeComment> LikeComments { get; set; } = [];
 
         [NotMapped]
         public long LikeCount => LikeComments?.Count ?? 0;

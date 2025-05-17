@@ -1,4 +1,5 @@
 using System.Security.Claims;
+using DTO;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -6,7 +7,6 @@ using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
 using scriptium_backend_dotnet.Controllers.Validation;
 using scriptium_backend_dotnet.DB;
-using scriptium_backend_dotnet.DTOs;
 using scriptium_backend_dotnet.Models;
 using scriptium_backend_dotnet.Models.Util;
 
@@ -36,12 +36,12 @@ namespace scriptium_backend_dotnet.Controllers.NoteHandler
             try
             {
 
-                List<NoteDTOExtended> data = await _db.Note.Where(n => n.UserId == UserRequested.Id)
+                List<NoteOwnDTO> data = await _db.Note.Where(n => n.UserId == UserRequested.Id)
                     .Include(n => n.Likes).ThenInclude(l => l.Like)
                     .Include(n => n.Verse).ThenInclude(n => n.Chapter).ThenInclude(c => c.Meanings)
                     .Include(n => n.Verse).ThenInclude(n => n.Chapter).ThenInclude(c => c.Section).ThenInclude(s => s.Scripture)
                     .AsSplitQuery()
-                    .Select(n => n.ToNoteDTOExtended(UserRequested)).ToListAsync();
+                    .Select(n => n.ToNoteOwnDTO(UserRequested)).ToListAsync();
 
                 _logger.LogInformation($"Operation completed: User: [Id: {UserRequested.Id}, Username: {UserRequested.UserName}] has demanded his note records. {data.Count} row has ben returned.");
                 return Ok(new { data });
@@ -82,15 +82,14 @@ namespace scriptium_backend_dotnet.Controllers.NoteHandler
                         .ToHashSet();
 
 
-                List<NoteDTO> data = await _db.Note
+                List<NoteOwnerDTO> data = await _db.Note
                     .Where(n => n.VerseId == VerseAttached.Id &&
                               (n.UserId == UserRequested.Id || FollowedUserIds.Contains(n.UserId)))
-
                                .Include(n => n.User)
                                .Include(n => n.Likes).ThenInclude(l => l.Like)
                                .Include(n => n.Comments)
                                .AsSplitQuery()
-                                .Select(n => n.ToNoteDTO(UserRequested))
+                                .Select(n => n.ToNoteOwnerDTO(UserRequested))
                                .ToListAsync();
 
                 _logger.LogInformation($"Operation completed: User: [Id: {UserRequested.Id}, Username: {UserRequested.UserName}] has demanded his note records attached on Verse: [Id: {VerseAttached.Id}]. {data.Count} row has ben returned.");

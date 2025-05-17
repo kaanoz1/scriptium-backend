@@ -27,9 +27,9 @@ namespace scriptium_backend_dotnet.Models
 
         public virtual Verse Verse { get; set; } = null!;
 
-        public virtual List<Root>? Roots { get; set; }
+        public virtual List<Root> Roots { get; set; } = [];
 
-        public virtual List<WordMeaning>? WordMeanings { get; set; }
+        public virtual List<WordMeaning> WordMeanings { get; set; } = [];
 
     }
 }

@@ -8,7 +8,7 @@ namespace scriptium_backend_dotnet.Services
     public interface ICacheService
     {
         Task<T?> GetCachedDataAsync<T>(string key);
-        Task SetCacheDataAsync<T>(string key, T data, double? ExpirationDayCount = 10);
+        Task SetCacheDataAsync<T>(string key, T data, TimeSpan? ExpirationTime = null);
     }
 
     public class CacheService(ApplicationDBContext db) : ICacheService
@@ -47,7 +47,7 @@ namespace scriptium_backend_dotnet.Services
         }
 
 
-        public async Task SetCacheDataAsync<T>(string key, T data, double? ExpirationDayCount)
+        public async Task SetCacheDataAsync<T>(string key, T data, TimeSpan? ExpirationTime = null)
         {
             string jsonData = JsonSerializer.Serialize(data);
 
@@ -60,11 +60,12 @@ namespace scriptium_backend_dotnet.Services
             }
             else
             {
-                var cacheEntry = new Cache
+
+                Cache cacheEntry = new ()
                 {
                     Key = key,
                     Data = jsonData,
-                    ExpirationDate = DateTime.UtcNow + TimeSpan.FromDays(ExpirationDayCount ?? 10)
+                    ExpirationDate = DateTime.UtcNow + (ExpirationTime ?? TimeSpan.FromDays(10))
                 };
 
                 _db.Cache.Add(cacheEntry);
