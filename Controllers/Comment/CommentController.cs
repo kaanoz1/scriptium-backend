@@ -71,7 +71,6 @@ As for notes. Notes considered top comment for user whoever belongs to. (Will be
 
 namespace scriptium_backend_dotnet.Controllers.CommentHandler
 {
-
     /// <summary>
     /// This controller consists of common operations for the 'Comment' model. This handler is also marked as "Authorize" because all operations this controller own require Authentication. For comprehensive information please check the following:
     /// </summary>
@@ -135,10 +134,16 @@ namespace scriptium_backend_dotnet.Controllers.CommentHandler
     /// </list>
     /// </remarks>
     [ApiController, Route("comment"), Authorize, EnableRateLimiting(policyName: "InteractionControllerRateLimit")]
-    public class CommentController(ApplicationDBContext db, UserManager<User> userManager, ILogger<CommentController> logger) : ControllerBase
+    public class CommentController(
+        ApplicationDBContext db,
+        UserManager<User> userManager,
+        ILogger<CommentController> logger) : ControllerBase
     {
         private readonly ApplicationDBContext _db = db ?? throw new ArgumentNullException(nameof(db));
-        private readonly UserManager<User> _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
+
+        private readonly UserManager<User> _userManager =
+            userManager ?? throw new ArgumentNullException(nameof(userManager));
+
         private readonly ILogger<CommentController> _logger = logger ?? throw new ArgumentNullException(nameof(logger));
 
         /// <summary>
@@ -162,50 +167,99 @@ namespace scriptium_backend_dotnet.Controllers.CommentHandler
                 return NotFound(new { message = "User not found." });
 
             HashSet<Guid> FollowedUserIds = _db.Follow
-              .Where(f => f.FollowerId == userRequested.Id && f.Followed.IsPrivate.HasValue && f.Status == FollowStatus.Accepted)
-              .Select(f => f.FollowedId)
-              .ToHashSet();
+                .Where(f => f.FollowerId == userRequested.Id && f.Followed.IsPrivate.HasValue &&
+                            f.Status == FollowStatus.Accepted)
+                .Select(f => f.FollowedId)
+                .ToHashSet();
 
-
-            List<Comment>? Comments = await _db.Comment
-                .Where(c => c.UserId == userRequested.Id && c.CommentVerse != null && c.CommentVerse.Verse != null && (c.ParentComment == null || c.ParentComment.User != null))
+       
+            List<Comment>? fetchedVerseComments = await _db.Comment
+                .Where(c => c.UserId == userRequested.Id && c.CommentVerse != null && c.CommentVerse.Verse != null &&
+                            (c.ParentComment == null || c.ParentComment.User != null))
                 .Include(c => c.CommentVerse)
-                    .ThenInclude(cv => cv!.Verse) //Already checked in Where()
-                        .ThenInclude(v => v.Chapter)
-                            .ThenInclude(c => c.Section)
-                                .ThenInclude(s => s.Scripture)
-                                    .ThenInclude(s => s.Meanings)
-                                        .ThenInclude(m => m.Language)
+                .ThenInclude(cv => cv!.Verse) //Already checked in Where()
+                .ThenInclude(v => v.Chapter)
+                .ThenInclude(c => c.Section)
+                .ThenInclude(s => s.Scripture)
+                .ThenInclude(s => s.Meanings)
+                .ThenInclude(m => m.Language)
                 .Include(c => c.CommentVerse)
-                    .ThenInclude(cv => cv!.Verse) //Already checked in Where()
-                        .ThenInclude(v => v.Chapter)
-                            .ThenInclude(c => c.Section)
-                                .ThenInclude(s => s.Meanings)
-                                    .ThenInclude(m => m.Language)
+                .ThenInclude(cv => cv!.Verse) //Already checked in Where()
+                .ThenInclude(v => v.Chapter)
+                .ThenInclude(c => c.Section)
+                .ThenInclude(s => s.Meanings)
+                .ThenInclude(m => m.Language)
                 .Include(c => c.CommentVerse)
-                    .ThenInclude(cv => cv!.Verse) //Already checked in Where()
-                        .ThenInclude(v => v.Chapter)
-                            .ThenInclude(c => c.Meanings)
-                                .ThenInclude(m => m.Language)
+                .ThenInclude(cv => cv!.Verse) //Already checked in Where()
+                .ThenInclude(v => v.Chapter)
+                .ThenInclude(c => c.Meanings)
+                .ThenInclude(m => m.Language)
                 .Include(c => c.User)
                 .Include(c => c.ParentComment)
-                    .ThenInclude(c => c!.User) //Already checked in Where()
+                .ThenInclude(c => c!.User) //Already checked in Where()
                 .AsSplitQuery()
                 .ToListAsync();
 
-            List<CommentOwnDTO> data = [];
+            List<Comment> fetchedNoteComments = await _db.Comment
+                .Where(c => c.UserId == userRequested.Id && c.CommentVerse != null && c.CommentNote.Note != null &&
+                            (c.ParentComment == null || c.ParentComment.User != null))
+                .Include(c => c.CommentNote)
+                .ThenInclude(n => n.Note)
+                .ThenInclude(cv => cv!.Verse) //Already checked in Where()
+                .ThenInclude(v => v.Chapter)
+                .ThenInclude(c => c.Section)
+                .ThenInclude(s => s.Scripture)
+                .ThenInclude(s => s.Meanings)
+                .ThenInclude(m => m.Language)
+                .Include(c => c.CommentVerse)
+                .ThenInclude(cv => cv!.Verse) //Already checked in Where()
+                .ThenInclude(v => v.Chapter)
+                .ThenInclude(c => c.Section)
+                .ThenInclude(s => s.Meanings)
+                .ThenInclude(m => m.Language)
+                .Include(c => c.CommentVerse)
+                .ThenInclude(cv => cv!.Verse) //Already checked in Where()
+                .ThenInclude(v => v.Chapter)
+                .ThenInclude(c => c.Meanings)
+                .ThenInclude(m => m.Language)
+                .Include(c => c.User)
+                .Include(c => c.ParentComment)
+                .ThenInclude(c => c!.User) //Already checked in Where()
+                .AsSplitQuery()
+                .ToListAsync();
 
-            foreach (Comment c in Comments)
+            List<CommentOwnVerseDTO> verseComments = [];
+            List<CommentOwnNoteDTO> noteComments = [];
+
+            
+            foreach (Comment c in fetchedVerseComments)
             {
                 bool isFollowing = c.ParentComment != null && FollowedUserIds.Contains(c.ParentComment.UserId);
                 bool hasPermissionToSeeParentCommentOwnerInformation = isFollowing && userRequested.Id == c.UserId;
-                data.Add(c.ToCommentOwnDTO(hasPermissionToSeeParentCommentOwnerInformation, userRequested));
+                verseComments.Add(c.ToCommentOwnVerseDTO(hasPermissionToSeeParentCommentOwnerInformation,
+                    userRequested));
             }
 
-            _logger.LogInformation($"Operation completed: User: [Id: {userRequested.Id}, Username: {userRequested.UserName}] has demanded his comments records. {data.Count} row has been returned.");
+            foreach (Comment c in fetchedNoteComments)
+            {
+                bool isFollowing = c.ParentComment != null && FollowedUserIds.Contains(c.ParentComment.UserId);
+                bool hasPermissionToSeeParentCommentOwnerInformation = isFollowing && userRequested.Id == c.UserId;
+                noteComments.Add(c.ToCommentOwnNoteDTO(hasPermissionToSeeParentCommentOwnerInformation, userRequested));
+            }
 
-            return Ok(new { data });
+            int totalRowCount = verseComments.Count + noteComments.Count;
 
+            _logger.LogInformation(
+                $"Operation completed: User: [Id: {userRequested.Id}, Username: {userRequested.UserName}] has demanded his comments records. {totalRowCount} row has been returned.");
+
+            return Ok(new
+            {
+                data = new
+                {
+                    verseComments,
+                    noteComments,
+                }
+            });
         }
 
 
@@ -237,31 +291,36 @@ namespace scriptium_backend_dotnet.Controllers.CommentHandler
 
                 if (NoteTarget == null)
                 {
-                    _logger.LogWarning($"Not Found, while: User: [Id: {userRequested.Id}, Username: {userRequested.UserName}] trying to get comments attached Note: [model.NoteId: {model.NoteId}]. Note not found.");
+                    _logger.LogWarning(
+                        $"Not Found, while: User: [Id: {userRequested.Id}, Username: {userRequested.UserName}] trying to get comments attached Note: [model.NoteId: {model.NoteId}]. Note not found.");
                     return NotFound(new { message = "Note not found." });
                 }
 
-                bool isFollowing = await _db.Follow.AnyAsync(f => f.FollowerId == userRequested.Id && f.FollowedId == NoteTarget.UserId && f.Status == FollowStatus.Accepted);
+                bool isFollowing = await _db.Follow.AnyAsync(f =>
+                    f.FollowerId == userRequested.Id && f.FollowedId == NoteTarget.UserId &&
+                    f.Status == FollowStatus.Accepted);
 
                 if (!isFollowing)
                 {
-                    _logger.LogWarning($"Unauthorize, while: User: [Id: {userRequested.Id}, Username: {userRequested.UserName}] trying to get comments attached Note: [Id: {NoteTarget.Id}, NoteTarget.UserId: {NoteTarget.UserId}, NoteTarget.User.UserName: {NoteTarget.User.UserName}]. User does not follow the owner.");
+                    _logger.LogWarning(
+                        $"Unauthorize, while: User: [Id: {userRequested.Id}, Username: {userRequested.UserName}] trying to get comments attached Note: [Id: {NoteTarget.Id}, NoteTarget.UserId: {NoteTarget.UserId}, NoteTarget.User.UserName: {NoteTarget.User.UserName}]. User does not follow the owner.");
                     return Unauthorized(new { message = "You do not have permission to attach comment to this note" });
                 }
 
                 List<CommentOwnerNoteDTO> data = await _db.GetNoteCommentsAsync(userRequested, NoteTarget.Id);
 
-                _logger.LogInformation($"Operation completed: User: [Id: {userRequested.Id}, Username: {userRequested.UserName}] has demanded comments on attached Note: [Id: {NoteTarget.Id}, NoteTarget.UserId: {NoteTarget.UserId}, NoteTarget.User.UserName: {NoteTarget.User.UserName}]. {data.Count} row has ben returned.");
+                _logger.LogInformation(
+                    $"Operation completed: User: [Id: {userRequested.Id}, Username: {userRequested.UserName}] has demanded comments on attached Note: [Id: {NoteTarget.Id}, NoteTarget.UserId: {NoteTarget.UserId}, NoteTarget.User.UserName: {NoteTarget.User.UserName}]. {data.Count} row has ben returned.");
 
 
                 return Ok(new { data });
             }
             catch (Exception)
             {
-                _logger.LogError($"Error occurred, while: User: [Id: {userRequested.Id}, Username: {userRequested.UserName}] trying to get comments attached Note: [model.NoteId: {model.NoteId}] Error Details: {model.NoteId}");
+                _logger.LogError(
+                    $"Error occurred, while: User: [Id: {userRequested.Id}, Username: {userRequested.UserName}] trying to get comments attached Note: [model.NoteId: {model.NoteId}] Error Details: {model.NoteId}");
                 return BadRequest(new { message = "Something went unexpectedly wrong?" });
             }
-
         }
 
         /// <summary>
@@ -294,24 +353,24 @@ namespace scriptium_backend_dotnet.Controllers.CommentHandler
             try
             {
                 Verse? VerseTarget = await _db.Verse
-                          .FirstOrDefaultAsync(v => v.Id == verseId);
+                    .FirstOrDefaultAsync(v => v.Id == verseId);
 
                 if (VerseTarget == null)
                     return NotFound(new { message = "Verse not found." });
 
                 List<CommentOwnerVerseDTO> data = await _db.GetVerseCommentsAsync(userRequested, VerseTarget.Id);
 
-                _logger.LogInformation($"Operation completed: User: [Id: {userRequested.Id}, Username: {userRequested.UserName}] has demanded comments on attached Verse: [Id: {VerseTarget.Id},]. {data.Count} row has ben returned.");
+                _logger.LogInformation(
+                    $"Operation completed: User: [Id: {userRequested.Id}, Username: {userRequested.UserName}] has demanded comments on attached Verse: [Id: {VerseTarget.Id},]. {data.Count} row has ben returned.");
 
                 return Ok(new { data });
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Error occurred, while: User: [Id: {userRequested.Id}, Username: {userRequested.UserName}] trying to get comments attached on Verse: [verseId: {verseId}] Error Details: {ex}");
+                _logger.LogError(
+                    $"Error occurred, while: User: [Id: {userRequested.Id}, Username: {userRequested.UserName}] trying to get comments attached on Verse: [verseId: {verseId}] Error Details: {ex}");
                 return BadRequest(new { message = "Something went unexpectedly wrong?" });
             }
-
-
         }
 
         /// <summary>
@@ -342,16 +401,18 @@ namespace scriptium_backend_dotnet.Controllers.CommentHandler
             using var transaction = await _db.Database.BeginTransactionAsync();
             try
             {
-
-                Note? NoteTarget = await _db.Note.FirstOrDefaultAsync(n => n.Id == model.EntityId && n.UserId == UserRequested.Id);
+                Note? NoteTarget =
+                    await _db.Note.FirstOrDefaultAsync(n => n.Id == model.EntityId && n.UserId == UserRequested.Id);
 
                 if (NoteTarget == null)
                 {
-                    _logger.LogWarning($"Not Found, while: User: [Id: {UserRequested.Id}, Username: {UserRequested.UserName}] trying to create comment on Note: [model.NoteId: {model.EntityId}]. Note not found.");
+                    _logger.LogWarning(
+                        $"Not Found, while: User: [Id: {UserRequested.Id}, Username: {UserRequested.UserName}] trying to create comment on Note: [model.NoteId: {model.EntityId}]. Note not found.");
                     return NotFound(new { message = "Note not found." });
                 }
 
-                int CommentCount = await _db.Comment.CountAsync(c => c.UserId == UserRequested.Id && c.CommentNote != null && c.CommentNote.NoteId == NoteTarget.Id);
+                int CommentCount = await _db.Comment.CountAsync(c =>
+                    c.UserId == UserRequested.Id && c.CommentNote != null && c.CommentNote.NoteId == NoteTarget.Id);
 
                 if (CommentCount > Utility.MAX_REFLECTION_COUNT_PER_NOTE)
                     return Unauthorized(new { message = "You cannot have more reflections to this note." });
@@ -361,20 +422,25 @@ namespace scriptium_backend_dotnet.Controllers.CommentHandler
 
                 if (model.ParentCommentId != null)
                 {
-                    HashSet<long> ReplyableCommentIdSet = _db.GetAvailableNoteCommentIds(UserRequested.Id, NoteTarget.Id);
+                    HashSet<long> ReplyableCommentIdSet =
+                        _db.GetAvailableNoteCommentIds(UserRequested.Id, NoteTarget.Id);
 
-                    ParentComment = await _db.Comment.FirstOrDefaultAsync(c => c.CommentNote != null && c.CommentNote.NoteId == NoteTarget.Id && c.Id == model.ParentCommentId);
+                    ParentComment = await _db.Comment.FirstOrDefaultAsync(c =>
+                        c.CommentNote != null && c.CommentNote.NoteId == NoteTarget.Id &&
+                        c.Id == model.ParentCommentId);
 
                     if (ParentComment == null)
                     {
-                        _logger.LogWarning($"Not Found, while: User: [Id: {UserRequested.Id}, Username: {UserRequested.UserName}] trying to create comment on Note: [Id: {NoteTarget.Id}] and reply for ParentComment: [model.ParentCommentId: {model.ParentCommentId}]");
+                        _logger.LogWarning(
+                            $"Not Found, while: User: [Id: {UserRequested.Id}, Username: {UserRequested.UserName}] trying to create comment on Note: [Id: {NoteTarget.Id}] and reply for ParentComment: [model.ParentCommentId: {model.ParentCommentId}]");
 
                         return NotFound(new { message = "ParentComment not found." });
                     }
 
                     if (!ReplyableCommentIdSet.Contains(ParentComment.Id)) //Users can only reply the comments they see.
                     {
-                        _logger.LogWarning($"Unauthorized, while: User: [Id: {UserRequested.Id}, Username: {UserRequested.UserName}] trying to create comment on Note: [Id: {NoteTarget.Id}] and reply for ParentComment: [model.ParentCommentId: {model.ParentCommentId}]. User does not have permission to reply this comment.");
+                        _logger.LogWarning(
+                            $"Unauthorized, while: User: [Id: {UserRequested.Id}, Username: {UserRequested.UserName}] trying to create comment on Note: [Id: {NoteTarget.Id}] and reply for ParentComment: [model.ParentCommentId: {model.ParentCommentId}]. User does not have permission to reply this comment.");
 
                         return Unauthorized(new { message = "You do not have permission to reply this comment" });
                     }
@@ -401,7 +467,8 @@ namespace scriptium_backend_dotnet.Controllers.CommentHandler
                 await _db.SaveChangesAsync();
                 await transaction.CommitAsync();
 
-                _logger.LogInformation($"Operation completed: User: [Id: {UserRequested.Id}, Username: {UserRequested.UserName}] has created on Note: [Id: {NoteTarget.Id}, NoteTarget.UserId: {NoteTarget.UserId}, NoteTarget.User.UserName: {NoteTarget.User.UserName}].");
+                _logger.LogInformation(
+                    $"Operation completed: User: [Id: {UserRequested.Id}, Username: {UserRequested.UserName}] has created on Note: [Id: {NoteTarget.Id}, NoteTarget.UserId: {NoteTarget.UserId}, NoteTarget.User.UserName: {NoteTarget.User.UserName}].");
                 return Ok(new { message = "You have created comment on that note successfully" });
             }
             catch (Exception ex)
@@ -409,10 +476,10 @@ namespace scriptium_backend_dotnet.Controllers.CommentHandler
                 await transaction.RollbackAsync();
 
 
-                _logger.LogError($"Error occurred, while: User: [Id: {UserRequested.Id}, Username: {UserRequested.UserName}] trying to get comments attached on  Note: [Id: {model.EntityId}]. Error Details: {ex}");
+                _logger.LogError(
+                    $"Error occurred, while: User: [Id: {UserRequested.Id}, Username: {UserRequested.UserName}] trying to get comments attached on  Note: [Id: {model.EntityId}]. Error Details: {ex}");
                 return BadRequest(new { message = "Something went unexpectedly wrong?" });
             }
-
         }
 
 
@@ -449,7 +516,8 @@ namespace scriptium_backend_dotnet.Controllers.CommentHandler
                 if (VerseTarget == null)
                     return NotFound(new { message = "Verse not found." });
 
-                int CommentCount = await _db.Comment.CountAsync(c => c.UserId == userRequested.Id && c.CommentVerse != null && c.CommentVerse.VerseId == VerseTarget.Id);
+                int CommentCount = await _db.Comment.CountAsync(c =>
+                    c.UserId == userRequested.Id && c.CommentVerse != null && c.CommentVerse.VerseId == VerseTarget.Id);
 
                 if (CommentCount > Utility.MAX_REFLECTION_COUNT_PER_VERSE)
                     return Unauthorized(new { message = "You cannot have more reflections to this verse." });
@@ -459,20 +527,25 @@ namespace scriptium_backend_dotnet.Controllers.CommentHandler
 
                 if (model.ParentCommentId != null)
                 {
-                    HashSet<long> ReplyableCommentIdSet = _db.GetAvailableVerseCommentIds(userRequested, VerseTarget.Id);
+                    HashSet<long> ReplyableCommentIdSet =
+                        _db.GetAvailableVerseCommentIds(userRequested, VerseTarget.Id);
 
-                    ParentComment = await _db.Comment.FirstOrDefaultAsync(c => c.CommentVerse != null && c.CommentVerse.VerseId == VerseTarget.Id && c.Id == model.ParentCommentId);
+                    ParentComment = await _db.Comment.FirstOrDefaultAsync(c =>
+                        c.CommentVerse != null && c.CommentVerse.VerseId == VerseTarget.Id &&
+                        c.Id == model.ParentCommentId);
 
                     if (ParentComment == null)
                     {
-                        _logger.LogWarning($"Not Found, while: User: [Id: {userRequested.Id}, Username: {userRequested.UserName}] trying to create comment on Verse: [Id: {VerseTarget.Id}] and reply for ParentComment: [model.ParentCommentId: {model.ParentCommentId}]");
+                        _logger.LogWarning(
+                            $"Not Found, while: User: [Id: {userRequested.Id}, Username: {userRequested.UserName}] trying to create comment on Verse: [Id: {VerseTarget.Id}] and reply for ParentComment: [model.ParentCommentId: {model.ParentCommentId}]");
                         return NotFound(new { message = "ParentComment not found." });
                     }
 
                     if (!ReplyableCommentIdSet.Contains(ParentComment.Id)) //Users can only reply the comments they see.
 
                     {
-                        _logger.LogWarning($"Unauthorized, while: User: [Id: {userRequested.Id}, Username: {userRequested.UserName}] trying to create comment on Verse: [Id: {VerseTarget.Id}] and reply for ParentComment: [model.ParentCommentId: {model.ParentCommentId}]. User does not have permission to reply this comment.");
+                        _logger.LogWarning(
+                            $"Unauthorized, while: User: [Id: {userRequested.Id}, Username: {userRequested.UserName}] trying to create comment on Verse: [Id: {VerseTarget.Id}] and reply for ParentComment: [model.ParentCommentId: {model.ParentCommentId}]. User does not have permission to reply this comment.");
 
                         return Unauthorized(new { message = "You do not have permission to reply this comment" });
                     }
@@ -500,17 +573,18 @@ namespace scriptium_backend_dotnet.Controllers.CommentHandler
                 await transaction.CommitAsync();
 
 
-                _logger.LogInformation($"Operation completed: User: [Id: {userRequested.Id}, Username: {userRequested.UserName}] has created on Verse: [Id: {VerseTarget.Id}].");
+                _logger.LogInformation(
+                    $"Operation completed: User: [Id: {userRequested.Id}, Username: {userRequested.UserName}] has created on Verse: [Id: {VerseTarget.Id}].");
                 return Ok(new { message = "You have created comment on that verse successfully" });
             }
             catch (Exception ex)
             {
                 await transaction.RollbackAsync();
 
-                _logger.LogError($"Error occurred, while: User: [Id: {userRequested.Id}, Username: {userRequested.UserName}] trying to get comments attached on Verse: [Id: {model.EntityId}], Error Details: {ex}");
+                _logger.LogError(
+                    $"Error occurred, while: User: [Id: {userRequested.Id}, Username: {userRequested.UserName}] trying to get comments attached on Verse: [Id: {model.EntityId}], Error Details: {ex}");
                 return BadRequest(new { message = "Something went unexpectedly wrong?" });
             }
-
         }
 
 
@@ -540,11 +614,13 @@ namespace scriptium_backend_dotnet.Controllers.CommentHandler
 
             try
             {
-                Comment? CommentUpdated = await _db.Comment.FirstOrDefaultAsync(c => c.Id == model.CommentId && c.UserId == UserRequested.Id);
+                Comment? CommentUpdated =
+                    await _db.Comment.FirstOrDefaultAsync(c => c.Id == model.CommentId && c.UserId == UserRequested.Id);
 
                 if (CommentUpdated == null)
                 {
-                    _logger.LogWarning($"Not Found, while: User: [Id: {UserRequested.Id}, Username: {UserRequested.UserName}] trying to update Comment: [model.CommentId: {model.CommentId}]. CommentUpdated is not found.");
+                    _logger.LogWarning(
+                        $"Not Found, while: User: [Id: {UserRequested.Id}, Username: {UserRequested.UserName}] trying to update Comment: [model.CommentId: {model.CommentId}]. CommentUpdated is not found.");
                     return NotFound(new { message = "Comment not found." });
                 }
 
@@ -556,15 +632,16 @@ namespace scriptium_backend_dotnet.Controllers.CommentHandler
 
                 await _db.SaveChangesAsync();
 
-                _logger.LogInformation($"Operation completed: User: [Id: {UserRequested.Id}, Username: {UserRequested.UserName}]. Updated Comment: [Id: {CommentUpdated.Id}]");
+                _logger.LogInformation(
+                    $"Operation completed: User: [Id: {UserRequested.Id}, Username: {UserRequested.UserName}]. Updated Comment: [Id: {CommentUpdated.Id}]");
                 return Ok(new { message = "You have updated the comment!" });
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Error occurred, while: User: [Id: {UserRequested.Id}, Username: {UserRequested.UserName}] trying to update Comment: [Id: {model.CommentId}]. Error Details: {ex}");
+                _logger.LogError(
+                    $"Error occurred, while: User: [Id: {UserRequested.Id}, Username: {UserRequested.UserName}] trying to update Comment: [Id: {model.CommentId}]. Error Details: {ex}");
                 return BadRequest(new { message = "Something went unexpectedly wrong?" });
             }
-
         }
 
 
@@ -594,30 +671,33 @@ namespace scriptium_backend_dotnet.Controllers.CommentHandler
 
             try
             {
-
-                Comment? CommentDeleted = await _db.Comment.FirstOrDefaultAsync(c => c.Id == model.CommentId && c.UserId == UserRequested.Id);
+                Comment? CommentDeleted =
+                    await _db.Comment.FirstOrDefaultAsync(c => c.Id == model.CommentId && c.UserId == UserRequested.Id);
 
                 if (CommentDeleted == null)
                 {
-                    _logger.LogWarning($"Not Found, while: User: [Id: {UserRequested.Id}, Username: {UserRequested.UserName}] trying to delete Comment: [model.CommentId: {model.CommentId}]. CommentDeleted is not found.");
+                    _logger.LogWarning(
+                        $"Not Found, while: User: [Id: {UserRequested.Id}, Username: {UserRequested.UserName}] trying to delete Comment: [model.CommentId: {model.CommentId}]. CommentDeleted is not found.");
 
                     return NotFound(new { message = "Comment not found." });
                 }
+
                 await DeleteCommentRecursively(CommentDeleted);
 
 
                 await _db.SaveChangesAsync();
 
-                _logger.LogInformation($"Operation completed: User: [Id: {UserRequested.Id}, Username: {UserRequested.UserName}]. Updated Comment: [Id: {CommentDeleted.Id}]. Comment deleted.");
+                _logger.LogInformation(
+                    $"Operation completed: User: [Id: {UserRequested.Id}, Username: {UserRequested.UserName}]. Updated Comment: [Id: {CommentDeleted.Id}]. Comment deleted.");
 
                 return Ok(new { message = "You have deleted the comment successfully" });
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Error occurred, while: User: [Id: {UserRequested.Id}, UserName: {UserRequested.UserName}] trying to delete Comment: [Id: {model.CommentId}]. Error Details: {ex}");
+                _logger.LogError(
+                    $"Error occurred, while: User: [Id: {UserRequested.Id}, UserName: {UserRequested.UserName}] trying to delete Comment: [Id: {model.CommentId}]. Error Details: {ex}");
                 return BadRequest(new { message = "Something went unexpectedly wrong?" });
             }
-
         }
 
         /// <summary>
@@ -634,6 +714,5 @@ namespace scriptium_backend_dotnet.Controllers.CommentHandler
 
             _db.Comment.Remove(comment);
         }
-
     }
 }

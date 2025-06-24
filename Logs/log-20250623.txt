@@ -1,0 +1,261 @@
+2025-06-23 08:39:05 [INF] Application is starting...
+2025-06-23 08:49:13 [WRN] Failed to determine the https port for redirect.
+2025-06-23 08:49:14 [INF] HTTP GET /verse/t responded 400 in 1038.0383 ms
+2025-06-23 08:57:20 [INF] Application is starting...
+2025-06-23 10:38:56 [INF] Application is starting...
+2025-06-23 12:50:56 [INF] Application is starting...
+2025-06-23 18:00:26 [INF] Application is starting...
+2025-06-23 19:50:55 [INF] Application is starting...
+2025-06-23 20:14:01 [INF] Application is starting...
+2025-06-23 20:14:01 [WRN] Overriding address(es) 'http://localhost:5277'. Binding to endpoints defined via IConfiguration and/or UseKestrel() instead.
+2025-06-23 20:14:08 [WRN] Failed to determine the https port for redirect.
+2025-06-23 20:14:08 [INF] HTTP GET /test responded 200 in 53.9787 ms
+2025-06-23 20:14:08 [INF] HTTP GET /favicon.ico responded 404 in 2.5809 ms
+2025-06-23 20:14:12 [INF] HTTP GET /test responded 200 in 1.9708 ms
+2025-06-23 20:14:13 [INF] HTTP GET /test responded 200 in 0.3144 ms
+2025-06-23 20:14:13 [INF] HTTP GET /test responded 200 in 0.4646 ms
+2025-06-23 20:14:14 [INF] HTTP GET /test responded 200 in 0.2530 ms
+2025-06-23 20:14:14 [INF] HTTP GET /test responded 200 in 0.2444 ms
+2025-06-23 20:14:14 [INF] HTTP GET /test responded 200 in 0.3274 ms
+2025-06-23 20:14:14 [INF] HTTP GET /test responded 200 in 0.2469 ms
+2025-06-23 20:14:15 [INF] HTTP GET /test responded 200 in 0.2690 ms
+2025-06-23 20:14:15 [INF] HTTP GET /test responded 200 in 0.2141 ms
+2025-06-23 20:14:15 [INF] HTTP GET /test responded 200 in 0.2541 ms
+2025-06-23 20:14:15 [INF] HTTP GET /test responded 200 in 0.2762 ms
+2025-06-23 20:14:15 [INF] HTTP GET /test responded 200 in 0.2974 ms
+2025-06-23 20:14:16 [INF] HTTP GET /test responded 200 in 0.2262 ms
+2025-06-23 20:14:16 [INF] HTTP GET /test responded 200 in 0.6017 ms
+2025-06-23 20:14:16 [INF] HTTP GET /test responded 200 in 0.2493 ms
+2025-06-23 20:14:16 [INF] HTTP GET /test responded 200 in 0.2404 ms
+2025-06-23 20:14:16 [INF] HTTP GET /test responded 200 in 0.2772 ms
+2025-06-23 20:14:16 [INF] HTTP GET /test responded 200 in 0.2221 ms
+2025-06-23 20:14:16 [INF] HTTP GET /test responded 200 in 0.2344 ms
+2025-06-23 20:14:16 [INF] HTTP GET /test responded 200 in 0.2290 ms
+2025-06-23 20:14:17 [INF] HTTP GET /test responded 200 in 0.3528 ms
+2025-06-23 20:14:17 [INF] HTTP GET /test responded 200 in 0.2890 ms
+2025-06-23 20:14:17 [INF] HTTP GET /test responded 200 in 0.2288 ms
+2025-06-23 20:14:17 [INF] HTTP GET /test responded 200 in 0.2160 ms
+2025-06-23 20:14:17 [INF] HTTP GET /test responded 200 in 0.3032 ms
+2025-06-23 20:14:17 [INF] HTTP GET /test responded 200 in 0.2684 ms
+2025-06-23 20:14:17 [INF] HTTP GET /test responded 200 in 0.2045 ms
+2025-06-23 20:14:17 [INF] HTTP GET /test responded 200 in 0.2209 ms
+2025-06-23 20:14:17 [INF] HTTP GET /test responded 200 in 0.2012 ms
+2025-06-23 20:14:17 [INF] HTTP GET /test responded 200 in 0.2917 ms
+2025-06-23 20:14:17 [INF] HTTP GET /test responded 200 in 0.1792 ms
+2025-06-23 20:14:17 [INF] HTTP GET /test responded 200 in 0.1767 ms
+2025-06-23 20:14:17 [INF] HTTP GET /test responded 200 in 0.2177 ms
+2025-06-23 20:14:17 [INF] HTTP GET /test responded 200 in 0.1801 ms
+2025-06-23 20:14:17 [INF] HTTP GET /test responded 200 in 0.1787 ms
+2025-06-23 20:14:17 [INF] HTTP GET /test responded 200 in 0.2349 ms
+2025-06-23 20:14:17 [INF] HTTP GET /test responded 200 in 0.1995 ms
+2025-06-23 20:14:17 [INF] HTTP GET /test responded 200 in 0.1860 ms
+2025-06-23 20:14:17 [INF] HTTP GET /test responded 200 in 0.1946 ms
+2025-06-23 20:14:18 [INF] HTTP GET /test responded 200 in 0.1736 ms
+2025-06-23 20:14:18 [INF] HTTP GET /test responded 200 in 0.1800 ms
+2025-06-23 20:14:18 [INF] HTTP GET /test responded 200 in 3.1286 ms
+2025-06-23 20:14:18 [INF] HTTP GET /test responded 200 in 0.1458 ms
+2025-06-23 20:14:18 [INF] HTTP GET /test responded 200 in 0.1899 ms
+2025-06-23 20:14:18 [INF] HTTP GET /test responded 200 in 0.2136 ms
+2025-06-23 20:14:18 [INF] HTTP GET /test responded 200 in 0.1845 ms
+2025-06-23 20:14:18 [INF] HTTP GET /test responded 200 in 0.2052 ms
+2025-06-23 20:14:18 [INF] HTTP GET /test responded 200 in 0.1987 ms
+2025-06-23 20:14:18 [INF] HTTP GET /test responded 200 in 0.2232 ms
+2025-06-23 20:14:18 [INF] HTTP GET /test responded 200 in 0.1863 ms
+2025-06-23 20:14:18 [INF] HTTP GET /test responded 200 in 0.1959 ms
+2025-06-23 20:14:18 [INF] HTTP GET /test responded 200 in 0.2242 ms
+2025-06-23 20:14:18 [INF] HTTP GET /test responded 200 in 0.1611 ms
+2025-06-23 20:14:18 [INF] HTTP GET /test responded 200 in 0.2011 ms
+2025-06-23 20:14:18 [INF] HTTP GET /test responded 200 in 0.1401 ms
+2025-06-23 20:14:18 [INF] HTTP GET /test responded 200 in 0.1390 ms
+2025-06-23 20:14:18 [INF] HTTP GET /test responded 200 in 0.1451 ms
+2025-06-23 20:14:18 [INF] HTTP GET /test responded 200 in 0.1847 ms
+2025-06-23 20:14:18 [INF] HTTP GET /test responded 200 in 0.1377 ms
+2025-06-23 20:14:18 [INF] HTTP GET /test responded 200 in 0.2538 ms
+2025-06-23 20:14:18 [INF] HTTP GET /test responded 200 in 0.1292 ms
+2025-06-23 20:14:18 [INF] HTTP GET /test responded 200 in 0.1239 ms
+2025-06-23 20:14:18 [INF] HTTP GET /test responded 200 in 0.1269 ms
+2025-06-23 20:14:18 [INF] HTTP GET /test responded 200 in 0.1643 ms
+2025-06-23 20:14:18 [INF] HTTP GET /test responded 200 in 0.2577 ms
+2025-06-23 20:14:18 [INF] HTTP GET /test responded 200 in 0.1157 ms
+2025-06-23 20:14:18 [INF] HTTP GET /test responded 200 in 0.1343 ms
+2025-06-23 20:14:18 [INF] HTTP GET /test responded 200 in 0.1054 ms
+2025-06-23 20:14:18 [INF] HTTP GET /test responded 200 in 0.1624 ms
+2025-06-23 20:14:18 [INF] HTTP GET /test responded 200 in 0.1565 ms
+2025-06-23 20:14:18 [INF] HTTP GET /test responded 200 in 0.1152 ms
+2025-06-23 20:14:19 [INF] HTTP GET /test responded 200 in 0.1547 ms
+2025-06-23 20:14:19 [INF] HTTP GET /test responded 200 in 0.1363 ms
+2025-06-23 20:14:19 [INF] HTTP GET /test responded 200 in 0.1393 ms
+2025-06-23 20:14:19 [INF] HTTP GET /test responded 200 in 0.1175 ms
+2025-06-23 20:14:19 [INF] HTTP GET /test responded 200 in 0.1336 ms
+2025-06-23 20:14:19 [INF] HTTP GET /test responded 200 in 0.1066 ms
+2025-06-23 20:14:19 [INF] HTTP GET /test responded 200 in 0.1100 ms
+2025-06-23 20:14:19 [INF] HTTP GET /test responded 200 in 0.1218 ms
+2025-06-23 20:14:19 [INF] HTTP GET /test responded 200 in 0.2299 ms
+2025-06-23 20:14:19 [INF] HTTP GET /test responded 200 in 0.1679 ms
+2025-06-23 20:14:19 [INF] HTTP GET /test responded 200 in 0.1281 ms
+2025-06-23 20:14:19 [INF] HTTP GET /test responded 200 in 0.0932 ms
+2025-06-23 20:14:19 [INF] HTTP GET /test responded 200 in 0.1075 ms
+2025-06-23 20:14:19 [INF] HTTP GET /test responded 200 in 0.0959 ms
+2025-06-23 20:14:19 [INF] HTTP GET /test responded 200 in 0.1215 ms
+2025-06-23 20:14:19 [INF] HTTP GET /test responded 200 in 0.1927 ms
+2025-06-23 20:14:19 [INF] HTTP GET /test responded 200 in 0.1786 ms
+2025-06-23 20:14:19 [INF] HTTP GET /test responded 200 in 0.2171 ms
+2025-06-23 20:14:19 [INF] HTTP GET /test responded 200 in 0.1377 ms
+2025-06-23 20:14:19 [INF] HTTP GET /test responded 200 in 0.0879 ms
+2025-06-23 20:17:45 [INF] HTTP GET /verse/t responded 400 in 1054.6566 ms
+2025-06-23 20:17:45 [INF] HTTP GET /user/me responded 302 in 19.4911 ms
+2025-06-23 20:17:46 [INF] HTTP GET /verse/t responded 400 in 8.2561 ms
+2025-06-23 20:18:28 [INF] HTTP GET /user/me responded 302 in 1.6845 ms
+2025-06-23 20:18:29 [INF] HTTP GET /user/me responded 302 in 0.9069 ms
+2025-06-23 20:18:30 [INF] Cache data for URL /verse/1 is renewing
+2025-06-23 20:18:30 [INF] HTTP GET /verse/1 responded 200 in 2144.3088 ms
+2025-06-23 20:20:45 [INF] Application is starting...
+2025-06-23 20:20:45 [WRN] Overriding address(es) 'http://localhost:5277'. Binding to endpoints defined via IConfiguration and/or UseKestrel() instead.
+2025-06-23 20:21:35 [WRN] Failed to determine the https port for redirect.
+2025-06-23 20:21:35 [INF] HTTP GET /user/me responded 302 in 44.4671 ms
+2025-06-23 20:21:37 [INF] HTTP GET /user/me responded 302 in 3.6611 ms
+2025-06-23 20:21:37 [INF] Cache data with URL /verse/1 is found. Sending.
+2025-06-23 20:21:37 [INF] HTTP GET /verse/1 responded 200 in 2054.1931 ms
+2025-06-23 20:22:12 [INF] Cache data with URL /verse/1 is found. Sending.
+2025-06-23 20:22:12 [INF] HTTP GET /verse/1 responded 200 in 24.3831 ms
+2025-06-23 20:22:12 [INF] HTTP GET /user/me responded 302 in 2.0132 ms
+2025-06-23 20:22:13 [INF] HTTP GET /user/me responded 302 in 0.2702 ms
+2025-06-23 20:55:17 [INF] Application is starting...
+2025-06-23 20:55:17 [WRN] Overriding address(es) 'http://localhost:5277'. Binding to endpoints defined via IConfiguration and/or UseKestrel() instead.
+2025-06-23 20:56:34 [WRN] Failed to determine the https port for redirect.
+2025-06-23 20:56:34 [INF] HTTP GET /user/me responded 302 in 44.3789 ms
+2025-06-23 20:56:35 [INF] HTTP GET /user/me responded 302 in 4.9656 ms
+2025-06-23 20:56:36 [WRN] Compiling a query which loads related collections for more than one collection navigation, either via 'Include' or through projection, but no 'QuerySplittingBehavior' has been configured. By default, Entity Framework will use 'QuerySplittingBehavior.SingleQuery', which can potentially result in slow query performance. See https://go.microsoft.com/fwlink/?linkid=2134277 for more information. To identify the query that's triggering this warning call 'ConfigureWarnings(w => w.Throw(RelationalEventId.MultipleCollectionIncludeWarning))'.
+2025-06-23 20:56:36 [ERR] An exception occurred while iterating over the results of a query for context type 'scriptium_backend_dotnet.DB.ApplicationDBContext'.
+System.NullReferenceException: Object reference not set to an instance of an object.
+   at DTO.LanguageExtensions.ToLanguageDTO(Language language) in /home/prag/RiderProjects/scriptium-backend/DTO/LanguageDTO.cs:line 22
+   at DTO.ScriptureExtensions.ToScriptureMeaningDTO(ScriptureMeaning scriptureMeaning) in /home/prag/RiderProjects/scriptium-backend/DTO/ScriptureDTO.cs:line 65
+   at DTO.ScriptureExtensions.<>c.<ToScriptureOneLevelLowerDTO>b__2_0(ScriptureMeaning m) in /home/prag/RiderProjects/scriptium-backend/DTO/ScriptureDTO.cs:line 92
+   at System.Linq.Enumerable.SelectListIterator`2.Fill(ReadOnlySpan`1 source, Span`1 destination, Func`2 func)
+   at System.Linq.Enumerable.SelectListIterator`2.ToList()
+   at DTO.ScriptureExtensions.ToScriptureOneLevelLowerDTO(Scripture scripture) in /home/prag/RiderProjects/scriptium-backend/DTO/ScriptureDTO.cs:line 86
+   at lambda_method136(Closure, QueryContext, DbDataReader, ResultContext, SingleQueryResultCoordinator)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+System.NullReferenceException: Object reference not set to an instance of an object.
+   at DTO.LanguageExtensions.ToLanguageDTO(Language language) in /home/prag/RiderProjects/scriptium-backend/DTO/LanguageDTO.cs:line 22
+   at DTO.ScriptureExtensions.ToScriptureMeaningDTO(ScriptureMeaning scriptureMeaning) in /home/prag/RiderProjects/scriptium-backend/DTO/ScriptureDTO.cs:line 65
+   at DTO.ScriptureExtensions.<>c.<ToScriptureOneLevelLowerDTO>b__2_0(ScriptureMeaning m) in /home/prag/RiderProjects/scriptium-backend/DTO/ScriptureDTO.cs:line 92
+   at System.Linq.Enumerable.SelectListIterator`2.Fill(ReadOnlySpan`1 source, Span`1 destination, Func`2 func)
+   at System.Linq.Enumerable.SelectListIterator`2.ToList()
+   at DTO.ScriptureExtensions.ToScriptureOneLevelLowerDTO(Scripture scripture) in /home/prag/RiderProjects/scriptium-backend/DTO/ScriptureDTO.cs:line 86
+   at lambda_method136(Closure, QueryContext, DbDataReader, ResultContext, SingleQueryResultCoordinator)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+2025-06-23 20:56:36 [ERR] HTTP GET /verse/1 responded 500 in 2660.5078 ms
+System.NullReferenceException: Object reference not set to an instance of an object.
+   at DTO.LanguageExtensions.ToLanguageDTO(Language language) in /home/prag/RiderProjects/scriptium-backend/DTO/LanguageDTO.cs:line 22
+   at DTO.ScriptureExtensions.ToScriptureMeaningDTO(ScriptureMeaning scriptureMeaning) in /home/prag/RiderProjects/scriptium-backend/DTO/ScriptureDTO.cs:line 65
+   at DTO.ScriptureExtensions.<>c.<ToScriptureOneLevelLowerDTO>b__2_0(ScriptureMeaning m) in /home/prag/RiderProjects/scriptium-backend/DTO/ScriptureDTO.cs:line 92
+   at System.Linq.Enumerable.SelectListIterator`2.Fill(ReadOnlySpan`1 source, Span`1 destination, Func`2 func)
+   at System.Linq.Enumerable.SelectListIterator`2.ToList()
+   at DTO.ScriptureExtensions.ToScriptureOneLevelLowerDTO(Scripture scripture) in /home/prag/RiderProjects/scriptium-backend/DTO/ScriptureDTO.cs:line 86
+   at lambda_method136(Closure, QueryContext, DbDataReader, ResultContext, SingleQueryResultCoordinator)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+   at Microsoft.EntityFrameworkCore.Query.ShapedQueryCompilingExpressionVisitor.SingleOrDefaultAsync[TSource](IAsyncEnumerable`1 asyncEnumerable, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.ShapedQueryCompilingExpressionVisitor.SingleOrDefaultAsync[TSource](IAsyncEnumerable`1 asyncEnumerable, CancellationToken cancellationToken)
+   at scriptium_backend_dotnet.Controllers.VerseHandler.VerseController.GetScripture(ScriptureValidatedModel model) in /home/prag/RiderProjects/scriptium-backend/Controllers/Verse/VerseController.cs:line 206
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.RateLimiting.RateLimitingMiddleware.InvokeInternal(HttpContext context, EnableRateLimitingAttribute enableRateLimitingAttribute)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+2025-06-23 20:56:36 [ERR] An unhandled exception has occurred while executing the request.
+System.NullReferenceException: Object reference not set to an instance of an object.
+   at DTO.LanguageExtensions.ToLanguageDTO(Language language) in /home/prag/RiderProjects/scriptium-backend/DTO/LanguageDTO.cs:line 22
+   at DTO.ScriptureExtensions.ToScriptureMeaningDTO(ScriptureMeaning scriptureMeaning) in /home/prag/RiderProjects/scriptium-backend/DTO/ScriptureDTO.cs:line 65
+   at DTO.ScriptureExtensions.<>c.<ToScriptureOneLevelLowerDTO>b__2_0(ScriptureMeaning m) in /home/prag/RiderProjects/scriptium-backend/DTO/ScriptureDTO.cs:line 92
+   at System.Linq.Enumerable.SelectListIterator`2.Fill(ReadOnlySpan`1 source, Span`1 destination, Func`2 func)
+   at System.Linq.Enumerable.SelectListIterator`2.ToList()
+   at DTO.ScriptureExtensions.ToScriptureOneLevelLowerDTO(Scripture scripture) in /home/prag/RiderProjects/scriptium-backend/DTO/ScriptureDTO.cs:line 86
+   at lambda_method136(Closure, QueryContext, DbDataReader, ResultContext, SingleQueryResultCoordinator)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+   at Microsoft.EntityFrameworkCore.Query.ShapedQueryCompilingExpressionVisitor.SingleOrDefaultAsync[TSource](IAsyncEnumerable`1 asyncEnumerable, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.ShapedQueryCompilingExpressionVisitor.SingleOrDefaultAsync[TSource](IAsyncEnumerable`1 asyncEnumerable, CancellationToken cancellationToken)
+   at scriptium_backend_dotnet.Controllers.VerseHandler.VerseController.GetScripture(ScriptureValidatedModel model) in /home/prag/RiderProjects/scriptium-backend/Controllers/Verse/VerseController.cs:line 206
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.RateLimiting.RateLimitingMiddleware.InvokeInternal(HttpContext context, EnableRateLimitingAttribute enableRateLimitingAttribute)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+2025-06-23 20:59:06 [INF] Application is starting...
+2025-06-23 20:59:06 [WRN] Overriding address(es) 'http://localhost:5277'. Binding to endpoints defined via IConfiguration and/or UseKestrel() instead.
+2025-06-23 20:59:58 [WRN] Failed to determine the https port for redirect.
+2025-06-23 20:59:58 [INF] HTTP GET /user/me responded 302 in 45.3312 ms
+2025-06-23 21:00:00 [INF] HTTP GET /user/me responded 302 in 3.8888 ms
+2025-06-23 21:00:00 [INF] Cache data for URL /verse/1 is renewing
+2025-06-23 21:00:01 [INF] HTTP GET /verse/1 responded 200 in 2283.7285 ms
+2025-06-23 21:00:18 [INF] HTTP GET /user/me responded 302 in 1.2343 ms
+2025-06-23 21:00:19 [INF] Cache data for URL /verse/1/1 is renewing
+2025-06-23 21:00:19 [INF] HTTP GET /verse/1/1 responded 200 in 103.9051 ms
+2025-06-23 21:00:20 [INF] HTTP GET /user/me responded 302 in 0.2389 ms
+2025-06-23 21:00:46 [INF] HTTP GET /user/me responded 302 in 0.2746 ms
+2025-06-23 21:00:47 [INF] HTTP GET /user/me responded 302 in 0.2904 ms
+2025-06-23 21:00:57 [INF] HTTP GET /user/me responded 302 in 0.2187 ms
+2025-06-23 21:00:58 [INF] HTTP GET /user/me responded 302 in 0.2198 ms
+2025-06-23 21:01:11 [INF] HTTP GET /user/me responded 302 in 0.2719 ms
+2025-06-23 21:01:12 [INF] HTTP GET /user/me responded 302 in 0.2733 ms
+2025-06-23 21:03:34 [INF] HTTP GET /user/me responded 302 in 0.2325 ms
+2025-06-23 21:03:36 [INF] HTTP GET /user/me responded 302 in 0.1618 ms
+2025-06-23 21:04:02 [INF] HTTP GET /user/me responded 302 in 0.1959 ms
+2025-06-23 21:04:04 [INF] HTTP GET /user/me responded 302 in 0.1679 ms
+2025-06-23 21:04:52 [INF] HTTP GET /user/me responded 302 in 0.2874 ms
+2025-06-23 21:04:54 [INF] HTTP GET /user/me responded 302 in 0.2850 ms
+2025-06-23 21:09:28 [INF] HTTP GET /user/me responded 302 in 2.1826 ms
+2025-06-23 21:09:29 [INF] HTTP GET /user/me responded 302 in 2.6578 ms
+2025-06-23 21:10:12 [INF] HTTP GET /user/me responded 302 in 0.3399 ms
+2025-06-23 21:10:13 [INF] HTTP GET /user/me responded 302 in 0.2381 ms
+2025-06-23 21:10:35 [INF] HTTP GET /user/me responded 302 in 0.4136 ms
+2025-06-23 21:10:36 [INF] HTTP GET /user/me responded 302 in 0.7212 ms
+2025-06-23 21:10:46 [INF] HTTP GET /user/me responded 302 in 0.1660 ms
+2025-06-23 21:10:47 [INF] HTTP GET /user/me responded 302 in 0.1835 ms
+2025-06-23 21:11:02 [INF] HTTP GET /user/me responded 302 in 0.2205 ms
+2025-06-23 21:11:03 [INF] HTTP GET /user/me responded 302 in 0.2149 ms
+2025-06-23 21:11:09 [INF] HTTP GET /user/me responded 302 in 2.1996 ms
+2025-06-23 21:11:11 [INF] HTTP GET /user/me responded 302 in 0.5114 ms
+2025-06-23 21:17:45 [INF] HTTP GET /user/me responded 302 in 38.2553 ms
+2025-06-23 21:17:47 [INF] HTTP GET /user/me responded 302 in 6.6205 ms
+2025-06-23 21:17:55 [INF] HTTP GET /user/me responded 302 in 5.8780 ms
+2025-06-23 21:17:57 [INF] HTTP GET /user/me responded 302 in 1.0392 ms
+2025-06-23 21:19:20 [INF] HTTP GET /user/me responded 302 in 24.7968 ms
+2025-06-23 21:19:21 [WRN] Compiling a query which loads related collections for more than one collection navigation, either via 'Include' or through projection, but no 'QuerySplittingBehavior' has been configured. By default, Entity Framework will use 'QuerySplittingBehavior.SingleQuery', which can potentially result in slow query performance. See https://go.microsoft.com/fwlink/?linkid=2134277 for more information. To identify the query that's triggering this warning call 'ConfigureWarnings(w => w.Throw(RelationalEventId.MultipleCollectionIncludeWarning))'.
+2025-06-23 21:19:22 [INF] HTTP GET /user/me responded 302 in 0.0892 ms
+2025-06-23 21:19:22 [INF] Cache data for URL /verse/1/1/1 is renewing
+2025-06-23 21:19:22 [INF] HTTP GET /verse/1/1/1 responded 200 in 1729.6623 ms
+2025-06-23 21:24:12 [INF] HTTP GET /user/me responded 302 in 22.3642 ms
+2025-06-23 21:24:12 [INF] Cache data with URL /verse/1/1/1 is found. Sending.
+2025-06-23 21:24:12 [INF] HTTP GET /verse/1/1/1 responded 200 in 298.5073 ms
+2025-06-23 21:24:13 [INF] HTTP GET /user/me responded 302 in 2.3139 ms
+2025-06-23 21:28:15 [INF] Application is starting...
+2025-06-23 21:28:16 [WRN] Overriding address(es) 'http://localhost:5277'. Binding to endpoints defined via IConfiguration and/or UseKestrel() instead.
+2025-06-23 21:30:24 [WRN] Failed to determine the https port for redirect.
+2025-06-23 21:30:25 [INF] HTTP GET /user/me responded 302 in 133.0738 ms
+2025-06-23 21:30:26 [INF] HTTP GET /user/me responded 302 in 8.1783 ms
+2025-06-23 21:30:28 [INF] Cache data with URL /verse/1/1/1 is found. Sending.
+2025-06-23 21:30:28 [INF] HTTP GET /verse/1/1/1 responded 200 in 4014.7281 ms
+2025-06-23 21:31:31 [INF] HTTP GET /user/me responded 302 in 1.3327 ms
+2025-06-23 21:31:31 [INF] Cache data with URL /verse/1/1/1 is found. Sending.
+2025-06-23 21:31:31 [INF] HTTP GET /verse/1/1/1 responded 200 in 69.5202 ms
+2025-06-23 21:31:33 [INF] HTTP GET /user/me responded 302 in 2.2531 ms

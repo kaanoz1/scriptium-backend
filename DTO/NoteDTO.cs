@@ -47,6 +47,22 @@ namespace DTO
                 Verse = note.Verse.ToVerseUpperMeanDTO(),
             };
         }
+        
+        
+        public static NoteOwnDTO ToNoteOwnDTO(this Note note, bool isLiked)
+        {
+            return new NoteOwnDTO
+            {
+                Id = note.Id,
+                Text = note.Text,
+                CreatedAt = note.CreatedAt,
+                UpdatedAt = note.UpdatedAt,
+                LikeCount = note.Likes?.Count ?? 0,
+                ReplyCount = note.Comments?.Count ?? 0,
+                IsLiked = isLiked,
+                Verse = note.Verse.ToVerseUpperMeanDTO(),
+            };
+        }
 
         public static NoteOwnerDTO ToNoteOwnerDTO(this Note note, User UserRequested)
         {

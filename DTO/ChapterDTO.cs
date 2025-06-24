@@ -2,13 +2,11 @@ using scriptium_backend_dotnet.Models;
 
 namespace DTO
 {
-
     public abstract class ChapterBaseDTO
     {
         public required int Id { get; set; }
         public required string Name { get; set; }
         public required short Number { get; set; }
-
     }
 
     public abstract class ChapterSimpleDTO : ChapterBaseDTO
@@ -22,6 +20,7 @@ namespace DTO
     {
         public required SectionUpperDTO Section { get; set; }
     }
+
     public class ChapterOneLevelUpperDTO : ChapterDTO
     {
         public required SectionDTO Section { get; set; }
@@ -37,19 +36,22 @@ namespace DTO
         public required List<VerseDTO> Verses { get; set; }
     }
 
+    public class ChapterUpperAndOneLevelLowerDTO : ChapterUpperDTO
+    {
+        public required List<VerseDTO> Verses { get; set; }
+    }
+
     public class ChapterBothDTO : ChapterDTO
     {
         public required SectionUpperDTO Section { get; set; }
         public required List<VerseLowerDTO> Verses { get; set; }
-
-
     }
 
     public class ChapterMeaningDTO : Meaning;
 
-    public abstract class ChapterConfinedDTO: ChapterBaseDTO;
+    public abstract class ChapterConfinedDTO : ChapterBaseDTO;
 
-    public class ChapterUpperConfinedDTO: ChapterConfinedDTO
+    public class ChapterUpperConfinedDTO : ChapterConfinedDTO
     {
         public required SectionUpperConfinedDTO Section { get; set; }
     }
@@ -58,17 +60,18 @@ namespace DTO
     {
         public required List<VerseLowerConfinedDTO> Verses { get; set; }
     }
+
     //Custom DTOs
-    public class ChapterMeanDTO: ChapterBaseDTO
+    public class ChapterMeanDTO : ChapterBaseDTO
     {
         public required List<ChapterMeaningDTO> Meanings { get; set; } = [];
-
     }
+
     public class ChapterUpperMeanDTO : ChapterMeanDTO
     {
-
-        public required SectionUpperMeanDTO Section {get;set;}
+        public required SectionUpperMeanDTO Section { get; set; }
     }
+
     public class ChapterLowerMeanDTO : ChapterMeanDTO
     {
         public required List<VerseLowerMeanDTO> Verses { get; set; }
@@ -76,6 +79,19 @@ namespace DTO
 
     public static class ChapterExtensions
     {
+        public static ChapterUpperAndOneLevelLowerDTO ToChapterUpperAndOneLevelLowerDTO(this Chapter chapter)
+        {
+            return new ChapterUpperAndOneLevelLowerDTO
+            {
+                Id = chapter.Id,
+                Meanings = chapter.Meanings.Select(cm => cm.ToChapterMeaningDTO()).ToList(),
+                Name = chapter.Name,
+                Number = chapter.Number,
+                Section = chapter.Section.ToSectionUpperDTO(),
+                Verses = chapter.Verses.Select(v => v.ToVerseDTO()).ToList()
+            };
+        }
+
         public static ChapterDTO ToChapterDTO(this Chapter chapter)
         {
             return new ChapterDTO
@@ -86,6 +102,7 @@ namespace DTO
                 Meanings = chapter.Meanings.Select(cm => cm.ToChapterMeaningDTO()).ToList(),
             };
         }
+
         public static ChapterUpperDTO ToChapterUpperDTO(this Chapter chapter)
         {
             return new ChapterUpperDTO
@@ -95,7 +112,6 @@ namespace DTO
                 Number = chapter.Number,
                 Meanings = chapter.Meanings.Select(cm => cm.ToChapterMeaningDTO()).ToList(),
                 Section = chapter.Section.ToSectionUpperDTO(),
-
             };
         }
 
@@ -146,7 +162,6 @@ namespace DTO
 
                 Verses = chapter.Verses.Select(v => v.ToVerseLowerDTO()).ToList(),
                 Section = chapter.Section.ToSectionUpperDTO(),
-
             };
         }
 
@@ -163,7 +178,6 @@ namespace DTO
 
         public static ChapterLowerConfinedDTO ToChapterLowerConfinedDTO(this Chapter chapter)
         {
-
             return new ChapterLowerConfinedDTO
             {
                 Id = chapter.Id,
@@ -194,6 +208,5 @@ namespace DTO
                 Section = chapter.Section.ToSectionUpperMeanDTO(),
             };
         }
-
     }
 }

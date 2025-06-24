@@ -5,8 +5,8 @@ namespace scriptium_backend_dotnet.Models
 {
     public class Scripture
     {
-        [Key, Column("id", TypeName = Utility.DBType8bitInteger)]
-        public byte Id { get; set; }
+        [Key, Column("id", TypeName = Utility.DBType16bitInteger)]
+        public short Id { get; set; }
 
         [Required, Column(TypeName = Utility.DBTypeNVARCHAR255), MaxLength(50)]
         public required string Name { get; set; }

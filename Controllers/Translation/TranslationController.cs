@@ -47,5 +47,29 @@ namespace scriptium_backend_dotnet.Controllers.TranslatorsHandler
             return Ok(new { data });
 
         }
+
+        [HttpGet("{scriptureNumber}")]
+        public async Task<IActionResult> GetTranslationOfScripture(short scriptureNumber)
+        {
+            string requestPath = Request.Path.ToString();
+
+
+            List<TranslationDTO>? cache = await _cacheService.GetCachedDataAsync<List<TranslationDTO>>(requestPath);
+            
+            if (cache != null) //Checking cache
+            {
+                _logger.LogInformation($"Cache data with URL {requestPath} is found. Sending.");
+                return Ok(new { data = cache });
+            }
+
+            List<TranslationDTO> data = await _db.Translation.Where(t => t.Scripture.Number == scriptureNumber)
+                .Select(t => t.ToTranslationDTO()).ToListAsync();
+            
+            await _cacheService.SetCacheDataAsync(requestPath, data);
+            
+            _logger.LogInformation($"Cache data for URL {requestPath} is renewing");
+
+            return Ok(new { data });
+        }
     }
 }

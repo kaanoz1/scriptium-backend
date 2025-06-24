@@ -16,7 +16,7 @@ namespace scriptium_backend_dotnet.DB
         public DbSet<Language> Language { get; set; }
 
         public DbSet<Scripture> Scripture { get; set; }
-
+        
         public DbSet<ScriptureMeaning> ScriptureMeaning { get; set; }
 
         public DbSet<Section> Section { get; set; }
@@ -139,7 +139,7 @@ namespace scriptium_backend_dotnet.DB
                 Scripture.HasKey(s => s.Id);
 
                 Scripture.Property(s => s.Id).HasColumnName("id")
-                      .HasColumnType(Utility.DBType8bitInteger).IsRequired(true).ValueGeneratedOnAdd();
+                      .HasColumnType(Utility.DBType16bitInteger).IsRequired(true).ValueGeneratedOnAdd();
 
                 Scripture.Property(s => s.Name)
                       .HasColumnName("name")
@@ -176,7 +176,7 @@ namespace scriptium_backend_dotnet.DB
 
                 ScriptureMeaning.Property(sm => sm.Meaning).HasColumnName("meaning").HasColumnType(Utility.DBTypeVARCHAR50).IsRequired(true);
 
-                ScriptureMeaning.Property(sm => sm.ScriptureId).HasColumnName("scripture_id").HasColumnType(Utility.DBType8bitInteger).IsRequired(true);
+                ScriptureMeaning.Property(sm => sm.ScriptureId).HasColumnName("scripture_id").HasColumnType(Utility.DBType16bitInteger).IsRequired(true);
 
                 ScriptureMeaning.HasOne(c => c.Scripture)
                       .WithMany(p => p.Meanings)
@@ -206,7 +206,7 @@ namespace scriptium_backend_dotnet.DB
 
                 Section.Property(s => s.Name).HasColumnName("name").HasColumnType(Utility.DBTypeNVARCHAR255).IsRequired(true);
 
-                Section.Property(s => s.ScriptureId).HasColumnName("scripture_id").HasColumnType(Utility.DBType8bitInteger).IsRequired(true);
+                Section.Property(s => s.ScriptureId).HasColumnName("scripture_id").HasColumnType(Utility.DBType16bitInteger).IsRequired(true);
 
                 Section.HasOne(s => s.Scripture)
                       .WithMany(scr => scr.Sections)
@@ -327,18 +327,18 @@ namespace scriptium_backend_dotnet.DB
 
                 Root.Property(r => r.Latin)
                     .HasColumnName("latin")
-                    .HasColumnType(Utility.DBTypeNVARCHAR5)
+                    .HasColumnType(Utility.DBTypeNVARCHAR30)
                     .IsRequired(true)
                     .UseCollation("SQL_Latin1_General_CP1_CS_AS"); // Case-sensitive
 
                 Root.Property(r => r.Own)
                     .HasColumnName("own")
-                    .HasColumnType(Utility.DBTypeNVARCHAR5)
+                    .HasColumnType(Utility.DBTypeNVARCHAR30)
                     .IsRequired(true);
 
                 Root.Property(r => r.ScriptureId)
                     .HasColumnName("scripture_id")
-                    .HasColumnType(Utility.DBType8bitInteger)
+                    .HasColumnType(Utility.DBType16bitInteger)
                     .IsRequired(true);
 
                 Root.HasOne(r => r.Scripture)
@@ -565,6 +565,11 @@ namespace scriptium_backend_dotnet.DB
                       .IsRequired(true)
                       .HasDefaultValue(1);
 
+                Translation.Property(t => t.ScriptureId)
+                      .HasColumnName("scripture_id")
+                      .HasColumnType(Utility.DBType16bitInteger)
+                      .IsRequired(true);
+
 
                 Translation.HasOne(t => t.Language)
                       .WithMany(l => l.Translations)
@@ -665,6 +670,8 @@ namespace scriptium_backend_dotnet.DB
                 TranslationText.HasMany(tt => tt.Suggestions)
                       .WithOne(s => s.TranslationText)
                       .OnDelete(DeleteBehavior.NoAction);
+
+                TranslationText.HasIndex(tt => new { tt.VerseId, tt.TranslationId });
             });
 
             modelBuilder.Entity<FootNoteText>(FootNoteText =>

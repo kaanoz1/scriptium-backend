@@ -18,8 +18,8 @@ namespace scriptium_backend_dotnet.Models
         [NotMapped]
         public short ChapterCount => (short)(Chapters?.Count ?? -1);
 
-        [Required, Column("scripture_id", TypeName = Utility.DBType8bitInteger)]
-        public byte ScriptureId { get; set; }
+        [Required, Column("scripture_id", TypeName = Utility.DBType16bitInteger)]
+        public short ScriptureId { get; set; }
 
         public virtual Scripture Scripture { get; set; } = null!;
 

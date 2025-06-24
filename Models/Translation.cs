@@ -25,8 +25,8 @@ namespace scriptium_backend_dotnet.Models
 
         public virtual Language Language { get; set; } = null!;
 
-        [Required, ForeignKey("Scripture"), Column("scripture_id", TypeName = Utility.DBType8bitInteger)]
-        public byte ScriptureId { get; set; } = 1;
+        [Required, ForeignKey("Scripture"), Column("scripture_id", TypeName = Utility.DBType16bitInteger)]
+        public short ScriptureId { get; set; } = 1;
 
         public virtual Scripture Scripture { get; set; } = null!;
 

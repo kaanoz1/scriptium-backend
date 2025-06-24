@@ -14,8 +14,8 @@ namespace scriptium_backend_dotnet.Models
         [Required, Column("own", TypeName = Utility.DBTypeNVARCHAR5), MaxLength(5)]
         public required string Own { get; set; }
 
-        [Required, Column("scripture_id", TypeName = Utility.DBType8bitInteger)]
-        public byte ScriptureId { get; set; }
+        [Required, Column("scripture_id", TypeName = Utility.DBType16bitInteger)]
+        public short ScriptureId { get; set; }
 
         public virtual Scripture Scripture { get; set; } = null!;
 

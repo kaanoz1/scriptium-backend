@@ -4,7 +4,7 @@ namespace DTO
 {
     public abstract class WordBaseDTO
     {
-        public long Id { get; set; }
+        public required long Id { get; set; }
 
         public required short SequenceNumber { get; set; }
        
@@ -73,6 +73,7 @@ namespace DTO
         {
             return new WordLowerDTO
             {
+                Id = word.Id,
                 SequenceNumber = word.SequenceNumber,
                 Variation = new TextVariation { Simplified = word.TextSimplified, Usual = word.Text, WithoutVowel = word.TextWithoutVowel },
                 Roots = word.Roots.Select(r => r.ToRootDTO()).ToList(),
@@ -84,6 +85,7 @@ namespace DTO
         {
             return new WordUpperDTO()
             {
+                Id = word.Id,
                 SequenceNumber = word.SequenceNumber,
                 Variation = new TextVariation { Simplified = word.TextSimplified, Usual = word.Text, WithoutVowel = word.TextWithoutVowel },
                 Meanings = word.WordMeanings.Select(wm => wm.ToWordMeaningDTO()).ToList(),

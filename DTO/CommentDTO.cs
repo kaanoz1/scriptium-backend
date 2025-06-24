@@ -2,7 +2,6 @@ using scriptium_backend_dotnet.Models;
 
 namespace DTO
 {
-
     public class CommentBaseDTO
     {
         public required long Id { get; set; }
@@ -17,7 +16,7 @@ namespace DTO
 
         public required long ReplyCount { get; set; }
 
-        public bool IsLiked { get; set; } = false;
+        public required bool IsLiked { get; set; }
     }
 
     public class ParentCommentDTO : CommentBaseDTO
@@ -39,6 +38,7 @@ namespace DTO
     {
         public required NoteOwnDTO Note { get; set; }
     }
+
     public class CommentOwnVerseDTO : CommentOwnDTO
     {
         public required VerseUpperMeanDTO Verse { get; set; }
@@ -48,6 +48,7 @@ namespace DTO
     {
         public required NoteOwnDTO Note { get; set; }
     }
+
     public class CommentOwnerVerseDTO : CommentOwnerDTO
     {
         public required VerseUpperMeanDTO Verse { get; set; }
@@ -63,12 +64,13 @@ namespace DTO
                 Text = comment.Text,
                 CreatedAt = comment.CreatedAt,
                 LikeCount = comment.LikeCount,
-                ReplyCount = comment.ReplyCount
+                ReplyCount = comment.ReplyCount,
+                IsLiked = false
             };
         }
+
         public static CommentOwnDTO ToCommentOwnDTO(this Comment comment, bool hasPermissionToSeeParentCommentOwnerInformation, User userRequested)
         {
-
             if (comment.CommentVerse == null) throw new ArgumentNullException();
 
             return new CommentOwnDTO
@@ -80,25 +82,31 @@ namespace DTO
                 LikeCount = comment.LikeCount,
                 ReplyCount = comment.ReplyCount,
                 IsLiked = comment.LikeComments.Any(lc => lc.Like.UserId == userRequested.Id),
-                ParentComment = comment.ParentComment != null ? new ParentCommentDTO
-                {
-                    Id = comment.ParentComment.Id,
-                    Text = comment.ParentComment.Text,
-                    CreatedAt = comment.ParentComment.CreatedAt,
-                    UpdatedAt = comment.ParentComment.UpdatedAt,
-                    User = hasPermissionToSeeParentCommentOwnerInformation ? comment.ParentComment.User.ToUserDTO() : default,
-                    LikeCount = hasPermissionToSeeParentCommentOwnerInformation ? comment.ParentComment.LikeCount : 0,
-                    ReplyCount = hasPermissionToSeeParentCommentOwnerInformation ? comment.ParentComment.ReplyCount : 0
-
-                } : null
-
+                ParentComment = comment.ParentComment != null
+                    ? new ParentCommentDTO
+                    {
+                        Id = comment.ParentComment.Id,
+                        Text = comment.ParentComment.Text,
+                        CreatedAt = comment.ParentComment.CreatedAt,
+                        UpdatedAt = comment.ParentComment.UpdatedAt,
+                        IsLiked = comment.ParentComment.LikeComments.Any(lc => lc.Like.UserId == userRequested.Id),
+                        User = hasPermissionToSeeParentCommentOwnerInformation
+                            ? comment.ParentComment.User.ToUserDTO()
+                            : default,
+                        LikeCount = hasPermissionToSeeParentCommentOwnerInformation
+                            ? comment.ParentComment.LikeCount
+                            : -1,
+                        ReplyCount = hasPermissionToSeeParentCommentOwnerInformation
+                            ? comment.ParentComment.ReplyCount
+                            : -1
+                    }
+                    : null
             };
-
         }
 
-        public static CommentOwnNoteDTO ToCommentOwnNoteDTO(this Comment comment, User userRequested)
+        public static CommentOwnNoteDTO ToCommentOwnNoteDTO(this Comment comment,
+            bool hasPermissionToSeeParentCommentOwnerInformation, User userRequested)
         {
-
             if (comment.CommentNote == null) throw new ArgumentNullException();
 
             return new CommentOwnNoteDTO
@@ -111,25 +119,30 @@ namespace DTO
                 ReplyCount = comment.ReplyCount,
                 IsLiked = comment.LikeComments.Any(lc => lc.Like.UserId == userRequested.Id),
                 Note = comment.CommentNote.Note.ToNoteOwnerDTO(userRequested),
-                ParentComment = comment.ParentComment != null ? new ParentCommentDTO
-                {
-                    Id = comment.ParentComment.Id,
-                    Text = comment.ParentComment.Text,
-                    CreatedAt = comment.ParentComment.CreatedAt,
-                    UpdatedAt = comment.ParentComment.UpdatedAt,
-                    User = comment.ParentComment.User.ToUserDTO(),
-                    LikeCount = comment.ParentComment.LikeCount,
-                    ReplyCount = comment.ParentComment.ReplyCount
-
-                } : null
-
+                ParentComment = comment.ParentComment != null
+                    ? new ParentCommentDTO
+                    {
+                        Id = comment.ParentComment.Id,
+                        Text = comment.ParentComment.Text,
+                        CreatedAt = comment.ParentComment.CreatedAt,
+                        UpdatedAt = comment.ParentComment.UpdatedAt,
+                        IsLiked = comment.ParentComment.LikeComments.Any(lc => lc.Like.UserId == userRequested.Id),
+                        User = hasPermissionToSeeParentCommentOwnerInformation
+                            ? comment.ParentComment.User.ToUserDTO()
+                            : default,
+                        LikeCount = hasPermissionToSeeParentCommentOwnerInformation
+                            ? comment.ParentComment.LikeCount
+                            : -1,
+                        ReplyCount = hasPermissionToSeeParentCommentOwnerInformation
+                            ? comment.ParentComment.ReplyCount
+                            : -1
+                    }
+                    : null
             };
-
         }
 
         public static CommentOwnNoteDTO ToCommentOwnNoteDTO(this Comment comment, bool isLiked)
         {
-
             if (comment.CommentNote == null) throw new ArgumentNullException();
 
             return new CommentOwnNoteDTO
@@ -142,25 +155,24 @@ namespace DTO
                 ReplyCount = comment.ReplyCount,
                 IsLiked = isLiked,
                 Note = comment.CommentNote.Note.ToNoteOwnerDTO(isLiked),
-                ParentComment = comment.ParentComment != null ? new ParentCommentDTO
-                {
-                    Id = comment.ParentComment.Id,
-                    Text = comment.ParentComment.Text,
-                    CreatedAt = comment.ParentComment.CreatedAt,
-                    UpdatedAt = comment.ParentComment.UpdatedAt,
-                    User = comment.ParentComment.User.ToUserDTO(),
-                    LikeCount = comment.ParentComment.LikeCount,
-                    ReplyCount = comment.ParentComment.ReplyCount
-
-                } : null
-
+                ParentComment = comment.ParentComment != null
+                    ? new ParentCommentDTO
+                    {
+                        Id = comment.ParentComment.Id,
+                        Text = comment.ParentComment.Text,
+                        CreatedAt = comment.ParentComment.CreatedAt,
+                        IsLiked = isLiked,
+                        UpdatedAt = comment.ParentComment.UpdatedAt,
+                        User = comment.ParentComment.User.ToUserDTO(),
+                        LikeCount = comment.ParentComment.LikeCount,
+                        ReplyCount = comment.ParentComment.ReplyCount
+                    }
+                    : null
             };
-
         }
 
         public static CommentOwnVerseDTO ToCommentOwnVerseDTO(this Comment comment, User userRequested)
         {
-
             if (comment.CommentVerse == null) throw new ArgumentNullException();
 
             return new CommentOwnVerseDTO
@@ -173,25 +185,24 @@ namespace DTO
                 ReplyCount = comment.ReplyCount,
                 IsLiked = comment.LikeComments.Any(lc => lc.Like.UserId == userRequested.Id),
                 Verse = comment.CommentVerse.Verse.ToVerseUpperMeanDTO(),
-                ParentComment = comment.ParentComment != null ? new ParentCommentDTO
-                {
-                    Id = comment.ParentComment.Id,
-                    Text = comment.ParentComment.Text,
-                    CreatedAt = comment.ParentComment.CreatedAt,
-                    UpdatedAt = comment.ParentComment.UpdatedAt,
-                    User = comment.ParentComment.User.ToUserDTO(),
-                    LikeCount = comment.ParentComment.LikeCount,
-                    ReplyCount = comment.ParentComment.ReplyCount
-
-                } : null
-
+                ParentComment = comment.ParentComment != null
+                    ? new ParentCommentDTO
+                    {
+                        Id = comment.ParentComment.Id,
+                        Text = comment.ParentComment.Text,
+                        CreatedAt = comment.ParentComment.CreatedAt,
+                        UpdatedAt = comment.ParentComment.UpdatedAt,
+                        User = comment.ParentComment.User.ToUserDTO(),
+                        IsLiked = comment.ParentComment.LikeComments.Any(lc => lc.Like.UserId == userRequested.Id),
+                        LikeCount = comment.ParentComment.LikeCount,
+                        ReplyCount = comment.ParentComment.ReplyCount
+                    }
+                    : null
             };
-
         }
 
-        public static CommentOwnVerseDTO ToCommentOwnVerseDTO(this Comment comment, bool isLiked)
+        public static CommentOwnVerseDTO ToCommentOwnVerseDTO(this Comment comment, bool isLiked, User userRequested)
         {
-
             if (comment.CommentVerse == null) throw new ArgumentNullException();
 
             return new CommentOwnVerseDTO
@@ -204,25 +215,24 @@ namespace DTO
                 ReplyCount = comment.ReplyCount,
                 IsLiked = isLiked,
                 Verse = comment.CommentVerse.Verse.ToVerseUpperMeanDTO(),
-                ParentComment = comment.ParentComment != null ? new ParentCommentDTO
-                {
-                    Id = comment.ParentComment.Id,
-                    Text = comment.ParentComment.Text,
-                    CreatedAt = comment.ParentComment.CreatedAt,
-                    UpdatedAt = comment.ParentComment.UpdatedAt,
-                    User = comment.ParentComment.User.ToUserDTO(),
-                    LikeCount = comment.ParentComment.LikeCount,
-                    ReplyCount = comment.ParentComment.ReplyCount
-
-                } : null
-
+                ParentComment = comment.ParentComment != null
+                    ? new ParentCommentDTO
+                    {
+                        Id = comment.ParentComment.Id,
+                        Text = comment.ParentComment.Text,
+                        CreatedAt = comment.ParentComment.CreatedAt,
+                        UpdatedAt = comment.ParentComment.UpdatedAt,
+                        User = comment.ParentComment.User.ToUserDTO(),
+                        IsLiked = comment.ParentComment.LikeComments.Any(lc => lc.Like.UserId == userRequested.Id),
+                        LikeCount = comment.ParentComment.LikeCount,
+                        ReplyCount = comment.ParentComment.ReplyCount
+                    }
+                    : null
             };
-
         }
 
         public static CommentOwnerNoteDTO ToCommentOwnerNoteDTO(this Comment comment, User userRequested)
         {
-
             if (comment.CommentNote == null) throw new ArgumentNullException();
 
             return new CommentOwnerNoteDTO
@@ -236,25 +246,25 @@ namespace DTO
                 Creator = comment.User.ToUserDTO(),
                 IsLiked = comment.LikeComments.Any(lc => lc.Like.UserId == userRequested.Id),
                 Note = comment.CommentNote.Note.ToNoteOwnerDTO(userRequested),
-                ParentComment = comment.ParentComment != null ? new ParentCommentDTO
-                {
-                    Id = comment.ParentComment.Id,
-                    Text = comment.ParentComment.Text,
-                    CreatedAt = comment.ParentComment.CreatedAt,
-                    UpdatedAt = comment.ParentComment.UpdatedAt,
-                    User = comment.ParentComment.User.ToUserDTO(),
-                    LikeCount = comment.ParentComment.LikeCount,
-                    ReplyCount = comment.ParentComment.ReplyCount
+                ParentComment = comment.ParentComment != null
+                    ? new ParentCommentDTO
+                    {
+                        Id = comment.ParentComment.Id,
+                        Text = comment.ParentComment.Text,
+                        CreatedAt = comment.ParentComment.CreatedAt,
+                        UpdatedAt = comment.ParentComment.UpdatedAt,
+                        User = comment.ParentComment.User.ToUserDTO(),
+                        IsLiked = comment.ParentComment.LikeComments.Any(lc => lc.Like.UserId == userRequested.Id),
 
-                } : null
-
+                        LikeCount = comment.ParentComment.LikeCount,
+                        ReplyCount = comment.ParentComment.ReplyCount
+                    }
+                    : null
             };
-
         }
 
-        public static CommentOwnerNoteDTO ToCommentOwnerNoteDTO(this Comment comment, bool isLiked)
+        public static CommentOwnerNoteDTO ToCommentOwnerNoteDTO(this Comment comment, bool isLiked, User userRequested)
         {
-
             if (comment.CommentNote == null) throw new ArgumentNullException();
 
             return new CommentOwnerNoteDTO
@@ -268,25 +278,24 @@ namespace DTO
                 IsLiked = isLiked,
                 Creator = comment.User.ToUserDTO(),
                 Note = comment.CommentNote.Note.ToNoteOwnerDTO(isLiked),
-                ParentComment = comment.ParentComment != null ? new ParentCommentDTO
-                {
-                    Id = comment.ParentComment.Id,
-                    Text = comment.ParentComment.Text,
-                    CreatedAt = comment.ParentComment.CreatedAt,
-                    UpdatedAt = comment.ParentComment.UpdatedAt,
-                    User = comment.ParentComment.User.ToUserDTO(),
-                    LikeCount = comment.ParentComment.LikeCount,
-                    ReplyCount = comment.ParentComment.ReplyCount
-
-                } : null
-
+                ParentComment = comment.ParentComment != null
+                    ? new ParentCommentDTO
+                    {
+                        Id = comment.ParentComment.Id,
+                        Text = comment.ParentComment.Text,
+                        CreatedAt = comment.ParentComment.CreatedAt,
+                        UpdatedAt = comment.ParentComment.UpdatedAt,
+                        User = comment.ParentComment.User.ToUserDTO(),
+                        IsLiked = comment.ParentComment.LikeComments.Any(lc => lc.Like.UserId == userRequested.Id),
+                        LikeCount = comment.ParentComment.LikeCount,
+                        ReplyCount = comment.ParentComment.ReplyCount
+                    }
+                    : null
             };
-
         }
 
         public static CommentOwnerVerseDTO ToCommentOwnerVerseDTO(this Comment comment, User userRequested)
         {
-
             if (comment.CommentVerse == null) throw new ArgumentNullException();
 
             return new CommentOwnerVerseDTO
@@ -300,25 +309,25 @@ namespace DTO
                 Creator = comment.User.ToUserDTO(),
                 IsLiked = comment.LikeComments.Any(lc => lc.Like.UserId == userRequested.Id),
                 Verse = comment.CommentVerse.Verse.ToVerseUpperMeanDTO(),
-                ParentComment = comment.ParentComment != null ? new ParentCommentDTO
-                {
-                    Id = comment.ParentComment.Id,
-                    Text = comment.ParentComment.Text,
-                    CreatedAt = comment.ParentComment.CreatedAt,
-                    UpdatedAt = comment.ParentComment.UpdatedAt,
-                    User = comment.ParentComment.User.ToUserDTO(),
-                    LikeCount = comment.ParentComment.LikeCount,
-                    ReplyCount = comment.ParentComment.ReplyCount
-
-                } : null
-
+                ParentComment = comment.ParentComment != null
+                    ? new ParentCommentDTO
+                    {
+                        Id = comment.ParentComment.Id,
+                        Text = comment.ParentComment.Text,
+                        CreatedAt = comment.ParentComment.CreatedAt,
+                        UpdatedAt = comment.ParentComment.UpdatedAt,
+                        User = comment.ParentComment.User.ToUserDTO(),
+                        IsLiked = comment.ParentComment.LikeComments.Any(lc => lc.Like.UserId == userRequested.Id),
+                        LikeCount = comment.ParentComment.LikeCount,
+                        ReplyCount = comment.ParentComment.ReplyCount
+                    }
+                    : null
             };
-
         }
 
-        public static CommentOwnerVerseDTO ToCommentOwnerVerseDTO(this Comment comment, bool isLiked)
+        public static CommentOwnerVerseDTO ToCommentOwnerVerseDTO(this Comment comment, bool isLiked,
+            User userRequested)
         {
-
             if (comment.CommentVerse == null) throw new ArgumentNullException();
 
             return new CommentOwnerVerseDTO
@@ -332,26 +341,20 @@ namespace DTO
                 IsLiked = isLiked,
                 Creator = comment.User.ToUserDTO(),
                 Verse = comment.CommentVerse.Verse.ToVerseUpperMeanDTO(),
-                ParentComment = comment.ParentComment != null ? new ParentCommentDTO
-                {
-                    Id = comment.ParentComment.Id,
-                    Text = comment.ParentComment.Text,
-                    CreatedAt = comment.ParentComment.CreatedAt,
-                    UpdatedAt = comment.ParentComment.UpdatedAt,
-                    User = comment.ParentComment.User.ToUserDTO(),
-                    LikeCount = comment.ParentComment.LikeCount,
-                    ReplyCount = comment.ParentComment.ReplyCount
-
-                } : null
-
+                ParentComment = comment.ParentComment != null
+                    ? new ParentCommentDTO
+                    {
+                        Id = comment.ParentComment.Id,
+                        Text = comment.ParentComment.Text,
+                        CreatedAt = comment.ParentComment.CreatedAt,
+                        UpdatedAt = comment.ParentComment.UpdatedAt,
+                        IsLiked = comment.ParentComment.LikeComments.Any(lc => lc.Like.UserId == userRequested.Id),
+                        User = comment.ParentComment.User.ToUserDTO(),
+                        LikeCount = comment.ParentComment.LikeCount,
+                        ReplyCount = comment.ParentComment.ReplyCount
+                    }
+                    : null
             };
-
         }
-
-
     }
-
 }
-
-
-

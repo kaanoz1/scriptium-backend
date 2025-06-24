@@ -11,6 +11,11 @@ using scriptium_backend_dotnet.MiddleWare;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.WebHost.ConfigureKestrel(options =>
+{
+    options.ListenAnyIP(5227); 
+});
+
 Log.Logger = new LoggerConfiguration()
     .MinimumLevel.Override("Microsoft", Serilog.Events.LogEventLevel.Warning)
     .MinimumLevel.Override("System", Serilog.Events.LogEventLevel.Warning)
@@ -55,12 +60,14 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll", policy =>
     {
-        policy.WithOrigins("http://localhost:3000", "http://localhost:5277") // Frontend URL
-              .AllowAnyHeader()
-              .AllowAnyMethod()
-              .AllowCredentials(); // Required for cookies
+        policy
+            .AllowAnyOrigin()       // 🔁 Tüm origin'lere izin ver
+            .AllowAnyHeader()       // 🔁 Tüm header'lara izin ver
+            .AllowAnyMethod();      // 🔁 GET, POST, PUT, DELETE, vb.
+        // ❌ .AllowCredentials() => Bu, AllowAnyOrigin ile birlikte kullanılamaz
     });
 });
+
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

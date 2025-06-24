@@ -2,17 +2,15 @@ using scriptium_backend_dotnet.Models;
 
 namespace DTO
 {
-
     public abstract class ScriptureBaseDTO
     {
-        public required byte Id { get; set; }
+        public required short Id { get; set; }
 
         public required string Name { get; set; }
 
         public required byte Number { get; set; }
 
         public required char Code { get; set; }
-
     }
 
     public abstract class ScriptureSimpleDTO : ScriptureBaseDTO
@@ -27,6 +25,7 @@ namespace DTO
         public required List<SectionLowerDTO> Sections { get; set; }
     }
 
+    public class ScriptureUpperDTO : ScriptureDTO;
 
     public class ScriptureOneLevelUpperDTO : ScriptureDTO;
 
@@ -51,15 +50,16 @@ namespace DTO
     {
         public List<ScriptureMeaningDTO> Meanings { get; set; } = [];
     }
+
     public class ScriptureUpperMeanDTO : ScriptureMeanDTO;
 
     public class ScriptureLowerMeanDTO : ScriptureMeanDTO
     {
-        public required List<SectionLowerMeanDTO> Sections {get;set;}
+        public required List<SectionLowerMeanDTO> Sections { get; set; }
     }
+
     public static class ScriptureExtensions
     {
-
         public static ScriptureMeaningDTO ToScriptureMeaningDTO(this ScriptureMeaning scriptureMeaning)
         {
             return new ScriptureMeaningDTO
@@ -116,6 +116,7 @@ namespace DTO
                 Number = scripture.Number
             };
         }
+
         public static ScriptureLowerConfinedDTO ToScriptureLowerConfinedDTO(this Scripture scripture)
         {
             return new ScriptureLowerConfinedDTO
@@ -136,10 +137,20 @@ namespace DTO
                 Code = scripture.Code,
                 Name = scripture.Name,
                 Number = scripture.Number
-
             };
         }
 
 
+        public static ScriptureUpperDTO ToScriptureUpperDTO(this Scripture scripture)
+        {
+            return new ScriptureUpperDTO
+            {
+                Id = scripture.Id,
+                Name = scripture.Name,
+                Code = scripture.Code,
+                Number = scripture.Number,
+                Meanings = scripture.Meanings.Select(m => m.ToScriptureMeaningDTO()).ToList()
+            };
+        }
     }
 }

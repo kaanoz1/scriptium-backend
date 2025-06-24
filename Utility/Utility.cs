@@ -30,6 +30,10 @@ public static class Utility
     public const string DBTypeNVARCHAR100 = "NVARCHAR(100)";
 
     public const string DBTypeNVARCHAR5 = "NVARCHAR(5)";
+    
+    public const string DBTypeNVARCHAR10 = "NVARCHAR(10)";
+    
+    public const string DBTypeNVARCHAR30 = "NVARCHAR(30)";
 
     public const string DBTypeVARCHARMAX = "varchar(max)";
 

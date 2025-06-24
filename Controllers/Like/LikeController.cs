@@ -10,7 +10,6 @@ using scriptium_backend_dotnet.Controllers.Validation;
 using scriptium_backend_dotnet.DB;
 using scriptium_backend_dotnet.Models;
 using scriptium_backend_dotnet.Models.Util;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace scriptium_backend_dotnet.Controllers.LikeHandler
 {
@@ -44,7 +43,7 @@ namespace scriptium_backend_dotnet.Controllers.LikeHandler
                     .Include(c => c.CommentVerse).ThenInclude(cv => cv!.Verse).ThenInclude(v => v.Chapter).ThenInclude(c => c.Section).ThenInclude(s => s.Meanings).ThenInclude(m => m.Language)  //cv is not null. Checked in Where()
                     .Include(c => c.CommentVerse).ThenInclude(cv => cv!.Verse).ThenInclude(v => v.Chapter).ThenInclude(c => c.Meanings).ThenInclude(m => m.Language)  //cv is not null. Checked in Where()
                     .AsSplitQuery() 
-                    .Select(comment => comment.ToCommentOwnVerseDTO(true)) //Already checked in Where()
+                    .Select(comment => comment.ToCommentOwnVerseDTO(true, userRequested)) //Already checked in Where()
                     .ToListAsync();
 
                 List<CommentOwnNoteDTO> noteComments = await _db.Comment
@@ -95,7 +94,7 @@ namespace scriptium_backend_dotnet.Controllers.LikeHandler
                 return NotFound(new { message = "User not found." });
 
 
-            using var transaction = await _db.Database.BeginTransactionAsync();
+            await using var transaction = await _db.Database.BeginTransactionAsync();
             try
             {
                 Note? NoteLiked = await _db.Note.FirstOrDefaultAsync(n => n.Id == model.NoteId);
