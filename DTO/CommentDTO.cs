@@ -29,7 +29,7 @@ namespace DTO
         public ParentCommentDTO? ParentComment { get; set; }
     }
 
-    public abstract class CommentOwnerDTO : CommentOwnDTO
+    public class CommentOwnerDTO : CommentOwnDTO
     {
         public required UserDTO Creator { get; set; }
     }
@@ -78,6 +78,42 @@ namespace DTO
                 Id = comment.Id,
                 Text = comment.Text,
                 CreatedAt = comment.CreatedAt,
+                UpdatedAt = comment.UpdatedAt ?? default,
+                LikeCount = comment.LikeCount,
+                ReplyCount = comment.ReplyCount,
+                IsLiked = comment.LikeComments.Any(lc => lc.Like.UserId == userRequested.Id),
+                ParentComment = comment.ParentComment != null
+                    ? new ParentCommentDTO
+                    {
+                        Id = comment.ParentComment.Id,
+                        Text = comment.ParentComment.Text,
+                        CreatedAt = comment.ParentComment.CreatedAt,
+                        UpdatedAt = comment.ParentComment.UpdatedAt,
+                        IsLiked = comment.ParentComment.LikeComments.Any(lc => lc.Like.UserId == userRequested.Id),
+                        User = hasPermissionToSeeParentCommentOwnerInformation
+                            ? comment.ParentComment.User.ToUserDTO()
+                            : default,
+                        LikeCount = hasPermissionToSeeParentCommentOwnerInformation
+                            ? comment.ParentComment.LikeCount
+                            : -1,
+                        ReplyCount = hasPermissionToSeeParentCommentOwnerInformation
+                            ? comment.ParentComment.ReplyCount
+                            : -1
+                    }
+                    : null
+            };
+        }
+
+        public static CommentOwnerDTO ToCommentOwnerDTO(this Comment comment, bool hasPermissionToSeeParentCommentOwnerInformation, User userRequested)
+        {
+            if (comment.CommentVerseId == null) throw new ArgumentNullException();
+
+            return new CommentOwnerDTO
+            {
+                Id = comment.Id,
+                Text = comment.Text,
+                CreatedAt = comment.CreatedAt,
+                Creator = comment.User.ToUserDTO(),
                 UpdatedAt = comment.UpdatedAt ?? default,
                 LikeCount = comment.LikeCount,
                 ReplyCount = comment.ReplyCount,

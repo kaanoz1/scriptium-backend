@@ -136,7 +136,8 @@ namespace DTO
                 Id = scripture.Id,
                 Code = scripture.Code,
                 Name = scripture.Name,
-                Number = scripture.Number
+                Number = scripture.Number,
+                Meanings = scripture.Meanings.Select(m => m.ToScriptureMeaningDTO()).ToList()
             };
         }
 

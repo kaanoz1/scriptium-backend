@@ -14,7 +14,7 @@ namespace scriptium_backend_dotnet.Controllers.Validation
         public NoteIdentifierModelValidator()
         {
             RuleFor(r => r.NoteId)
-            .GreaterThan(0).WithMessage("Variable NoteId must be greater than 0.");
+            .GreaterThan(0).WithMessage("NoteId must be greater than 0.");
         }
     }
     public class NoteUpdateModel

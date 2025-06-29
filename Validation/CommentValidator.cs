@@ -17,7 +17,7 @@ namespace scriptium_backend_dotnet.Controllers.Validation
             .GreaterThan(0).WithMessage("Variable CommentId must be greater than 0.");
 
             RuleFor(r => r.EntityId)
-            .GreaterThan(0).WithMessage("Variable CommentId must be greater than 0.");
+            .GreaterThan(0).WithMessage("Variable EntityId must be greater than 0.");
         }
     }
 

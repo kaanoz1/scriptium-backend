@@ -79,6 +79,47 @@ namespace scriptium_backend_dotnet.Controllers.LikeHandler
             }
         }
 
+        
+        [HttpGet, Route("note")]
+        public async Task<IActionResult> GetLikedNotes()
+        {
+
+            string? userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (userId == null)
+                return Unauthorized();
+
+            User? userRequested = await _userManager.FindByIdAsync(userId);
+
+            if (userRequested == null)
+                return NotFound(new { message = "User not found." });
+
+            try
+            {
+                List<NoteOwnVerseDTO> data = await _db.Note
+                   .Where(n => n.Likes.Any(ln => ln.Like.UserId == userRequested.Id)).Include(n => n.Likes)
+                    .Include(n => n.Verse).ThenInclude(v => v.Chapter).ThenInclude(c => c.Section).ThenInclude(s => s.Scripture).ThenInclude(s => s.Meanings).ThenInclude(m => m.Language)
+                    .Include(cv => cv.Verse).ThenInclude(v => v.Chapter).ThenInclude(c => c.Section).ThenInclude(s => s.Meanings).ThenInclude(m => m.Language)
+                    .Include(cv => cv.Verse).ThenInclude(v => v.Chapter).ThenInclude(c => c.Meanings).ThenInclude(m => m.Language)
+                    .AsSplitQuery()
+                    .Select(n => n.ToNoteOwnVerseDTO(true)) //Already checked in Where()
+                     .ToListAsync();
+
+
+                _logger.LogInformation($"Operation completed: User: [Id: {userRequested.Id}, Username: {userRequested.UserName}] has demanded his liked note records. C: {data.Count} row has ben returned.");
+
+                return Ok(new { data });
+            }
+            catch (Exception)
+            {
+
+                _logger.LogError($"Error occurred, while: User: [Id: {userRequested.Id}, Username: {userRequested.UserName}] is demanding like records.");
+
+                return BadRequest(new { message = "Something went unexpectedly wrong?" });
+
+            }
+        }
+
 
         [HttpPost, Route("note")]
         public async Task<IActionResult> LikeNote([FromBody] NoteIdentifierModel model)

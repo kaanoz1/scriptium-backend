@@ -118,13 +118,13 @@ namespace scriptium_backend_dotnet.Controllers.VerseHandler
                             c.Section.Scripture.Number == model.ScriptureNumber)
                 .AsNoTracking()
                 .Include(c => c.Section)
-                .ThenInclude(s => s.Scripture)
+                .ThenInclude(s => s.Scripture).ThenInclude(s => s.Meanings).ThenInclude(m => m.Language)
+                .Include(c => c.Section)
+                .ThenInclude(s => s.Meanings).ThenInclude(m => m.Language)
                 .Include(c => c.Verses)
                 .ThenInclude(v => v.TranslationTexts)
                 .ThenInclude(tt => tt.Translation)
-                // Çevirinin kendi Language özelliğini yükleyin:
                 .ThenInclude(t => t.Language)
-                // Eğer çeviriyi yapan tercüman ve onların dillerini de kullanıyorsanız:
                 .Include(c => c.Verses)
                 .ThenInclude(v => v.TranslationTexts)
                 .ThenInclude(tt => tt.Translation)
@@ -157,7 +157,7 @@ namespace scriptium_backend_dotnet.Controllers.VerseHandler
         {
             string requestPath = Request.Path.ToString();
 
-            SectionUpperDTO? cache = await _cacheService.GetCachedDataAsync<SectionUpperDTO>(requestPath);
+            SectionOneLevelBothDTO? cache = await _cacheService.GetCachedDataAsync<SectionOneLevelBothDTO>(requestPath);
 
             if (cache != null)
             {
@@ -166,10 +166,12 @@ namespace scriptium_backend_dotnet.Controllers.VerseHandler
             }
 
 
-            SectionOneLevelBothDTO? data = await _db.Section.Include(s => s.Chapters)
+            SectionOneLevelBothDTO? data = await _db.Section
                 .Where(s => s.Number == model.SectionNumber && s.Scripture.Number == model.ScriptureNumber)
                 .AsNoTracking()
-                .Include(s => s.Scripture)
+                .Include(s => s.Meanings).ThenInclude(m => m.Language)
+                .Include(s => s.Scripture).ThenInclude(s => s.Meanings).ThenInclude(m => m.Language)
+                .Include(s => s.Chapters).ThenInclude(c => c.Meanings).ThenInclude(m => m.Language)
                 .Select(s => s.ToSectionOneLevelBothDTO()).FirstOrDefaultAsync();
 
 

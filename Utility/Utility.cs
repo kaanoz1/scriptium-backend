@@ -75,7 +75,7 @@ public static class Utility
 
     public const short MAX_REFLECTION_COUNT_PER_NOTE = 10;
 
-    public const short MAX_NOTE_COUNT_PER_VERSE = 1;
+    public const short MAX_NOTE_COUNT_PER_VERSE = 3;
 
     public const short MIN_LENGTH_FOR_ROOT = 1;
 

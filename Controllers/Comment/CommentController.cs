@@ -307,7 +307,7 @@ namespace scriptium_backend_dotnet.Controllers.CommentHandler
                     return Unauthorized(new { message = "You do not have permission to attach comment to this note" });
                 }
 
-                List<CommentOwnerNoteDTO> data = await _db.GetNoteCommentsAsync(userRequested, NoteTarget.Id);
+                List<CommentOwnerDTO> data = await _db.GetNoteCommentsAsync(userRequested, NoteTarget.Id);
 
                 _logger.LogInformation(
                     $"Operation completed: User: [Id: {userRequested.Id}, Username: {userRequested.UserName}] has demanded comments on attached Note: [Id: {NoteTarget.Id}, NoteTarget.UserId: {NoteTarget.UserId}, NoteTarget.User.UserName: {NoteTarget.User.UserName}]. {data.Count} row has ben returned.");
@@ -358,10 +358,10 @@ namespace scriptium_backend_dotnet.Controllers.CommentHandler
                 if (VerseTarget == null)
                     return NotFound(new { message = "Verse not found." });
 
-                List<CommentOwnerVerseDTO> data = await _db.GetVerseCommentsAsync(userRequested, VerseTarget.Id);
+                List<CommentOwnerDTO> data = await _db.GetVerseCommentsAsync(userRequested, VerseTarget.Id);
 
                 _logger.LogInformation(
-                    $"Operation completed: User: [Id: {userRequested.Id}, Username: {userRequested.UserName}] has demanded comments on attached Verse: [Id: {VerseTarget.Id},]. {data.Count} row has ben returned.");
+                    $"Operation completed: User: [Id: {userRequested.Id}, Username: {userRequested.UserName}] has demanded comments on attached Verse: [Id: {VerseTarget.Id}]. {data.Count} row has ben returned.");
 
                 return Ok(new { data });
             }
@@ -558,18 +558,22 @@ namespace scriptium_backend_dotnet.Controllers.CommentHandler
                     ParentCommentId = ParentComment?.Id
                 };
 
+                _db.Comment.Add(CommentCreated);
+                await _db.SaveChangesAsync(); 
+
                 CommentVerse CommentVerseCreated = new()
                 {
-                    Comment = CommentCreated,
+                    CommentId = CommentCreated.Id,
                     VerseId = VerseTarget.Id
                 };
 
-
-                _db.Comment.Add(CommentCreated);
                 _db.CommentVerse.Add(CommentVerseCreated);
 
+                CommentCreated.CommentVerseId = CommentVerseCreated.CommentId;
 
                 await _db.SaveChangesAsync();
+
+
                 await transaction.CommitAsync();
 
 

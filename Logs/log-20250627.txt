@@ -1,0 +1,543 @@
+2025-06-27 14:03:17 [INF] Application is starting...
+2025-06-27 14:03:17 [WRN] Overriding address(es) 'http://localhost:5277'. Binding to endpoints defined via IConfiguration and/or UseKestrel() instead.
+2025-06-27 19:25:56 [INF] Application is starting...
+2025-06-27 19:25:56 [WRN] Overriding address(es) 'http://localhost:5277'. Binding to endpoints defined via IConfiguration and/or UseKestrel() instead.
+2025-06-27 19:29:19 [WRN] Failed to determine the https port for redirect.
+2025-06-27 19:29:19 [INF] HTTP GET /test responded 200 in 117.8944 ms
+2025-06-27 19:29:31 [INF] Cache data with URL /verse/1 is found. Sending.
+2025-06-27 19:29:31 [INF] HTTP GET /verse/1 responded 200 in 2799.4619 ms
+2025-06-27 19:30:01 [INF] Cache data with URL /verse/1 is found. Sending.
+2025-06-27 19:30:01 [INF] HTTP GET /verse/1 responded 200 in 35.5920 ms
+2025-06-27 19:30:01 [INF] HTTP GET /user/me responded 302 in 4.2463 ms
+2025-06-27 19:30:02 [INF] HTTP GET /auth/login responded 405 in 0.1693 ms
+2025-06-27 19:30:03 [INF] HTTP GET /user/me responded 302 in 1.7566 ms
+2025-06-27 19:30:03 [INF] HTTP GET /auth/login responded 405 in 0.7839 ms
+2025-06-27 19:30:15 [INF] Cache data with URL /verse/1/1 is found. Sending.
+2025-06-27 19:30:15 [INF] HTTP GET /verse/1/1 responded 200 in 80.1720 ms
+2025-06-27 19:30:25 [INF] Cache data with URL /verse/1/1/2 is found. Sending.
+2025-06-27 19:30:25 [INF] HTTP GET /verse/1/1/2 responded 200 in 53.1437 ms
+2025-06-27 19:32:24 [INF] Cache data for URL /verse/1/1/2/1 is renewing
+2025-06-27 19:32:24 [INF] HTTP GET /verse/1/1/2/1 responded 200 in 645.7622 ms
+2025-06-27 19:36:37 [INF] HTTP GET /user/me responded 302 in 3.1934 ms
+2025-06-27 19:36:37 [INF] HTTP GET /auth/login responded 405 in 0.0868 ms
+2025-06-27 19:36:37 [INF] Cache data with URL /verse/1/1/2/1 is found. Sending.
+2025-06-27 19:36:37 [INF] HTTP GET /verse/1/1/2/1 responded 200 in 360.0651 ms
+2025-06-27 19:36:38 [INF] HTTP GET /user/me responded 302 in 2.2615 ms
+2025-06-27 19:36:38 [INF] HTTP GET /auth/login responded 405 in 0.0858 ms
+2025-06-27 19:37:12 [INF] HTTP GET /user/me responded 302 in 0.6269 ms
+2025-06-27 19:37:12 [INF] Cache data with URL /verse/1/1/2/1 is found. Sending.
+2025-06-27 19:37:12 [INF] HTTP GET /verse/1/1/2/1 responded 200 in 47.7260 ms
+2025-06-27 19:37:12 [INF] HTTP GET /auth/login responded 405 in 0.1581 ms
+2025-06-27 19:37:14 [INF] HTTP GET /user/me responded 302 in 0.2037 ms
+2025-06-27 19:37:14 [INF] HTTP GET /auth/login responded 405 in 0.0756 ms
+2025-06-27 19:38:36 [INF] HTTP GET /user/me responded 302 in 0.3310 ms
+2025-06-27 19:38:36 [INF] Cache data with URL /verse/1/1/2/1 is found. Sending.
+2025-06-27 19:38:36 [INF] HTTP GET /verse/1/1/2/1 responded 200 in 51.8043 ms
+2025-06-27 19:38:36 [INF] HTTP GET /auth/login responded 405 in 0.1790 ms
+2025-06-27 19:38:38 [INF] HTTP GET /user/me responded 302 in 0.2126 ms
+2025-06-27 19:38:38 [INF] HTTP GET /auth/login responded 405 in 0.1112 ms
+2025-06-27 19:41:13 [INF] HTTP GET /user/me responded 302 in 8.6718 ms
+2025-06-27 19:41:13 [INF] Cache data with URL /verse/1/1/2/1 is found. Sending.
+2025-06-27 19:41:13 [INF] HTTP GET /verse/1/1/2/1 responded 200 in 88.1607 ms
+2025-06-27 19:41:13 [INF] HTTP GET /auth/login responded 405 in 0.4349 ms
+2025-06-27 19:41:14 [INF] HTTP GET /user/me responded 302 in 0.2314 ms
+2025-06-27 19:41:14 [INF] HTTP GET /auth/login responded 405 in 0.2932 ms
+2025-06-27 19:42:03 [INF] HTTP GET /user/me responded 302 in 0.4292 ms
+2025-06-27 19:42:03 [INF] Cache data with URL /verse/1/1/2/1 is found. Sending.
+2025-06-27 19:42:03 [INF] HTTP GET /verse/1/1/2/1 responded 200 in 30.5948 ms
+2025-06-27 19:42:03 [INF] HTTP GET /auth/login responded 405 in 0.2356 ms
+2025-06-27 19:42:04 [INF] HTTP GET /user/me responded 302 in 0.2654 ms
+2025-06-27 19:42:04 [INF] HTTP GET /auth/login responded 405 in 0.2214 ms
+2025-06-27 19:46:07 [INF] HTTP GET /user/me responded 302 in 0.2605 ms
+2025-06-27 19:46:07 [INF] HTTP GET /auth/login responded 405 in 0.0881 ms
+2025-06-27 19:46:08 [INF] HTTP GET /user/me responded 302 in 2.2163 ms
+2025-06-27 19:46:08 [INF] HTTP GET /auth/login responded 405 in 0.0571 ms
+2025-06-27 19:46:18 [INF] Password is incompatible. Claimed password: Quaxanos1974 for User: [Id: a50d16fd-d9bc-4d5c-8af0-7d8c6b18943a]
+2025-06-27 19:46:18 [INF] HTTP POST /auth/login responded 401 in 353.6180 ms
+2025-06-27 19:51:49 [INF] Application is starting...
+2025-06-27 19:51:49 [WRN] Overriding address(es) 'http://localhost:5277'. Binding to endpoints defined via IConfiguration and/or UseKestrel() instead.
+2025-06-27 19:51:57 [WRN] Failed to determine the https port for redirect.
+2025-06-27 19:51:57 [INF] HTTP GET /test responded 200 in 68.5257 ms
+2025-06-27 19:51:58 [INF] HTTP GET /test responded 200 in 2.3859 ms
+2025-06-27 19:52:10 [INF] HTTP GET /user/me responded 302 in 5.8129 ms
+2025-06-27 19:52:10 [INF] HTTP GET /auth/login responded 405 in 0.2044 ms
+2025-06-27 19:52:11 [INF] HTTP GET /user/me responded 302 in 1.6084 ms
+2025-06-27 19:52:11 [INF] HTTP GET /auth/login responded 405 in 0.6143 ms
+2025-06-27 19:52:20 [INF] Password is incompatible. Claimed password: Quaxanos1974 for User: [Id: a50d16fd-d9bc-4d5c-8af0-7d8c6b18943a]
+2025-06-27 19:52:20 [INF] HTTP POST /auth/login responded 401 in 1848.6698 ms
+2025-06-27 19:52:43 [INF] User: [Id: a50d16fd-d9bc-4d5c-8af0-7d8c6b18943a, Username: prag1974] has logged in.
+2025-06-27 19:52:43 [INF] HTTP POST /auth/login responded 200 in 215.1452 ms
+2025-06-27 19:52:43 [INF] HTTP GET /user/me responded 200 in 68.6805 ms
+2025-06-27 19:52:55 [INF] HTTP GET /user/prag1974 responded 302 in 0.8859 ms
+2025-06-27 19:52:56 [INF] HTTP GET /auth/login responded 405 in 0.3417 ms
+2025-06-27 19:53:58 [INF] HTTP GET /user/prag1974 responded 302 in 33.6859 ms
+2025-06-27 19:53:58 [INF] HTTP GET /user/me responded 302 in 36.0915 ms
+2025-06-27 19:53:58 [INF] HTTP GET /auth/login responded 405 in 1.0927 ms
+2025-06-27 19:53:58 [INF] HTTP GET /auth/login responded 405 in 0.5755 ms
+2025-06-27 19:53:59 [INF] HTTP GET /user/me responded 302 in 0.8502 ms
+2025-06-27 19:53:59 [INF] HTTP GET /auth/login responded 405 in 0.8352 ms
+2025-06-27 19:54:00 [INF] HTTP GET /user/undefined responded 302 in 0.8293 ms
+2025-06-27 19:54:00 [INF] HTTP GET /auth/login responded 405 in 0.3870 ms
+2025-06-27 19:54:07 [INF] StoreAsync called to create a new session.
+2025-06-27 19:54:07 [INF] Generated new SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99 for UserId: a50d16fd-d9bc-4d5c-8af0-7d8c6b18943a.
+2025-06-27 19:54:07 [INF] Session with SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99 successfully stored in the database.
+2025-06-27 19:54:07 [INF] User: [Id: a50d16fd-d9bc-4d5c-8af0-7d8c6b18943a, Username: prag1974] has logged in.
+2025-06-27 19:54:07 [INF] HTTP POST /auth/login responded 200 in 406.4113 ms
+2025-06-27 19:54:07 [INF] RetrieveAsync called for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 19:54:07 [INF] RetrieveAsync: Authentication ticket created for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 19:54:07 [INF] User: [Id: a50d16fd-d9bc-4d5c-8af0-7d8c6b18943a, Username: prag1974]'s last active property has been updated.
+2025-06-27 19:54:07 [INF] HTTP GET /user/me responded 200 in 144.3110 ms
+2025-06-27 19:54:10 [INF] RetrieveAsync called for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 19:54:10 [INF] RetrieveAsync: Authentication ticket created for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 19:54:10 [INF] User: [Id: a50d16fd-d9bc-4d5c-8af0-7d8c6b18943a, Username: prag1974]'s last active property has been updated.
+2025-06-27 19:54:11 [INF] HTTP GET /user/prag1974 responded 200 in 164.7872 ms
+2025-06-27 19:54:11 [INF] RetrieveAsync called for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 19:54:11 [INF] RetrieveAsync: Authentication ticket created for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 19:54:11 [INF] User: [Id: a50d16fd-d9bc-4d5c-8af0-7d8c6b18943a, Username: prag1974]'s last active property has been updated.
+2025-06-27 19:54:11 [WRN] Collection navigations are only considered null if their parent entity is null. Use 'Any' to check whether collection navigation 'Comment.LikeComments' is empty.
+2025-06-27 19:54:11 [INF] HTTP GET /user/comments/a50d16fd-d9bc-4d5c-8af0-7d8c6b18943a responded 200 in 170.6012 ms
+2025-06-27 19:54:31 [INF] RetrieveAsync called for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 19:54:31 [INF] RetrieveAsync: Authentication ticket created for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 19:54:31 [INF] User: [Id: a50d16fd-d9bc-4d5c-8af0-7d8c6b18943a, Username: prag1974]'s last active property has been updated.
+2025-06-27 19:54:31 [INF] HTTP GET /user/undefined responded 404 in 16.0681 ms
+2025-06-27 19:54:36 [INF] RetrieveAsync called for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 19:54:36 [INF] RetrieveAsync: Authentication ticket created for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 19:54:36 [INF] User: [Id: a50d16fd-d9bc-4d5c-8af0-7d8c6b18943a, Username: prag1974]'s last active property has been updated.
+2025-06-27 19:54:36 [INF] HTTP GET /user/prag1974 responded 200 in 20.8629 ms
+2025-06-27 19:54:37 [INF] RetrieveAsync called for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 19:54:38 [INF] RetrieveAsync: Authentication ticket created for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 19:54:38 [INF] User: [Id: a50d16fd-d9bc-4d5c-8af0-7d8c6b18943a, Username: prag1974]'s last active property has been updated.
+2025-06-27 19:54:38 [WRN] Collection navigations are only considered null if their parent entity is null. Use 'Any' to check whether collection navigation 'Note.Likes' is empty.
+2025-06-27 19:54:38 [INF] HTTP GET /user/notes/a50d16fd-d9bc-4d5c-8af0-7d8c6b18943a responded 200 in 66.7209 ms
+2025-06-27 19:54:38 [INF] RetrieveAsync called for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 19:54:38 [INF] RetrieveAsync: Authentication ticket created for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 19:54:38 [INF] User: [Id: a50d16fd-d9bc-4d5c-8af0-7d8c6b18943a, Username: prag1974]'s last active property has been updated.
+2025-06-27 19:54:38 [INF] Operation completed: User: [Id: a50d16fd-d9bc-4d5c-8af0-7d8c6b18943a, Username: prag1974] has demanded his collection records. 1 row has ben returned.
+2025-06-27 19:54:38 [INF] HTTP GET /collection/ responded 200 in 58.4939 ms
+2025-06-27 19:54:52 [INF] RetrieveAsync called for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 19:54:52 [INF] RetrieveAsync: Authentication ticket created for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 19:54:52 [INF] User: [Id: a50d16fd-d9bc-4d5c-8af0-7d8c6b18943a, Username: prag1974]'s last active property has been updated.
+2025-06-27 19:54:52 [INF] HTTP GET /user/me responded 200 in 16.3894 ms
+2025-06-27 19:54:56 [INF] RetrieveAsync called for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 19:54:56 [INF] RetrieveAsync: Authentication ticket created for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 19:54:56 [INF] User: [Id: a50d16fd-d9bc-4d5c-8af0-7d8c6b18943a, Username: prag1974]'s last active property has been updated.
+2025-06-27 19:54:56 [INF] HTTP GET /user/prag1974 responded 200 in 20.2448 ms
+2025-06-27 19:54:56 [INF] RetrieveAsync called for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 19:54:56 [INF] RetrieveAsync: Authentication ticket created for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 19:54:56 [INF] User: [Id: a50d16fd-d9bc-4d5c-8af0-7d8c6b18943a, Username: prag1974]'s last active property has been updated.
+2025-06-27 19:54:56 [INF] HTTP GET /user/comments/a50d16fd-d9bc-4d5c-8af0-7d8c6b18943a responded 200 in 15.1257 ms
+2025-06-27 19:54:59 [INF] RetrieveAsync called for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 19:54:59 [INF] RetrieveAsync: Authentication ticket created for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 19:54:59 [INF] User: [Id: a50d16fd-d9bc-4d5c-8af0-7d8c6b18943a, Username: prag1974]'s last active property has been updated.
+2025-06-27 19:54:59 [INF] HTTP GET /user/notes/a50d16fd-d9bc-4d5c-8af0-7d8c6b18943a responded 200 in 13.4308 ms
+2025-06-27 19:54:59 [INF] RetrieveAsync called for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 19:54:59 [INF] RetrieveAsync: Authentication ticket created for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 19:54:59 [INF] User: [Id: a50d16fd-d9bc-4d5c-8af0-7d8c6b18943a, Username: prag1974]'s last active property has been updated.
+2025-06-27 19:54:59 [INF] Operation completed: User: [Id: a50d16fd-d9bc-4d5c-8af0-7d8c6b18943a, Username: prag1974] has demanded his collection records. 1 row has ben returned.
+2025-06-27 19:54:59 [INF] HTTP GET /collection/ responded 200 in 13.1409 ms
+2025-06-27 19:55:09 [INF] RetrieveAsync called for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 19:55:09 [INF] RetrieveAsync: Authentication ticket created for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 19:55:09 [INF] User: [Id: a50d16fd-d9bc-4d5c-8af0-7d8c6b18943a, Username: prag1974]'s last active property has been updated.
+2025-06-27 19:55:09 [INF] HTTP GET /user/me responded 200 in 18.6226 ms
+2025-06-27 19:55:14 [INF] RetrieveAsync called for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 19:55:14 [INF] RetrieveAsync: Authentication ticket created for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 19:55:14 [INF] User: [Id: a50d16fd-d9bc-4d5c-8af0-7d8c6b18943a, Username: prag1974]'s last active property has been updated.
+2025-06-27 19:55:14 [INF] HTTP GET /user/prag1974 responded 200 in 18.6296 ms
+2025-06-27 19:55:14 [INF] RetrieveAsync called for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 19:55:14 [INF] RetrieveAsync: Authentication ticket created for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 19:55:14 [INF] User: [Id: a50d16fd-d9bc-4d5c-8af0-7d8c6b18943a, Username: prag1974]'s last active property has been updated.
+2025-06-27 19:55:14 [INF] HTTP GET /user/comments/a50d16fd-d9bc-4d5c-8af0-7d8c6b18943a responded 200 in 12.8642 ms
+2025-06-27 19:56:14 [INF] RetrieveAsync called for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 19:56:14 [INF] RetrieveAsync: Authentication ticket created for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 19:56:14 [INF] User: [Id: a50d16fd-d9bc-4d5c-8af0-7d8c6b18943a, Username: prag1974]'s last active property has been updated.
+2025-06-27 19:56:14 [INF] HTTP GET /user/prag1974 responded 200 in 21.4787 ms
+2025-06-27 19:56:14 [INF] RetrieveAsync called for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 19:56:14 [INF] RetrieveAsync: Authentication ticket created for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 19:56:14 [INF] User: [Id: a50d16fd-d9bc-4d5c-8af0-7d8c6b18943a, Username: prag1974]'s last active property has been updated.
+2025-06-27 19:56:14 [INF] HTTP GET /user/comments/a50d16fd-d9bc-4d5c-8af0-7d8c6b18943a responded 200 in 15.1923 ms
+2025-06-27 20:01:32 [INF] Application is starting...
+2025-06-27 20:01:32 [WRN] Overriding address(es) 'http://localhost:5277'. Binding to endpoints defined via IConfiguration and/or UseKestrel() instead.
+2025-06-27 20:01:33 [WRN] Failed to determine the https port for redirect.
+2025-06-27 20:01:33 [INF] HTTP GET /test responded 200 in 86.5150 ms
+2025-06-27 20:01:34 [INF] RetrieveAsync called for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 20:01:36 [INF] RetrieveAsync called for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 20:01:37 [INF] RetrieveAsync: Authentication ticket created for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 20:01:37 [INF] RetrieveAsync: Authentication ticket created for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 20:01:37 [INF] User: [Id: a50d16fd-d9bc-4d5c-8af0-7d8c6b18943a, Username: prag1974]'s last active property has been updated.
+2025-06-27 20:01:37 [INF] User: [Id: a50d16fd-d9bc-4d5c-8af0-7d8c6b18943a, Username: prag1974]'s last active property has been updated.
+2025-06-27 20:01:37 [INF] HTTP GET /test responded 200 in 643.0443 ms
+2025-06-27 20:01:37 [INF] HTTP GET /test responded 200 in 2488.0268 ms
+2025-06-27 20:01:37 [INF] RetrieveAsync called for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 20:01:37 [INF] RetrieveAsync: Authentication ticket created for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 20:01:37 [INF] User: [Id: a50d16fd-d9bc-4d5c-8af0-7d8c6b18943a, Username: prag1974]'s last active property has been updated.
+2025-06-27 20:01:37 [INF] HTTP GET /test responded 200 in 82.9485 ms
+2025-06-27 20:01:38 [INF] RetrieveAsync called for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 20:01:38 [INF] RetrieveAsync: Authentication ticket created for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 20:01:38 [INF] User: [Id: a50d16fd-d9bc-4d5c-8af0-7d8c6b18943a, Username: prag1974]'s last active property has been updated.
+2025-06-27 20:01:38 [INF] HTTP GET /test responded 200 in 19.6558 ms
+2025-06-27 20:01:38 [INF] RetrieveAsync called for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 20:01:38 [INF] RetrieveAsync: Authentication ticket created for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 20:01:38 [INF] User: [Id: a50d16fd-d9bc-4d5c-8af0-7d8c6b18943a, Username: prag1974]'s last active property has been updated.
+2025-06-27 20:01:38 [INF] HTTP GET /test responded 200 in 20.9904 ms
+2025-06-27 20:01:38 [INF] RetrieveAsync called for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 20:01:38 [INF] RetrieveAsync: Authentication ticket created for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 20:01:38 [INF] User: [Id: a50d16fd-d9bc-4d5c-8af0-7d8c6b18943a, Username: prag1974]'s last active property has been updated.
+2025-06-27 20:01:38 [INF] HTTP GET /test responded 200 in 15.0932 ms
+2025-06-27 20:01:39 [INF] RetrieveAsync called for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 20:01:39 [INF] RetrieveAsync: Authentication ticket created for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 20:01:39 [INF] User: [Id: a50d16fd-d9bc-4d5c-8af0-7d8c6b18943a, Username: prag1974]'s last active property has been updated.
+2025-06-27 20:01:39 [INF] HTTP GET /test responded 200 in 23.2048 ms
+2025-06-27 20:01:39 [INF] RetrieveAsync called for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 20:01:39 [INF] RetrieveAsync: Authentication ticket created for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 20:01:39 [INF] User: [Id: a50d16fd-d9bc-4d5c-8af0-7d8c6b18943a, Username: prag1974]'s last active property has been updated.
+2025-06-27 20:01:39 [INF] HTTP GET /test responded 200 in 13.6287 ms
+2025-06-27 20:01:39 [INF] RetrieveAsync called for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 20:01:39 [INF] RetrieveAsync: Authentication ticket created for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 20:01:39 [INF] User: [Id: a50d16fd-d9bc-4d5c-8af0-7d8c6b18943a, Username: prag1974]'s last active property has been updated.
+2025-06-27 20:01:39 [INF] HTTP GET /test responded 200 in 7.4684 ms
+2025-06-27 20:01:39 [INF] RetrieveAsync called for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 20:01:39 [INF] RetrieveAsync: Authentication ticket created for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 20:01:39 [INF] User: [Id: a50d16fd-d9bc-4d5c-8af0-7d8c6b18943a, Username: prag1974]'s last active property has been updated.
+2025-06-27 20:01:39 [INF] HTTP GET /test responded 200 in 9.2341 ms
+2025-06-27 20:01:39 [INF] RetrieveAsync called for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 20:01:39 [INF] RetrieveAsync: Authentication ticket created for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 20:01:39 [INF] User: [Id: a50d16fd-d9bc-4d5c-8af0-7d8c6b18943a, Username: prag1974]'s last active property has been updated.
+2025-06-27 20:01:39 [INF] HTTP GET /test responded 200 in 8.8288 ms
+2025-06-27 20:01:40 [INF] RetrieveAsync called for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 20:01:40 [INF] RetrieveAsync: Authentication ticket created for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 20:01:40 [INF] User: [Id: a50d16fd-d9bc-4d5c-8af0-7d8c6b18943a, Username: prag1974]'s last active property has been updated.
+2025-06-27 20:01:40 [INF] HTTP GET /test responded 200 in 10.3677 ms
+2025-06-27 20:01:40 [INF] RetrieveAsync called for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 20:01:40 [INF] RetrieveAsync: Authentication ticket created for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 20:01:40 [INF] User: [Id: a50d16fd-d9bc-4d5c-8af0-7d8c6b18943a, Username: prag1974]'s last active property has been updated.
+2025-06-27 20:01:40 [INF] HTTP GET /test responded 200 in 27.9787 ms
+2025-06-27 20:01:40 [INF] RetrieveAsync called for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 20:01:40 [INF] RetrieveAsync: Authentication ticket created for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 20:01:40 [INF] User: [Id: a50d16fd-d9bc-4d5c-8af0-7d8c6b18943a, Username: prag1974]'s last active property has been updated.
+2025-06-27 20:01:40 [INF] HTTP GET /test responded 200 in 8.4948 ms
+2025-06-27 20:01:40 [INF] RetrieveAsync called for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 20:01:40 [INF] RetrieveAsync: Authentication ticket created for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 20:01:40 [INF] User: [Id: a50d16fd-d9bc-4d5c-8af0-7d8c6b18943a, Username: prag1974]'s last active property has been updated.
+2025-06-27 20:01:40 [INF] HTTP GET /test responded 200 in 8.4928 ms
+2025-06-27 20:01:40 [INF] RetrieveAsync called for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 20:01:40 [INF] RetrieveAsync: Authentication ticket created for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 20:01:40 [INF] User: [Id: a50d16fd-d9bc-4d5c-8af0-7d8c6b18943a, Username: prag1974]'s last active property has been updated.
+2025-06-27 20:01:40 [INF] HTTP GET /test responded 200 in 8.7573 ms
+2025-06-27 20:01:41 [INF] RetrieveAsync called for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 20:01:41 [INF] RetrieveAsync: Authentication ticket created for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 20:01:41 [INF] User: [Id: a50d16fd-d9bc-4d5c-8af0-7d8c6b18943a, Username: prag1974]'s last active property has been updated.
+2025-06-27 20:01:41 [INF] HTTP GET /test responded 200 in 12.9598 ms
+2025-06-27 20:01:41 [INF] RetrieveAsync called for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 20:01:41 [INF] RetrieveAsync: Authentication ticket created for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 20:01:41 [INF] User: [Id: a50d16fd-d9bc-4d5c-8af0-7d8c6b18943a, Username: prag1974]'s last active property has been updated.
+2025-06-27 20:01:41 [INF] HTTP GET /test responded 200 in 11.6408 ms
+2025-06-27 20:01:41 [INF] RetrieveAsync called for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 20:01:41 [INF] RetrieveAsync: Authentication ticket created for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 20:01:41 [INF] User: [Id: a50d16fd-d9bc-4d5c-8af0-7d8c6b18943a, Username: prag1974]'s last active property has been updated.
+2025-06-27 20:01:41 [INF] HTTP GET /test responded 200 in 12.0862 ms
+2025-06-27 20:01:42 [INF] RetrieveAsync called for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 20:01:42 [INF] RetrieveAsync: Authentication ticket created for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 20:01:42 [INF] User: [Id: a50d16fd-d9bc-4d5c-8af0-7d8c6b18943a, Username: prag1974]'s last active property has been updated.
+2025-06-27 20:01:42 [INF] HTTP GET /test responded 200 in 9.2221 ms
+2025-06-27 20:01:47 [INF] RetrieveAsync called for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 20:01:47 [INF] RetrieveAsync: Authentication ticket created for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 20:01:47 [INF] User: [Id: a50d16fd-d9bc-4d5c-8af0-7d8c6b18943a, Username: prag1974]'s last active property has been updated.
+2025-06-27 20:01:47 [INF] RetrieveAsync called for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 20:01:47 [INF] RetrieveAsync: Authentication ticket created for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 20:01:47 [INF] User: [Id: a50d16fd-d9bc-4d5c-8af0-7d8c6b18943a, Username: prag1974]'s last active property has been updated.
+2025-06-27 20:01:47 [INF] HTTP GET /user/prag1974 responded 200 in 281.3778 ms
+2025-06-27 20:01:47 [INF] HTTP GET /user/me responded 200 in 24.1244 ms
+2025-06-27 20:01:48 [INF] RetrieveAsync called for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 20:01:48 [INF] RetrieveAsync: Authentication ticket created for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 20:01:48 [INF] User: [Id: a50d16fd-d9bc-4d5c-8af0-7d8c6b18943a, Username: prag1974]'s last active property has been updated.
+2025-06-27 20:01:49 [INF] HTTP GET /user/comments/a50d16fd-d9bc-4d5c-8af0-7d8c6b18943a responded 200 in 293.1692 ms
+2025-06-27 20:01:53 [INF] RetrieveAsync called for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 20:01:53 [INF] RetrieveAsync: Authentication ticket created for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 20:01:53 [INF] User: [Id: a50d16fd-d9bc-4d5c-8af0-7d8c6b18943a, Username: prag1974]'s last active property has been updated.
+2025-06-27 20:01:53 [WRN] Collection navigations are only considered null if their parent entity is null. Use 'Any' to check whether collection navigation 'Note.Likes' is empty.
+2025-06-27 20:01:53 [INF] HTTP GET /user/notes/a50d16fd-d9bc-4d5c-8af0-7d8c6b18943a responded 200 in 74.2133 ms
+2025-06-27 20:01:58 [INF] RetrieveAsync called for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 20:01:58 [INF] RetrieveAsync: Authentication ticket created for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 20:01:58 [INF] User: [Id: a50d16fd-d9bc-4d5c-8af0-7d8c6b18943a, Username: prag1974]'s last active property has been updated.
+2025-06-27 20:01:59 [INF] Operation completed: User: [Id: a50d16fd-d9bc-4d5c-8af0-7d8c6b18943a, Username: prag1974] has demanded his collection records. 1 row has ben returned.
+2025-06-27 20:01:59 [INF] HTTP GET /collection/ responded 200 in 54.0980 ms
+2025-06-27 20:02:09 [INF] RetrieveAsync called for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 20:02:09 [INF] RetrieveAsync called for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 20:02:09 [INF] RetrieveAsync: Authentication ticket created for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 20:02:09 [INF] User: [Id: a50d16fd-d9bc-4d5c-8af0-7d8c6b18943a, Username: prag1974]'s last active property has been updated.
+2025-06-27 20:02:09 [INF] RetrieveAsync: Authentication ticket created for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 20:02:09 [INF] User: [Id: a50d16fd-d9bc-4d5c-8af0-7d8c6b18943a, Username: prag1974]'s last active property has been updated.
+2025-06-27 20:02:09 [INF] HTTP GET /user/me responded 200 in 19.3867 ms
+2025-06-27 20:02:09 [INF] HTTP GET /user/prag1974 responded 200 in 25.5573 ms
+2025-06-27 20:02:09 [INF] RetrieveAsync called for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 20:02:09 [INF] RetrieveAsync: Authentication ticket created for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 20:02:09 [INF] User: [Id: a50d16fd-d9bc-4d5c-8af0-7d8c6b18943a, Username: prag1974]'s last active property has been updated.
+2025-06-27 20:02:09 [INF] HTTP GET /user/comments/a50d16fd-d9bc-4d5c-8af0-7d8c6b18943a responded 200 in 10.6644 ms
+2025-06-27 20:02:40 [INF] RetrieveAsync called for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 20:02:40 [INF] RetrieveAsync: Authentication ticket created for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 20:02:40 [INF] User: [Id: a50d16fd-d9bc-4d5c-8af0-7d8c6b18943a, Username: prag1974]'s last active property has been updated.
+2025-06-27 20:02:40 [INF] HTTP GET /user/prag1974 responded 200 in 21.3610 ms
+2025-06-27 20:02:41 [INF] RetrieveAsync called for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 20:02:41 [INF] RetrieveAsync: Authentication ticket created for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 20:02:41 [INF] User: [Id: a50d16fd-d9bc-4d5c-8af0-7d8c6b18943a, Username: prag1974]'s last active property has been updated.
+2025-06-27 20:02:41 [INF] HTTP GET /user/comments/a50d16fd-d9bc-4d5c-8af0-7d8c6b18943a responded 200 in 28.4439 ms
+2025-06-27 20:02:45 [INF] RetrieveAsync called for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 20:02:45 [INF] RetrieveAsync: Authentication ticket created for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 20:02:45 [INF] User: [Id: a50d16fd-d9bc-4d5c-8af0-7d8c6b18943a, Username: prag1974]'s last active property has been updated.
+2025-06-27 20:02:45 [INF] HTTP GET /user/prag1974 responded 200 in 31.1289 ms
+2025-06-27 20:02:45 [INF] RetrieveAsync called for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 20:02:45 [INF] RetrieveAsync: Authentication ticket created for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 20:02:45 [INF] User: [Id: a50d16fd-d9bc-4d5c-8af0-7d8c6b18943a, Username: prag1974]'s last active property has been updated.
+2025-06-27 20:02:45 [INF] HTTP GET /user/comments/a50d16fd-d9bc-4d5c-8af0-7d8c6b18943a responded 200 in 20.2905 ms
+2025-06-27 20:03:15 [INF] RetrieveAsync called for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 20:03:16 [INF] RetrieveAsync: Authentication ticket created for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 20:03:16 [INF] User: [Id: a50d16fd-d9bc-4d5c-8af0-7d8c6b18943a, Username: prag1974]'s last active property has been updated.
+2025-06-27 20:03:16 [INF] HTTP GET /user/prag1974 responded 200 in 479.2929 ms
+2025-06-27 20:03:16 [INF] RetrieveAsync called for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 20:03:16 [INF] RetrieveAsync: Authentication ticket created for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 20:03:16 [INF] User: [Id: a50d16fd-d9bc-4d5c-8af0-7d8c6b18943a, Username: prag1974]'s last active property has been updated.
+2025-06-27 20:03:16 [INF] HTTP GET /user/comments/a50d16fd-d9bc-4d5c-8af0-7d8c6b18943a responded 200 in 19.2351 ms
+2025-06-27 20:03:23 [INF] RetrieveAsync called for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 20:03:23 [INF] RetrieveAsync: Authentication ticket created for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 20:03:23 [INF] User: [Id: a50d16fd-d9bc-4d5c-8af0-7d8c6b18943a, Username: prag1974]'s last active property has been updated.
+2025-06-27 20:03:23 [INF] HTTP GET /user/prag1974 responded 200 in 19.9002 ms
+2025-06-27 20:03:23 [INF] RetrieveAsync called for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 20:03:23 [INF] RetrieveAsync: Authentication ticket created for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 20:03:23 [INF] User: [Id: a50d16fd-d9bc-4d5c-8af0-7d8c6b18943a, Username: prag1974]'s last active property has been updated.
+2025-06-27 20:03:23 [INF] HTTP GET /user/comments/a50d16fd-d9bc-4d5c-8af0-7d8c6b18943a responded 200 in 12.1865 ms
+2025-06-27 20:03:26 [INF] RetrieveAsync called for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 20:03:26 [INF] RetrieveAsync: Authentication ticket created for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 20:03:26 [INF] User: [Id: a50d16fd-d9bc-4d5c-8af0-7d8c6b18943a, Username: prag1974]'s last active property has been updated.
+2025-06-27 20:03:26 [INF] HTTP GET /user/notes/a50d16fd-d9bc-4d5c-8af0-7d8c6b18943a responded 200 in 14.2943 ms
+2025-06-27 20:04:23 [INF] RetrieveAsync called for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 20:04:23 [INF] RetrieveAsync: Authentication ticket created for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 20:04:23 [INF] User: [Id: a50d16fd-d9bc-4d5c-8af0-7d8c6b18943a, Username: prag1974]'s last active property has been updated.
+2025-06-27 20:04:23 [INF] HTTP GET /user/prag1974 responded 200 in 152.3312 ms
+2025-06-27 20:05:23 [INF] RetrieveAsync called for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 20:05:23 [INF] RetrieveAsync: Authentication ticket created for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 20:05:23 [INF] User: [Id: a50d16fd-d9bc-4d5c-8af0-7d8c6b18943a, Username: prag1974]'s last active property has been updated.
+2025-06-27 20:05:23 [INF] HTTP GET /user/prag1974 responded 200 in 27.4042 ms
+2025-06-27 20:05:29 [INF] RetrieveAsync called for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 20:05:29 [INF] RetrieveAsync: Authentication ticket created for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 20:05:29 [INF] User: [Id: a50d16fd-d9bc-4d5c-8af0-7d8c6b18943a, Username: prag1974]'s last active property has been updated.
+2025-06-27 20:05:29 [INF] RetrieveAsync called for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 20:05:29 [INF] RetrieveAsync: Authentication ticket created for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 20:05:29 [INF] User: [Id: a50d16fd-d9bc-4d5c-8af0-7d8c6b18943a, Username: prag1974]'s last active property has been updated.
+2025-06-27 20:05:29 [INF] HTTP GET /user/me responded 200 in 14.1537 ms
+2025-06-27 20:05:29 [INF] HTTP GET /user/prag1974 responded 200 in 23.4479 ms
+2025-06-27 20:05:29 [INF] RetrieveAsync called for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 20:05:29 [INF] RetrieveAsync: Authentication ticket created for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 20:05:29 [INF] User: [Id: a50d16fd-d9bc-4d5c-8af0-7d8c6b18943a, Username: prag1974]'s last active property has been updated.
+2025-06-27 20:05:29 [INF] HTTP GET /user/comments/a50d16fd-d9bc-4d5c-8af0-7d8c6b18943a responded 200 in 58.7993 ms
+2025-06-27 20:05:31 [INF] RetrieveAsync called for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 20:05:31 [INF] RetrieveAsync: Authentication ticket created for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 20:05:31 [INF] User: [Id: a50d16fd-d9bc-4d5c-8af0-7d8c6b18943a, Username: prag1974]'s last active property has been updated.
+2025-06-27 20:05:31 [INF] HTTP GET /user/notes/a50d16fd-d9bc-4d5c-8af0-7d8c6b18943a responded 200 in 17.9679 ms
+2025-06-27 20:06:29 [INF] RetrieveAsync called for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 20:06:29 [INF] RetrieveAsync: Authentication ticket created for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 20:06:29 [INF] User: [Id: a50d16fd-d9bc-4d5c-8af0-7d8c6b18943a, Username: prag1974]'s last active property has been updated.
+2025-06-27 20:06:29 [INF] HTTP GET /user/prag1974 responded 200 in 27.9915 ms
+2025-06-27 20:07:29 [INF] RetrieveAsync called for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 20:07:29 [INF] RetrieveAsync: Authentication ticket created for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 20:07:29 [INF] User: [Id: a50d16fd-d9bc-4d5c-8af0-7d8c6b18943a, Username: prag1974]'s last active property has been updated.
+2025-06-27 20:07:29 [INF] HTTP GET /user/prag1974 responded 200 in 17.4426 ms
+2025-06-27 20:08:24 [INF] RetrieveAsync called for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 20:08:24 [INF] RetrieveAsync: Authentication ticket created for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 20:08:24 [INF] User: [Id: a50d16fd-d9bc-4d5c-8af0-7d8c6b18943a, Username: prag1974]'s last active property has been updated.
+2025-06-27 20:08:24 [INF] HTTP GET /user/comments/a50d16fd-d9bc-4d5c-8af0-7d8c6b18943a responded 200 in 36.3846 ms
+2025-06-27 20:08:29 [INF] RetrieveAsync called for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 20:08:29 [INF] RetrieveAsync: Authentication ticket created for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 20:08:29 [INF] User: [Id: a50d16fd-d9bc-4d5c-8af0-7d8c6b18943a, Username: prag1974]'s last active property has been updated.
+2025-06-27 20:08:29 [INF] HTTP GET /user/prag1974 responded 200 in 27.0527 ms
+2025-06-27 20:08:33 [INF] RetrieveAsync called for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 20:08:33 [INF] RetrieveAsync: Authentication ticket created for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 20:08:33 [INF] User: [Id: a50d16fd-d9bc-4d5c-8af0-7d8c6b18943a, Username: prag1974]'s last active property has been updated.
+2025-06-27 20:08:33 [INF] HTTP GET /user/undefined responded 404 in 29.9946 ms
+2025-06-27 20:08:46 [INF] RetrieveAsync called for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 20:08:46 [INF] RetrieveAsync: Authentication ticket created for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 20:08:46 [INF] User: [Id: a50d16fd-d9bc-4d5c-8af0-7d8c6b18943a, Username: prag1974]'s last active property has been updated.
+2025-06-27 20:08:46 [INF] HTTP GET /user/me responded 200 in 12.2415 ms
+2025-06-27 20:08:54 [INF] RetrieveAsync called for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 20:08:54 [INF] RetrieveAsync: Authentication ticket created for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 20:08:54 [INF] User: [Id: a50d16fd-d9bc-4d5c-8af0-7d8c6b18943a, Username: prag1974]'s last active property has been updated.
+2025-06-27 20:08:54 [INF] Operation completed: User: [Id: a50d16fd-d9bc-4d5c-8af0-7d8c6b18943a Username: prag1974] has changed his account to public
+2025-06-27 20:08:54 [INF] HTTP PUT /session/alter responded 200 in 144.5624 ms
+2025-06-27 20:08:55 [INF] RetrieveAsync called for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 20:08:55 [INF] RetrieveAsync: Authentication ticket created for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 20:08:55 [INF] User: [Id: a50d16fd-d9bc-4d5c-8af0-7d8c6b18943a, Username: prag1974]'s last active property has been updated.
+2025-06-27 20:08:55 [INF] Operation completed: User: [Id: a50d16fd-d9bc-4d5c-8af0-7d8c6b18943a Username: prag1974] has changed his account to private
+2025-06-27 20:08:55 [INF] HTTP PUT /session/alter responded 200 in 17.6885 ms
+2025-06-27 20:08:56 [INF] RetrieveAsync called for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 20:08:56 [INF] RetrieveAsync: Authentication ticket created for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 20:08:56 [INF] User: [Id: a50d16fd-d9bc-4d5c-8af0-7d8c6b18943a, Username: prag1974]'s last active property has been updated.
+2025-06-27 20:08:56 [INF] Operation completed: User: [Id: a50d16fd-d9bc-4d5c-8af0-7d8c6b18943a Username: prag1974] has changed his account to public
+2025-06-27 20:08:56 [INF] HTTP PUT /session/alter responded 200 in 23.4394 ms
+2025-06-27 20:08:56 [INF] RetrieveAsync called for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 20:08:56 [INF] RetrieveAsync: Authentication ticket created for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 20:08:56 [INF] User: [Id: a50d16fd-d9bc-4d5c-8af0-7d8c6b18943a, Username: prag1974]'s last active property has been updated.
+2025-06-27 20:08:56 [INF] Operation completed: User: [Id: a50d16fd-d9bc-4d5c-8af0-7d8c6b18943a Username: prag1974] has changed his account to private
+2025-06-27 20:08:56 [INF] HTTP PUT /session/alter responded 200 in 16.6822 ms
+2025-06-27 20:08:57 [INF] RetrieveAsync called for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 20:08:57 [INF] RetrieveAsync: Authentication ticket created for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 20:08:57 [INF] User: [Id: a50d16fd-d9bc-4d5c-8af0-7d8c6b18943a, Username: prag1974]'s last active property has been updated.
+2025-06-27 20:08:57 [INF] Operation completed: User: [Id: a50d16fd-d9bc-4d5c-8af0-7d8c6b18943a, Username: prag1974] has demanded his followER records. 0 row has ben returned.
+2025-06-27 20:08:57 [INF] HTTP GET /follow/follower/1 responded 200 in 57.8536 ms
+2025-06-27 20:08:58 [INF] RetrieveAsync called for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 20:08:58 [INF] RetrieveAsync: Authentication ticket created for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 20:08:58 [INF] User: [Id: a50d16fd-d9bc-4d5c-8af0-7d8c6b18943a, Username: prag1974]'s last active property has been updated.
+2025-06-27 20:08:58 [INF] Operation completed: User: [Id: a50d16fd-d9bc-4d5c-8af0-7d8c6b18943a, Username: prag1974] has demanded his followED records. 0 row has ben returned.
+2025-06-27 20:08:58 [INF] HTTP GET /follow/followed/1 responded 200 in 43.3244 ms
+2025-06-27 20:08:59 [INF] RetrieveAsync called for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 20:08:59 [INF] RetrieveAsync: Authentication ticket created for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 20:08:59 [INF] User: [Id: a50d16fd-d9bc-4d5c-8af0-7d8c6b18943a, Username: prag1974]'s last active property has been updated.
+2025-06-27 20:08:59 [INF] Operation completed: User: [Id: a50d16fd-d9bc-4d5c-8af0-7d8c6b18943a, Username: prag1974] has demanded his followED records. 0 row has ben returned.
+2025-06-27 20:08:59 [INF] HTTP GET /follow/followed/0 responded 200 in 11.2945 ms
+2025-06-27 20:08:59 [INF] RetrieveAsync called for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 20:08:59 [INF] RetrieveAsync: Authentication ticket created for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 20:08:59 [INF] User: [Id: a50d16fd-d9bc-4d5c-8af0-7d8c6b18943a, Username: prag1974]'s last active property has been updated.
+2025-06-27 20:08:59 [INF] Operation completed: User: [Id: a50d16fd-d9bc-4d5c-8af0-7d8c6b18943a, Username: prag1974] has demanded his followER records. 0 row has ben returned.
+2025-06-27 20:08:59 [INF] HTTP GET /follow/follower/0 responded 200 in 9.7792 ms
+2025-06-27 20:09:01 [INF] RetrieveAsync called for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 20:09:01 [INF] RetrieveAsync: Authentication ticket created for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 20:09:01 [INF] User: [Id: a50d16fd-d9bc-4d5c-8af0-7d8c6b18943a, Username: prag1974]'s last active property has been updated.
+2025-06-27 20:09:01 [INF] Operation completed: User: [Id: a50d16fd-d9bc-4d5c-8af0-7d8c6b18943a, Username: prag1974] has demanded hiss block records. 0 rows has been returned.
+2025-06-27 20:09:01 [INF] HTTP GET /block responded 200 in 28.7422 ms
+2025-06-27 20:09:05 [INF] RetrieveAsync called for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 20:09:05 [INF] RetrieveAsync: Authentication ticket created for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 20:09:05 [INF] User: [Id: a50d16fd-d9bc-4d5c-8af0-7d8c6b18943a, Username: prag1974]'s last active property has been updated.
+2025-06-27 20:09:05 [INF] Operation completed: User: [Id: a50d16fd-d9bc-4d5c-8af0-7d8c6b18943a, Username: prag1974] has demanded his comments records. 0 row has been returned.
+2025-06-27 20:09:05 [INF] HTTP GET /comment/ responded 200 in 221.4829 ms
+2025-06-27 20:09:07 [INF] RetrieveAsync called for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 20:09:07 [INF] RetrieveAsync: Authentication ticket created for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 20:09:07 [INF] User: [Id: a50d16fd-d9bc-4d5c-8af0-7d8c6b18943a, Username: prag1974]'s last active property has been updated.
+2025-06-27 20:09:07 [INF] Operation completed: User: [Id: a50d16fd-d9bc-4d5c-8af0-7d8c6b18943a, Username: prag1974] has demanded his note records. 0 row has ben returned.
+2025-06-27 20:09:07 [INF] HTTP GET /note/notes responded 200 in 49.5274 ms
+2025-06-27 20:09:08 [INF] RetrieveAsync called for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 20:09:08 [INF] RetrieveAsync: Authentication ticket created for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 20:09:08 [INF] User: [Id: a50d16fd-d9bc-4d5c-8af0-7d8c6b18943a, Username: prag1974]'s last active property has been updated.
+2025-06-27 20:09:08 [INF] Operation completed: User: [Id: a50d16fd-d9bc-4d5c-8af0-7d8c6b18943a, Username: prag1974] has demanded his comments records. 0 row has been returned.
+2025-06-27 20:09:08 [INF] HTTP GET /comment/ responded 200 in 13.7632 ms
+2025-06-27 20:10:30 [INF] RetrieveAsync called for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 20:10:30 [INF] RetrieveAsync: Authentication ticket created for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 20:10:30 [INF] User: [Id: a50d16fd-d9bc-4d5c-8af0-7d8c6b18943a, Username: prag1974]'s last active property has been updated.
+2025-06-27 20:10:30 [INF] HTTP GET /user/me responded 200 in 75.0945 ms
+2025-06-27 22:42:21 [INF] Application is starting...
+2025-06-27 22:42:22 [WRN] Overriding address(es) 'http://localhost:5277'. Binding to endpoints defined via IConfiguration and/or UseKestrel() instead.
+2025-06-27 22:42:24 [WRN] Failed to determine the https port for redirect.
+2025-06-27 22:42:24 [INF] HTTP GET /test responded 200 in 55.8716 ms
+2025-06-27 22:42:25 [INF] RetrieveAsync called for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 22:42:25 [INF] RetrieveAsync called for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 22:42:26 [INF] RetrieveAsync called for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 22:42:26 [INF] RetrieveAsync called for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 22:42:26 [INF] RetrieveAsync called for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 22:42:26 [INF] RetrieveAsync called for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 22:42:26 [INF] RetrieveAsync called for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 22:42:27 [INF] RetrieveAsync: Authentication ticket created for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 22:42:27 [INF] RetrieveAsync: Authentication ticket created for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 22:42:27 [INF] RetrieveAsync: Authentication ticket created for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 22:42:27 [INF] RetrieveAsync: Authentication ticket created for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 22:42:27 [INF] RetrieveAsync: Authentication ticket created for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 22:42:27 [INF] RetrieveAsync: Authentication ticket created for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 22:42:27 [INF] RetrieveAsync: Authentication ticket created for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 22:42:27 [INF] RetrieveAsync called for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 22:42:27 [INF] User: [Id: a50d16fd-d9bc-4d5c-8af0-7d8c6b18943a, Username: prag1974]'s last active property has been updated.
+2025-06-27 22:42:27 [INF] User: [Id: a50d16fd-d9bc-4d5c-8af0-7d8c6b18943a, Username: prag1974]'s last active property has been updated.
+2025-06-27 22:42:27 [INF] HTTP GET /test responded 200 in 1683.2790 ms
+2025-06-27 22:42:27 [INF] HTTP GET /test responded 200 in 903.5903 ms
+2025-06-27 22:42:27 [INF] User: [Id: a50d16fd-d9bc-4d5c-8af0-7d8c6b18943a, Username: prag1974]'s last active property has been updated.
+2025-06-27 22:42:27 [INF] HTTP GET /test responded 200 in 787.8202 ms
+2025-06-27 22:42:27 [INF] User: [Id: a50d16fd-d9bc-4d5c-8af0-7d8c6b18943a, Username: prag1974]'s last active property has been updated.
+2025-06-27 22:42:27 [INF] HTTP GET /test responded 200 in 1492.0645 ms
+2025-06-27 22:42:27 [INF] User: [Id: a50d16fd-d9bc-4d5c-8af0-7d8c6b18943a, Username: prag1974]'s last active property has been updated.
+2025-06-27 22:42:27 [INF] HTTP GET /test responded 200 in 1153.4691 ms
+2025-06-27 22:42:27 [INF] User: [Id: a50d16fd-d9bc-4d5c-8af0-7d8c6b18943a, Username: prag1974]'s last active property has been updated.
+2025-06-27 22:42:27 [INF] HTTP GET /test responded 200 in 2220.0260 ms
+2025-06-27 22:42:27 [INF] RetrieveAsync: Authentication ticket created for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 22:42:27 [INF] User: [Id: a50d16fd-d9bc-4d5c-8af0-7d8c6b18943a, Username: prag1974]'s last active property has been updated.
+2025-06-27 22:42:27 [INF] HTTP GET /test responded 200 in 1299.4835 ms
+2025-06-27 22:42:27 [INF] User: [Id: a50d16fd-d9bc-4d5c-8af0-7d8c6b18943a, Username: prag1974]'s last active property has been updated.
+2025-06-27 22:42:27 [INF] HTTP GET /test responded 200 in 133.2296 ms
+2025-06-27 22:42:28 [INF] RetrieveAsync called for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 22:42:28 [INF] RetrieveAsync: Authentication ticket created for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 22:42:28 [INF] User: [Id: a50d16fd-d9bc-4d5c-8af0-7d8c6b18943a, Username: prag1974]'s last active property has been updated.
+2025-06-27 22:42:28 [INF] HTTP GET /test responded 200 in 11.7828 ms
+2025-06-27 22:42:28 [INF] RetrieveAsync called for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 22:42:28 [INF] RetrieveAsync: Authentication ticket created for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 22:42:28 [INF] User: [Id: a50d16fd-d9bc-4d5c-8af0-7d8c6b18943a, Username: prag1974]'s last active property has been updated.
+2025-06-27 22:42:28 [INF] HTTP GET /test responded 200 in 8.0478 ms
+2025-06-27 22:42:28 [INF] RetrieveAsync called for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 22:42:28 [INF] RetrieveAsync: Authentication ticket created for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 22:42:28 [INF] User: [Id: a50d16fd-d9bc-4d5c-8af0-7d8c6b18943a, Username: prag1974]'s last active property has been updated.
+2025-06-27 22:42:28 [INF] HTTP GET /test responded 200 in 9.0582 ms
+2025-06-27 22:42:28 [INF] RetrieveAsync called for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 22:42:28 [INF] RetrieveAsync: Authentication ticket created for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 22:42:28 [INF] User: [Id: a50d16fd-d9bc-4d5c-8af0-7d8c6b18943a, Username: prag1974]'s last active property has been updated.
+2025-06-27 22:42:28 [INF] HTTP GET /test responded 200 in 10.3324 ms
+2025-06-27 22:42:28 [INF] RetrieveAsync called for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 22:42:28 [INF] RetrieveAsync: Authentication ticket created for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 22:42:28 [INF] User: [Id: a50d16fd-d9bc-4d5c-8af0-7d8c6b18943a, Username: prag1974]'s last active property has been updated.
+2025-06-27 22:42:28 [INF] HTTP GET /test responded 200 in 10.7776 ms
+2025-06-27 22:42:29 [INF] RetrieveAsync called for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 22:42:29 [INF] RetrieveAsync: Authentication ticket created for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 22:42:29 [INF] User: [Id: a50d16fd-d9bc-4d5c-8af0-7d8c6b18943a, Username: prag1974]'s last active property has been updated.
+2025-06-27 22:42:29 [INF] HTTP GET /test responded 200 in 9.6749 ms
+2025-06-27 22:42:29 [INF] RetrieveAsync called for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 22:42:29 [INF] RetrieveAsync: Authentication ticket created for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 22:42:29 [INF] User: [Id: a50d16fd-d9bc-4d5c-8af0-7d8c6b18943a, Username: prag1974]'s last active property has been updated.
+2025-06-27 22:42:29 [INF] HTTP GET /test responded 200 in 8.4205 ms
+2025-06-27 22:42:29 [INF] RetrieveAsync called for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 22:42:29 [INF] RetrieveAsync: Authentication ticket created for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 22:42:29 [INF] User: [Id: a50d16fd-d9bc-4d5c-8af0-7d8c6b18943a, Username: prag1974]'s last active property has been updated.
+2025-06-27 22:42:29 [INF] HTTP GET /test responded 200 in 8.2156 ms
+2025-06-27 22:42:29 [INF] RetrieveAsync called for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 22:42:29 [INF] RetrieveAsync: Authentication ticket created for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 22:42:29 [INF] User: [Id: a50d16fd-d9bc-4d5c-8af0-7d8c6b18943a, Username: prag1974]'s last active property has been updated.
+2025-06-27 22:42:29 [INF] HTTP GET /test responded 200 in 8.9347 ms
+2025-06-27 22:42:29 [INF] RetrieveAsync called for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 22:42:29 [INF] RetrieveAsync: Authentication ticket created for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 22:42:29 [INF] User: [Id: a50d16fd-d9bc-4d5c-8af0-7d8c6b18943a, Username: prag1974]'s last active property has been updated.
+2025-06-27 22:42:29 [INF] HTTP GET /test responded 200 in 9.2393 ms
+2025-06-27 22:42:29 [INF] RetrieveAsync called for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 22:42:29 [INF] RetrieveAsync: Authentication ticket created for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 22:42:29 [INF] User: [Id: a50d16fd-d9bc-4d5c-8af0-7d8c6b18943a, Username: prag1974]'s last active property has been updated.
+2025-06-27 22:42:29 [INF] HTTP GET /test responded 200 in 8.8172 ms
+2025-06-27 22:42:30 [INF] RetrieveAsync called for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 22:42:30 [INF] RetrieveAsync: Authentication ticket created for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 22:42:30 [INF] User: [Id: a50d16fd-d9bc-4d5c-8af0-7d8c6b18943a, Username: prag1974]'s last active property has been updated.
+2025-06-27 22:42:30 [INF] HTTP GET /test responded 200 in 9.5977 ms
+2025-06-27 22:42:30 [INF] RetrieveAsync called for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 22:42:30 [INF] RetrieveAsync: Authentication ticket created for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 22:42:30 [INF] User: [Id: a50d16fd-d9bc-4d5c-8af0-7d8c6b18943a, Username: prag1974]'s last active property has been updated.
+2025-06-27 22:42:30 [INF] HTTP GET /test responded 200 in 8.1416 ms
+2025-06-27 22:42:30 [INF] RetrieveAsync called for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 22:42:30 [INF] RetrieveAsync: Authentication ticket created for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 22:42:30 [INF] User: [Id: a50d16fd-d9bc-4d5c-8af0-7d8c6b18943a, Username: prag1974]'s last active property has been updated.
+2025-06-27 22:42:30 [INF] HTTP GET /test responded 200 in 8.9883 ms
+2025-06-27 22:42:30 [INF] RetrieveAsync called for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 22:42:30 [INF] RetrieveAsync: Authentication ticket created for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 22:42:30 [INF] User: [Id: a50d16fd-d9bc-4d5c-8af0-7d8c6b18943a, Username: prag1974]'s last active property has been updated.
+2025-06-27 22:42:30 [INF] HTTP GET /test responded 200 in 8.7476 ms
+2025-06-27 22:42:30 [INF] RetrieveAsync called for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 22:42:30 [INF] RetrieveAsync: Authentication ticket created for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 22:42:30 [INF] User: [Id: a50d16fd-d9bc-4d5c-8af0-7d8c6b18943a, Username: prag1974]'s last active property has been updated.
+2025-06-27 22:42:30 [INF] HTTP GET /test responded 200 in 9.5329 ms
+2025-06-27 22:42:31 [INF] RetrieveAsync called for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 22:42:31 [INF] RetrieveAsync: Authentication ticket created for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 22:42:31 [INF] User: [Id: a50d16fd-d9bc-4d5c-8af0-7d8c6b18943a, Username: prag1974]'s last active property has been updated.
+2025-06-27 22:42:31 [INF] HTTP GET /test responded 200 in 7.6175 ms
+2025-06-27 22:42:31 [INF] RetrieveAsync called for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 22:42:31 [INF] RetrieveAsync: Authentication ticket created for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 22:42:31 [INF] User: [Id: a50d16fd-d9bc-4d5c-8af0-7d8c6b18943a, Username: prag1974]'s last active property has been updated.
+2025-06-27 22:42:31 [INF] HTTP GET /test responded 200 in 9.9261 ms
+2025-06-27 22:42:31 [INF] RetrieveAsync called for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 22:42:31 [INF] RetrieveAsync: Authentication ticket created for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 22:42:31 [INF] User: [Id: a50d16fd-d9bc-4d5c-8af0-7d8c6b18943a, Username: prag1974]'s last active property has been updated.
+2025-06-27 22:42:31 [INF] HTTP GET /test responded 200 in 6.6942 ms
+2025-06-27 22:42:32 [INF] RetrieveAsync called for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 22:42:32 [INF] RetrieveAsync: Authentication ticket created for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 22:42:32 [INF] User: [Id: a50d16fd-d9bc-4d5c-8af0-7d8c6b18943a, Username: prag1974]'s last active property has been updated.
+2025-06-27 22:42:32 [INF] HTTP GET /test responded 200 in 9.1696 ms
+2025-06-27 22:42:32 [INF] RetrieveAsync called for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 22:42:32 [INF] RetrieveAsync: Authentication ticket created for SessionId: 06d7d5f1-3d22-4eb5-adaf-2ab4c99b4b99.
+2025-06-27 22:42:32 [INF] User: [Id: a50d16fd-d9bc-4d5c-8af0-7d8c6b18943a, Username: prag1974]'s last active property has been updated.
+2025-06-27 22:42:32 [INF] HTTP GET /test responded 200 in 7.0655 ms

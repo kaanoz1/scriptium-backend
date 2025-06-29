@@ -1,9 +1,0 @@
-2025-06-21 23:46:53 [INF] Application is starting...
-2025-06-21 23:48:15 [WRN] Failed to determine the https port for redirect.
-2025-06-21 23:48:15 [INF] HTTP GET /test responded 200 in 105.7472 ms
-2025-06-21 23:48:40 [INF] Cache data for URL /verse/1/1/1/1 is renewing
-2025-06-21 23:48:40 [INF] HTTP GET /verse/1/1/1/1 responded 200 in 6081.7738 ms
-2025-06-21 23:49:46 [INF] Cache data for URL /verse/1/29/30/31 is renewing
-2025-06-21 23:49:47 [INF] HTTP GET /verse/1/29/30/31 responded 200 in 57.2184 ms
-2025-06-21 23:59:57 [INF] Application is starting...
-2025-06-21 23:59:59 [WRN] Failed to determine the https port for redirect.

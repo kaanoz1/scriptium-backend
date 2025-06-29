@@ -36,7 +36,7 @@ builder.Services.AddRateLimiter(option =>
 {
     option.AddFixedWindowLimiter(policyName: "StaticControllerRateLimiter", windowsOptions =>
     {
-        windowsOptions.PermitLimit = 3;
+        windowsOptions.PermitLimit = 5;
         windowsOptions.Window = TimeSpan.FromSeconds(10);
     });
 
@@ -61,12 +61,13 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowAll", policy =>
     {
         policy
-            .AllowAnyOrigin()       // 🔁 Tüm origin'lere izin ver
-            .AllowAnyHeader()       // 🔁 Tüm header'lara izin ver
-            .AllowAnyMethod();      // 🔁 GET, POST, PUT, DELETE, vb.
-        // ❌ .AllowCredentials() => Bu, AllowAnyOrigin ile birlikte kullanılamaz
+            .WithOrigins("http://localhost:3000", "http://192.168.1.2:3000")
+            .AllowCredentials()
+            .AllowAnyHeader()
+            .AllowAnyMethod();
     });
 });
+
 
 
 builder.Services.AddEndpointsApiExplorer();
@@ -124,6 +125,8 @@ builder.Services.AddControllers()
 
 var app = builder.Build();
 
+app.UseCors("AllowAll");
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -136,12 +139,12 @@ app.UseHttpsRedirection();
 
 app.UseRouting();
 
-app.UseCors("AllowAll");
+
 
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.UseRateLimiter();
+//app.UseRateLimiter();
 
 //app.UseMiddleware<RequestLoggingMiddleware>();
 

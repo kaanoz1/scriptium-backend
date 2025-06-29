@@ -36,12 +36,13 @@ namespace scriptium_backend_dotnet.Controllers.NoteHandler
             try
             {
 
-                List<NoteOwnDTO> data = await _db.Note.Where(n => n.UserId == UserRequested.Id)
+                List<NoteOwnVerseDTO> data = await _db.Note.Where(n => n.UserId == UserRequested.Id)
                     .Include(n => n.Likes).ThenInclude(l => l.Like)
                     .Include(n => n.Verse).ThenInclude(n => n.Chapter).ThenInclude(c => c.Meanings)
                     .Include(n => n.Verse).ThenInclude(n => n.Chapter).ThenInclude(c => c.Section).ThenInclude(s => s.Scripture)
+                    .Include(n => n.Likes).ThenInclude(nl => nl.Like)
                     .AsSplitQuery()
-                    .Select(n => n.ToNoteOwnDTO(UserRequested)).ToListAsync();
+                    .Select(n => n.ToNoteOwnVerseDTO(UserRequested)).ToListAsync();
 
                 _logger.LogInformation($"Operation completed: User: [Id: {UserRequested.Id}, Username: {UserRequested.UserName}] has demanded his note records. {data.Count} row has ben returned.");
                 return Ok(new { data });
@@ -110,7 +111,7 @@ namespace scriptium_backend_dotnet.Controllers.NoteHandler
             string? UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
             if (UserId == null)
-                return Unauthorized();
+                return Unauthorized(new {message = "You are not logged in."});
 
             User? UserRequested = await _userManager.FindByIdAsync(UserId);
 
@@ -120,7 +121,7 @@ namespace scriptium_backend_dotnet.Controllers.NoteHandler
             Verse? VerseAttached = null;
 
 
-            using var transaction = await _db.Database.BeginTransactionAsync();
+            await using var transaction = await _db.Database.BeginTransactionAsync();
             try
             {
                 VerseAttached = await _db.Verse.FirstOrDefaultAsync(v => v.Id == model.VerseId);
