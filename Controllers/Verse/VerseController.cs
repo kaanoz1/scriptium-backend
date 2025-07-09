@@ -133,6 +133,10 @@ namespace scriptium_backend_dotnet.Controllers.VerseHandler
                 .ThenInclude(tr => tr.Language)
                 .Include(c => c.Meanings)
                 .ThenInclude(m => m.Language)
+                .Include(c => c.Verses)
+                .ThenInclude(v => v.TranslationTexts)
+                .ThenInclude(tt => tt.FootNotes)
+                .ThenInclude(f => f.FootNoteText)
                 .Select(c => c.ToChapterUpperAndOneLevelLowerDTO())
                 .FirstOrDefaultAsync();
 

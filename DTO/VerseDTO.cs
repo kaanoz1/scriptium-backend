@@ -76,6 +76,8 @@ namespace DTO
     {
         public required ChapterUpperMeanDTO Chapter { get; set; }
     }
+    
+    
     public class VerseLowerMeanDTO : VerseMeanDTO;
 
     public class TextVariation
@@ -85,6 +87,41 @@ namespace DTO
         public required string? Simplified { get; set; }
 
         public required string? WithoutVowel { get; set; }
+    }
+
+    public class VerseUpperMeanStatisticsDTO : VerseUpperMeanDTO
+    {
+        public required long Count { get; set; }
+        
+        public required DateOnly Date { get; set; }
+    }
+
+    
+    
+    public class VerseIndicatorDTO : IEquatable<VerseIndicatorDTO>
+    {
+        public int Scripture { get; set; }
+        public int Section { get; set; }
+        public int Chapter { get; set; }
+        public int Verse { get; set; }
+
+        public override bool Equals(object? obj) => Equals(obj as VerseIndicatorDTO);
+
+        public bool Equals(VerseIndicatorDTO? other)
+        {
+            return other != null &&
+                   Scripture == other.Scripture &&
+                   Section == other.Section &&
+                   Chapter == other.Chapter &&
+                   Verse == other.Verse;
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(Scripture, Section, Chapter, Verse);
+        }
+
+        public override string ToString() => $"{Scripture}:{Section}:{Chapter}:{Verse}";
     }
 
 

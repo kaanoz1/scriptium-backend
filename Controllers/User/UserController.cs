@@ -60,10 +60,10 @@ namespace scriptium_backend_dotnet.Controllers.UserHandler
             long suggestionCount = await _db.Suggestion.CountAsync(s => s.UserId == UserFetched.Id);
 
 
-            Follow? FollowStatusFromInspectionUserToInspectedUser =
+            Follow? FollowStatusOfUserInspectingToUserInspected =
                 await _db.Follow.FirstOrDefaultAsync(f =>
                     f.FollowerId == UserRequested.Id && f.FollowedId == UserFetched.Id);
-            Follow? FollowStatusFromInspectedUserToInspectingUser =
+            Follow? FollowStatusOfUserInspectedToUserInspecting =
                 await _db.Follow.FirstOrDefaultAsync(f =>
                     f.FollowedId == UserRequested.Id && f.FollowerId == UserFetched.Id);
 
@@ -89,8 +89,8 @@ namespace scriptium_backend_dotnet.Controllers.UserHandler
                 UpdateCount = UserFetched.UpdateCount,
                 Roles = roles,
                 IsFrozen = UserFetched.IsFrozen.HasValue,
-                FollowStatusUserInspected = FollowStatusFromInspectionUserToInspectedUser?.Status.ToString(),
-                FollowStatusUserInspecting = FollowStatusFromInspectedUserToInspectingUser?.Status.ToString(),
+                followStatusUserInspecting = FollowStatusOfUserInspectingToUserInspected?.Status.ToString(),
+                followStatusUserInspected = FollowStatusOfUserInspectedToUserInspecting?.Status.ToString(),
                 IsUserInspectedBlocked = IsUserInspectedBlocked
             };
 
@@ -187,6 +187,14 @@ namespace scriptium_backend_dotnet.Controllers.UserHandler
             if (UserFetched == null || UserFetched.IsFrozen.HasValue)
                 return NotFound(new { message = "User not found!" });
 
+            if (UserFetched.IsPrivate.HasValue && UserRequested.Id != UserFetched.Id)
+            {
+                bool isUserFetchedFollowed = await _db.Follow.AnyAsync(f => f.FollowerId == UserRequested.Id && f.FollowedId == UserFetched.Id && f.Status == FollowStatus.Accepted);
+                
+                if(!isUserFetchedFollowed)
+                    return Unauthorized(new { message = "User not found!" });
+                
+            }
 
             try
             {
@@ -206,6 +214,9 @@ namespace scriptium_backend_dotnet.Controllers.UserHandler
                     .Include(cv => cv.Verse).ThenInclude(v => v.Chapter).ThenInclude(c => c.Meanings)
                     .ThenInclude(m => m.Language)
                     .Include(n => n.User)
+                    .Include(n => n.Likes)
+                    .ThenInclude(l => l.Like)
+                    .ThenInclude(l => l.User)
                     .AsSplitQuery()
                     .Select(note => note.ToNoteOwnerVerseDTO(UserRequested))
                     .ToListAsync();

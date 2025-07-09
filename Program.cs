@@ -8,6 +8,8 @@ using Serilog;
 using Microsoft.AspNetCore.RateLimiting;
 using FluentValidation.AspNetCore;
 using scriptium_backend_dotnet.MiddleWare;
+using scriptium_backend.Interface;
+using scriptium_backend.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -78,6 +80,11 @@ builder.Services.AddDbContext<ApplicationDBContext>(options =>
 
 builder.Services.AddSingleton<ITicketStore, SessionStore>();
 builder.Services.AddScoped<ICacheService, CacheService>();
+builder.Services.AddHostedService<UserDeletionBackgroundService>();
+
+builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
+builder.Services.AddScoped<IEmailService, EmailService>();
+
 
 builder.Services.AddIdentity<User, Role>(options =>
 {

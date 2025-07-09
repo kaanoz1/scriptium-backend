@@ -1,3 +1,4 @@
+using System.Data;
 using FluentValidation;
 
 namespace scriptium_backend_dotnet.Controllers.Validation
@@ -40,6 +41,7 @@ namespace scriptium_backend_dotnet.Controllers.Validation
     {
         public string Email { get; set; } = null!;
         public string Password { get; set; } = null!;
+        public bool RememberMe { get; set; }
     }
 
     public class LoginValidator : AbstractValidator<LoginModel>
@@ -49,7 +51,27 @@ namespace scriptium_backend_dotnet.Controllers.Validation
             RuleFor(r => r.Email).AuthenticationEmailRules();
 
             RuleFor(l => l.Password).AuthenticationPasswordRules();
+            
+            RuleFor(r => r.RememberMe).NotNull();
         }
     }
+    
+    
+    public class ResetPasswordModel
+    {
+        public required string Email { get; set; }
+        public required string Token { get; set; }
+        public required string NewPassword { get; set; }
+    }
+
+    public class ResetPasswordValidator : AbstractValidator<ResetPasswordModel>
+    {
+        public ResetPasswordValidator()
+        {
+            RuleFor(r => r.Email).AuthenticationEmailRules();
+            RuleFor(r => r.NewPassword).AuthenticationPasswordRules();
+        }
+    }
+
 }
 

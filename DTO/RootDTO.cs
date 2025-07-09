@@ -2,13 +2,11 @@ using scriptium_backend_dotnet.Models;
 
 namespace DTO
 {
-
-    public abstract class RootBaseDTO
+    public class RootBaseDTO
     {
         public required string Latin { get; set; }
 
         public required string Own { get; set; }
-
     }
 
     public class RootDTO : RootBaseDTO;
@@ -30,6 +28,28 @@ namespace DTO
     public class RootLowerConfinedDTO : RootConfinedDTO;
 
 
+    
+    
+    public class RootScriptureConfinedDTO
+    {
+        public required string Latin { get; set; }
+
+        public required string Own { get; set; }
+
+        public required ScriptureUpperMeanDTO Scripture { get; set; }
+        
+    }
+    
+    
+    
+    public class RootIdentifierDTO
+    {
+        public required string Latin { get; set; }
+
+        public required string Own { get; set; }
+
+        public required int ScriptureNumber { get; set; }
+    }
     public static class RootExtensions
     {
         public static RootDTO ToRootDTO(this Root root)
@@ -60,6 +80,7 @@ namespace DTO
                 Words = root.Words.Select(w => w.ToWordUpperConfinedDTO()).ToList()
             };
         }
+
         public static RootLowerConfinedDTO ToRootLowerConfinedDTO(this Root root)
         {
             return new RootLowerConfinedDTO

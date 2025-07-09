@@ -752,6 +752,8 @@ namespace scriptium_backend_dotnet.DB
 
             modelBuilder.Entity<User>(User =>
             {
+                User.HasQueryFilter(u => u.DeletedAt == null);
+                
                 User.ToTable("user");
 
                 User.HasKey(e => e.Id);

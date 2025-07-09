@@ -15,77 +15,94 @@ namespace scriptium_backend_dotnet.Controllers.Validation
     }
 
     public class UpdateProfileValidator : AbstractValidator<UpdateProfileModel>
+{
+    private readonly long _maxFileSize = 8 * 1024 * 1024; // 8MB
+    private readonly int _requiredDimension = 1024;
+
+    public UpdateProfileValidator()
     {
-        private readonly long _maxFileSize = 8 * 1024 * 1024; //8MB
-        private readonly long _requiredHeight = 1024;
-        private readonly long _requiredWidth = 1024;
+        RuleFor(x => x)
+            .Must(AtLeastOneFieldProvided)
+            .WithMessage("At least one field must be provided for update.");
 
+        RuleFor(x => x.Name)
+            .MaximumLength(16).WithMessage("Name cannot exceed 16 characters.")
+            .Must(NotOnlyWhitespace).WithMessage("Name cannot consist of whitespace.")
+            .When(x => x.Name != null);
 
-        public UpdateProfileValidator()
+        RuleFor(x => x.Surname)
+            .MaximumLength(16).WithMessage("Surname cannot exceed 16 characters.")
+            .Must(NotOnlyWhitespace).WithMessage("Surname cannot consist of whitespace.")
+            .When(x => x.Surname != null);
+
+        RuleFor(x => x.Username)
+            .MinimumLength(5).WithMessage("Username must be at least 5 characters long.")
+            .MaximumLength(16).WithMessage("Username cannot exceed 16 characters.")
+            .Matches("^[a-zA-Z0-9._]*$").WithMessage("Username can only contain letters, numbers, dots, and underscores.")
+            .Must(NotOnlyWhitespace).WithMessage("Username cannot consist of whitespace.")
+            .When(x => x.Username != null);
+
+        RuleFor(x => x.Biography)
+            .MaximumLength(200).WithMessage("Biography cannot exceed 200 characters.")
+            .Must(NotOnlyWhitespace).WithMessage("Biography cannot consist of whitespace.")
+            .When(x => x.Biography != null);
+
+        RuleFor(x => x.Gender)
+            .MaximumLength(1).WithMessage("Gender must be a single character.")
+            .Must(g => string.IsNullOrEmpty(g) || g == "M" || g == "F" || g == "O")
+            .WithMessage("Invalid gender. Allowed values are 'M', 'F', or 'O'.");
+
+        RuleFor(x => x.LanguageId)
+            .GreaterThanOrEqualTo((byte)1).WithMessage("Language ID must be a valid positive number.")
+            .When(x => x.LanguageId.HasValue);
+
+        RuleFor(x => x.Image)
+            .Must(IsAllowedExtension).WithMessage("Only JPEG or JPG files are allowed.")
+            .Must(f => f != null && f.Length <= _maxFileSize).WithMessage($"Image size must be less than {_maxFileSize / (1024 * 1024)} MB.")
+            .Must(IsValidImage).WithMessage($"Image must be {_requiredDimension}x{_requiredDimension} pixels and square.")
+            .When(x => x.Image != null);
+    }
+
+    private bool AtLeastOneFieldProvided(UpdateProfileModel model)
+    {
+        return !string.IsNullOrWhiteSpace(model.Name) ||
+               !string.IsNullOrWhiteSpace(model.Surname) ||
+               !string.IsNullOrWhiteSpace(model.Username) ||
+               !string.IsNullOrWhiteSpace(model.Biography) ||
+               !string.IsNullOrWhiteSpace(model.Gender) ||
+               model.LanguageId.HasValue ||
+               model.Image is not null;
+    }
+
+    private bool NotOnlyWhitespace(string? input)
+    {
+        return string.IsNullOrWhiteSpace(input) == false;
+    }
+
+    private bool IsAllowedExtension(IFormFile? file)
+    {
+        if (file == null) return false;
+        string[] allowedExtensions = [".jpg", ".jpeg"];
+        string extension = Path.GetExtension(file.FileName).ToLowerInvariant();
+        return allowedExtensions.Contains(extension);
+    }
+
+    private bool IsValidImage(IFormFile? file)
+    {
+        if (file == null) return false;
+        try
         {
-            RuleFor(x => x.Name)
-                .MaximumLength(16).WithMessage("Name cannot exceed 16 characters.")
-                .When(x => !string.IsNullOrWhiteSpace(x.Name));
-
-            RuleFor(x => x.Surname)
-                .MaximumLength(16).WithMessage("Surname cannot exceed 16 characters.")
-                .When(x => !string.IsNullOrWhiteSpace(x.Surname));
-
-            RuleFor(x => x.Username)
-                .MinimumLength(5)
-                .MaximumLength(16).WithMessage("Username cannot exceed 16 characters.")
-                .Matches("^[a-zA-Z0-9._]*$").WithMessage("Username can only contain letters, numbers, dots, and underscores.")
-                .When(x => !string.IsNullOrWhiteSpace(x.Username));
-
-            RuleFor(x => x.Biography)
-                .MaximumLength(200).WithMessage("Biography cannot exceed 200 characters.")
-                .When(x => !string.IsNullOrWhiteSpace(x.Biography));
-
-            RuleFor(r => r.Gender)
-              .MaximumLength(1).WithMessage("Gender must be a single character.")
-              .Must(g => string.IsNullOrEmpty(g) || g == "M" || g == "F" || g == "O")
-              .WithMessage("Invalid gender. Allowed values are 'M', 'F', or 'O'.");
-
-            RuleFor(x => x.LanguageId)
-                .GreaterThanOrEqualTo((byte)1).WithMessage("Language ID must be a valid positive number.")
-                .When(x => x.LanguageId.HasValue);
-
-            RuleFor(r => r.Image)
-                                .Must(IsAllowedExtension).WithMessage("Only JPEG or JPG files are allowed.")
-                                .Must(File => File != null && File.Length <= _maxFileSize).WithMessage($"Image size must be less than {_maxFileSize / (1024 * 1024)} MB.")
-                                .Must(IsValidImage).WithMessage($"Image must be {_requiredWidth}x{_requiredHeight} pixels and square.");
-
+            using var stream = file.OpenReadStream();
+            using var image = Image.Load(stream);
+            return image.Width == image.Height && image.Width == _requiredDimension;
         }
-
-        private bool IsAllowedExtension(IFormFile? File)
+        catch
         {
-            if (File == null)
-                return false;
-
-            string[] allowedExtensions = [".jpg", ".jpeg"];
-            string extension = Path.GetExtension(File.FileName).ToLowerInvariant();
-            return allowedExtensions.Contains(extension);
-        }
-
-        private bool IsValidImage(IFormFile? File)
-        {
-
-            if (File == null)
-                return false;
-
-            try
-            {
-                using var stream = File.OpenReadStream();
-                using var image = Image.Load(stream);
-
-                return image.Width == image.Height && image.Width == _requiredWidth; //&& image.Height == _requiredHeight; Should be square.
-            }
-            catch
-            {
-                return false;
-            }
+            return false;
         }
     }
+}
+
     public class ChangePasswordModel
     {
         public required string OldPassword { get; set; }
@@ -117,6 +134,24 @@ namespace scriptium_backend_dotnet.Controllers.Validation
 
             RuleFor(x => x.Password).AuthenticationPasswordRules();
 
+        }
+    }
+    
+    public class ChangeEmailModel
+    {
+        public required string NewEmail { get; set; }
+        public required string Password { get; set; }
+    }
+
+
+    public class ChangeEmailModelValidator : AbstractValidator<ChangeEmailModel>
+    {
+        public ChangeEmailModelValidator()
+        {
+            RuleFor(x => x.NewEmail)
+                .AuthenticationEmailRules();
+
+            RuleFor(x => x.Password).AuthenticationPasswordRules();
         }
     }
 

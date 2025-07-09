@@ -100,5 +100,8 @@ namespace scriptium_backend_dotnet.Models
         [NotMapped]
         public int UpdateCount => UpdateRecords?.Count ?? 0;
 
+
+        public DateTime? DeletedAt { get; set; }
+
     }
 }

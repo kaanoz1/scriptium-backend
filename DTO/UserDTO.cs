@@ -50,9 +50,9 @@ namespace DTO
 
         public required bool IsFrozen { get; set; } = false;
 
-        public required string? FollowStatusUserInspecting { get; set; }
+        public required string? followStatusUserInspected { get; set; }
 
-        public required string? FollowStatusUserInspected { get; set; }
+        public required string? followStatusUserInspecting { get; set; }
 
         public required bool IsUserInspectedBlocked { get; set; }
 

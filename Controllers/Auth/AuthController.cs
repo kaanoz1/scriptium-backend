@@ -7,10 +7,10 @@ using scriptium_backend_dotnet.Controllers.Validation;
 using scriptium_backend_dotnet.DB;
 using scriptium_backend_dotnet.Models.Util;
 using Microsoft.AspNetCore.RateLimiting;
+using scriptium_backend.Interface;
 
 namespace scriptium_backend_dotnet.Controllers.AuthHandler
 {
-
     /// <summary>
     /// This controller consists of Auth operations. Inspect the following:
     /// </summary>
@@ -42,13 +42,29 @@ namespace scriptium_backend_dotnet.Controllers.AuthHandler
     /// </list>
     /// </remarks>
     [ApiController, Route("auth"), EnableRateLimiting("AuthControllerRateLimit")]
-    public class AuthController(ApplicationDBContext db, UserManager<User> userManager, RoleManager<Role> roleManager, SignInManager<User> signInManager, ILogger<AuthController> logger) : ControllerBase
+    public class AuthController(
+        ApplicationDBContext db,
+        UserManager<User> userManager,
+        RoleManager<Role> roleManager,
+        SignInManager<User> signInManager,
+        ILogger<AuthController> logger,
+        IEmailService emailService) : ControllerBase
     {
-        private readonly UserManager<User> _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
-        private readonly SignInManager<User> _signInManager = signInManager ?? throw new ArgumentNullException(nameof(signInManager));
+        private readonly UserManager<User> _userManager =
+            userManager ?? throw new ArgumentNullException(nameof(userManager));
+
+        private readonly SignInManager<User> _signInManager =
+            signInManager ?? throw new ArgumentNullException(nameof(signInManager));
+
         private readonly ApplicationDBContext _db = db ?? throw new ArgumentNullException(nameof(db));
         private readonly ILogger<AuthController> _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        private readonly RoleManager<Role> _roleManager = roleManager ?? throw new ArgumentNullException(nameof(roleManager));
+
+        private readonly RoleManager<Role> _roleManager =
+            roleManager ?? throw new ArgumentNullException(nameof(roleManager));
+
+        private readonly IEmailService _emailService =
+            emailService ?? throw new ArgumentNullException(nameof(emailService));
+
         /// <summary>
         /// Register operation and necessary cookie processes. For validation model: <see cref="RegisterModel"/>
         /// </summary>
@@ -73,7 +89,6 @@ namespace scriptium_backend_dotnet.Controllers.AuthHandler
                 Name = model.Name,
                 Surname = model.Surname ?? null!,
                 IsPrivate = DateTime.UtcNow
-
             };
 
             if (model.Image != null)
@@ -87,14 +102,16 @@ namespace scriptium_backend_dotnet.Controllers.AuthHandler
 
             if (Result.Succeeded)
             {
-                _logger.LogInformation($"Operation completed: New User information: Identifier: {UserCreated.Id}, Username: {UserCreated.UserName}, Email: {UserCreated.Email}, Name: {UserCreated.Name} Surname: {UserCreated.Surname} CreatedAt: {UserCreated.CreatedAt}");
+                _logger.LogInformation(
+                    $"Operation completed: New User information: Identifier: {UserCreated.Id}, Username: {UserCreated.UserName}, Email: {UserCreated.Email}, Name: {UserCreated.Name} Surname: {UserCreated.Surname} CreatedAt: {UserCreated.CreatedAt}");
 
 
-                Collection DefaultCollection = new() //Default collection schema. Whenever a user registered a default collection should be created. For manuel implementation: Check: ../../DB/Triggers.sql and check trigger named: trg_CreateCollectionOnUserInsert
-                {
-                    Name = $"{UserCreated.Name}'s collection", //Default Collection Name
-                    UserId = UserCreated.Id,
-                };
+                Collection DefaultCollection =
+                    new() //Default collection schema. Whenever a user registered a default collection should be created. For manuel implementation: Check: ../../DB/Triggers.sql and check trigger named: trg_CreateCollectionOnUserInsert
+                    {
+                        Name = $"{UserCreated.Name}'s collection", //Default Collection Name
+                        UserId = UserCreated.Id,
+                    };
 
                 UserUpdateR DefaultUpdate = new()
                 {
@@ -106,14 +123,14 @@ namespace scriptium_backend_dotnet.Controllers.AuthHandler
                     Gender = UserCreated.Gender,
                     Biography = UserCreated.Biography,
                     Email = UserCreated.Email
-
                 };
 
                 _db.Collection.Add(DefaultCollection);
                 _db.UserUpdateRs.Add(DefaultUpdate);
                 await _db.SaveChangesAsync();
 
-                _logger.LogInformation($"Default collection has been created for User: [Id: {UserCreated.Id}, Username: {UserCreated.UserName}]");
+                _logger.LogInformation(
+                    $"Default collection has been created for User: [Id: {UserCreated.Id}, Username: {UserCreated.UserName}]");
 
                 await _signInManager.SignInAsync(UserCreated, isPersistent: true);
 
@@ -121,19 +138,19 @@ namespace scriptium_backend_dotnet.Controllers.AuthHandler
                 {
                     message = "Registration successful!",
                 });
-
-
             }
 
             if (Result.Errors.Any(e => e.Code == "DuplicateUserName"))
             {
-                _logger.LogInformation($"Registration failed: Duplicated username tried to be created.  Duplicated username {UserCreated.UserName} Email: {UserCreated.Email}");
+                _logger.LogInformation(
+                    $"Registration failed: Duplicated username tried to be created.  Duplicated username {UserCreated.UserName} Email: {UserCreated.Email}");
                 return Conflict(new { message = "Username already exists." });
             }
 
             if (Result.Errors.Any(e => e.Code == "DuplicateEmail"))
             {
-                _logger.LogInformation($"Registration failed: Duplicated Email tried to be created. Duplicated Email: {UserCreated.Email} Username: {UserCreated.UserName}");
+                _logger.LogInformation(
+                    $"Registration failed: Duplicated Email tried to be created. Duplicated Email: {UserCreated.Email} Username: {UserCreated.UserName}");
                 return Conflict(new { message = "Email already exists." });
             }
 
@@ -157,7 +174,6 @@ namespace scriptium_backend_dotnet.Controllers.AuthHandler
         [HttpPost, Route("login")]
         public async Task<IActionResult> Login([FromBody] LoginModel model)
         {
-
             User? UserRequested = await _userManager.FindByEmailAsync(model.Email);
 
             if (UserRequested == null)
@@ -166,17 +182,18 @@ namespace scriptium_backend_dotnet.Controllers.AuthHandler
                 return Unauthorized(new { message = "Invalid Credentials!" });
             }
 
-            var Result = await _signInManager.CheckPasswordSignInAsync(UserRequested, model.Password, lockoutOnFailure: false);
+            var Result =
+                await _signInManager.CheckPasswordSignInAsync(UserRequested, model.Password, lockoutOnFailure: false);
 
             if (!Result.Succeeded)
             {
-                _logger.LogInformation($"Password is incompatible. Claimed password: {model.Password} for User: [Id: {UserRequested.Id}]");
+                _logger.LogInformation(
+                    $"Password is incompatible. Claimed password: {model.Password} for User: [Id: {UserRequested.Id}]");
                 return Unauthorized(new { message = "Invalid Credentials!" });
             }
 
             if (UserRequested.IsFrozen != null)
             {
-
                 FreezeR freezeR = new()
                 {
                     UserId = UserRequested.Id,
@@ -189,18 +206,70 @@ namespace scriptium_backend_dotnet.Controllers.AuthHandler
 
                 await _db.SaveChangesAsync();
                 await _userManager.UpdateAsync(UserRequested);
-                _logger.LogInformation($"User had been frozen, melted, User: [Id: {UserRequested.Id}, Username: {UserRequested.UserName}]");
+                _logger.LogInformation(
+                    $"User had been frozen, melted, User: [Id: {UserRequested.Id}, Username: {UserRequested.UserName}]");
             }
 
-            await _signInManager.SignInAsync(UserRequested, isPersistent: true);
+            await _signInManager.SignInAsync(UserRequested, isPersistent: model.RememberMe);
 
-            _logger.LogInformation($"User: [Id: {UserRequested.Id}, Username: {UserRequested.UserName}] has logged in.");
+            _logger.LogInformation(
+                $"User: [Id: {UserRequested.Id}, Username: {UserRequested.UserName}] has logged in.");
 
             return Ok(new
             {
                 message = "Successfully logged in!",
             });
         }
+
+
+        [HttpPost("reset-password-request")]
+        public async Task<IActionResult> RequestPasswordReset([FromBody] string email)
+        {
+            try
+            {
+                IActionResult response = Ok(new { message = "If your email exists, a reset link was sent." });
+
+
+                User? user = await _userManager.FindByEmailAsync(email);
+                if (user == null)
+                    return response;
+
+
+                string token = await _userManager.GeneratePasswordResetTokenAsync(user);
+                string resetUrl =
+                    $"https://scriptium.com/auth/reset-password?token={Uri.EscapeDataString(token)}&email={Uri.EscapeDataString(email)}";
+
+                await _emailService.SendEmailAsync(
+                    toEmail: email,
+                    subject: "Password Reset - Scriptium",
+                    htmlBody: $"<p>Click <a href=\"{resetUrl}\">here</a> to reset your password.</p>"
+                );
+
+                _logger.LogInformation($"Password reset requested. Token: {token}");
+
+                return response;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Password reset request failed for email: {email}");
+                return BadRequest(new { message = "Something went unexpectedly wrong." });
+            }
+        }
+
+        [HttpPost("reset-password")]
+        public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordModel model)
+
+        {
+            User? user = await _userManager.FindByEmailAsync(model.Email);
+            if (user == null) return BadRequest(new { message = "Invalid request." });
+
+            IdentityResult result = await _userManager.ResetPasswordAsync(user, model.Token, model.NewPassword);
+            if (result.Succeeded)
+                return Ok(new { message = "Password has been reset successfully." });
+
+            return BadRequest(result.Errors);
+        }
+
 
         /// <summary>
         /// Test handler for authentication.

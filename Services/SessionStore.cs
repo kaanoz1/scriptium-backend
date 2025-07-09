@@ -26,7 +26,7 @@ namespace scriptium_backend_dotnet.Services
         {
             _logger.LogInformation("StoreAsync called to create a new session.");
 
-            using (var scope = _serviceProvider.CreateScope())
+            using var scope = _serviceProvider.CreateScope();
             {
                 var db = scope.ServiceProvider.GetRequiredService<ApplicationDBContext>();
 

@@ -76,6 +76,27 @@ namespace DTO
     {
         public required List<ChapterLowerMeanDTO> Chapters { get; set; }
     }
+    
+    
+    public class SectionIndicatorDTO : IEquatable<SectionIndicatorDTO>
+    {
+        public required int Scripture { get; set; }
+        public required int Section { get; set; }
+
+        public override bool Equals(object? obj) => Equals(obj as SectionIndicatorDTO);
+
+        public bool Equals(SectionIndicatorDTO? other)
+        {
+            if (other is null) return false;
+            return Scripture == other.Scripture &&
+                   Section == other.Section;
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(Scripture, Section);
+        }
+    }
 
     public static class SectionExtensions
     {

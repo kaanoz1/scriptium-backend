@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using scriptium_backend_dotnet.Controllers.Validation;
 using scriptium_backend_dotnet.DB;
 using scriptium_backend_dotnet.Models;
@@ -12,11 +13,20 @@ using scriptium_backend_dotnet.Models.Util;
 namespace scriptium_backend_dotnet.Controllers.SessionHandler
 {
     [ApiController, Route("session"), Authorize, EnableRateLimiting(policyName: "InteractionControllerRateLimit")]
-    public class SessionController(ApplicationDBContext db, ILogger<SessionController> logger, SignInManager<User> signInManager, UserManager<User> userManager) : ControllerBase
+    public class SessionController(
+        ApplicationDBContext db,
+        ILogger<SessionController> logger,
+        SignInManager<User> signInManager,
+        UserManager<User> userManager) : ControllerBase
     {
         private readonly ILogger<SessionController> _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        private readonly SignInManager<User> _signInManager = signInManager ?? throw new ArgumentNullException(nameof(signInManager));
-        private readonly UserManager<User> _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
+
+        private readonly SignInManager<User> _signInManager =
+            signInManager ?? throw new ArgumentNullException(nameof(signInManager));
+
+        private readonly UserManager<User> _userManager =
+            userManager ?? throw new ArgumentNullException(nameof(userManager));
+
         private readonly ApplicationDBContext _db = db ?? throw new ArgumentNullException(nameof(db));
 
         [HttpPost, Route("logout")]
@@ -36,7 +46,8 @@ namespace scriptium_backend_dotnet.Controllers.SessionHandler
 
             await _signInManager.SignOutAsync();
 
-            _logger.LogInformation($"User: [Id: {UserRequested.Id}, Username: {UserRequested.UserName}] successfully logged out.");
+            _logger.LogInformation(
+                $"User: [Id: {UserRequested.Id}, Username: {UserRequested.UserName}] successfully logged out.");
 
             return Ok(new { message = "Successfully logged out" });
         }
@@ -58,7 +69,8 @@ namespace scriptium_backend_dotnet.Controllers.SessionHandler
 
             if (IsPrivate)
             {
-                List<Follow> FollowsAccepted = await _db.Follow.Where(f => f.FollowedId == UserRequested.Id && f.Status == FollowStatus.Pending).ToListAsync();
+                List<Follow> FollowsAccepted = await _db.Follow
+                    .Where(f => f.FollowedId == UserRequested.Id && f.Status == FollowStatus.Pending).ToListAsync();
 
                 foreach (Follow follow in FollowsAccepted)
                     follow.Status = FollowStatus.Accepted;
@@ -72,13 +84,14 @@ namespace scriptium_backend_dotnet.Controllers.SessionHandler
                 string AccountStatus = IsPrivate ? "public" : "private";
 
                 await _userManager.UpdateAsync(UserRequested);
-                _logger.LogInformation($"Operation completed: User: [Id: {UserRequested.Id} Username: {UserRequested.UserName}] has changed his account to {AccountStatus}");
+                _logger.LogInformation(
+                    $"Operation completed: User: [Id: {UserRequested.Id} Username: {UserRequested.UserName}] has changed his account to {AccountStatus}");
                 return Ok(new { message = $"You account is now {AccountStatus}!" });
-
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Error occurred, while: User: [Id: {UserRequested.Id} Username: {UserRequested.UserName}] alter his account. Error Detail: {ex}");
+                _logger.LogError(
+                    $"Error occurred, while: User: [Id: {UserRequested.Id} Username: {UserRequested.UserName}] alter his account. Error Detail: {ex}");
                 return BadRequest(new { message = "Something went unexpectedly wrong?" });
             }
         }
@@ -104,11 +117,14 @@ namespace scriptium_backend_dotnet.Controllers.SessionHandler
             try
             {
                 FreezeRecord = await _db.FreezeR.OrderByDescending(r => r.ProceedAt)
-                                                .FirstOrDefaultAsync(r => r.UserId.ToString() == userId && r.Status == FreezeStatus.Frozen && r.ProceedAt < DateTime.UtcNow.AddDays(7));
+                    .FirstOrDefaultAsync(r =>
+                        r.UserId.ToString() == userId && r.Status == FreezeStatus.Frozen &&
+                        r.ProceedAt < DateTime.UtcNow.AddDays(7));
 
                 if (FreezeRecord != null)
                 {
-                    _logger.LogWarning($"Conflict occurred, while: User: [Id: {UserRequested.Id}, Username: {UserRequested.UserName}] is trying to freeze his account twice within 7 days.");
+                    _logger.LogWarning(
+                        $"Conflict occurred, while: User: [Id: {UserRequested.Id}, Username: {UserRequested.UserName}] is trying to freeze his account twice within 7 days.");
                     return Unauthorized(new { message = "You cannot freeze your account twice within 7 days!" });
                 }
 
@@ -132,41 +148,110 @@ namespace scriptium_backend_dotnet.Controllers.SessionHandler
 
                 await _userManager.UpdateAsync(UserRequested);
                 await _signInManager.SignOutAsync();
-                _logger.LogInformation($"Operation completed: User: [Id: {UserRequested.Id}, Username: {UserRequested.UserName}] has frozen his account.");
+                _logger.LogInformation(
+                    $"Operation completed: User: [Id: {UserRequested.Id}, Username: {UserRequested.UserName}] has frozen his account.");
                 return Ok(new { message = "Your account has been successfully frozen!" });
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Error occurred, while: User: [Id: {UserRequested.Id}, Username: {UserRequested.UserName}] trying to freeze his account. Error Details: {ex}");
+                _logger.LogError(
+                    $"Error occurred, while: User: [Id: {UserRequested.Id}, Username: {UserRequested.UserName}] trying to freeze his account. Error Details: {ex}");
                 return BadRequest(new { message = "Something went unexpectedly wrong?" });
             }
-
-
         }
 
         [HttpDelete, Route("delete"), EnableRateLimiting(policyName: "UpdateActionRateLimit")]
         public async Task<IActionResult> Delete()
         {
-
             string? userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
             if (userId == null)
                 return Unauthorized(new { message = "You are not logged in!" });
 
-            User? UserRequested = await _userManager.FindByIdAsync(userId);
+            User? user = await _userManager.FindByIdAsync(userId);
 
-            if (UserRequested == null)
-                return NotFound(new { message = "Something went wrong!" });
-            return Ok();
+            if (user == null)
+                return NotFound(new { message = "User not found!" });
 
+            if (user.DeletedAt != null)
+                return BadRequest(new { message = "Your account is already scheduled for deletion." });
+
+            await using IDbContextTransaction? transaction = await _db.Database.BeginTransactionAsync();
+            try
+            {
+                user.DeletedAt = DateTime.UtcNow;
+                var updateResult = await _userManager.UpdateAsync(user);
+
+                if (!updateResult.Succeeded)
+                    throw new InvalidOperationException("Failed to mark user as scheduled for deletion.");
+
+                List<Session> sessions = await _db.Session.Where(s => s.UserId == user.Id).ToListAsync();
+                _db.Session.RemoveRange(sessions);
+
+                await _db.SaveChangesAsync();
+
+                await transaction.CommitAsync();
+
+                await _signInManager.SignOutAsync();
+
+                _logger.LogInformation($"User {user.Id} scheduled account deletion at {user.DeletedAt}");
+
+                return Ok(new
+                {
+                    message =
+                        "Your account is scheduled to be permanently deleted in 15 days. You can log in before then to cancel the deletion."
+                });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error occurred while scheduling deletion for user: {userId}");
+                await transaction.RollbackAsync();
+                return StatusCode(500, new { message = "An unexpected error occurred while processing your request." });
+            }
         }
+        
+        
+        [HttpPost("change-email")]
+        public async Task<IActionResult> ChangeEmail([FromBody] ChangeEmailModel model)
+        {
+            string? userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userId == null)
+                return Unauthorized(new { message = "Unauthorized access." });
+
+            User? user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+                return Unauthorized(new { message = "User not found." });
+
+            bool isPasswordValid = await _userManager.CheckPasswordAsync(user, model.Password);
+            if (!isPasswordValid)
+            {
+                _logger.LogWarning($"Email change failed: Invalid password for user ID: {user.Id}");
+                return BadRequest(new { message = "Invalid password." });
+            }
+
+            IdentityResult result = await _userManager.SetEmailAsync(user, model.NewEmail);
+            if (!result.Succeeded)
+            {
+                foreach (var err in result.Errors)
+                    _logger.LogWarning($"Email change error: {err.Code} - {err.Description}");
+
+                return BadRequest(new { message = "Failed to change email." });
+            }
+
+            user.UserName = model.NewEmail;
+            await _userManager.UpdateAsync(user);
+            
+
+            _logger.LogInformation($"User email updated successfully. User ID: {user.Id}");
+
+            return Ok(new { message = "Email updated successfully." });
+        }
+
 
 
         [HttpPut, Route("update")]
         public async Task<IActionResult> UpdateProfile([FromForm] UpdateProfileModel model)
         {
-
-
             string? userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
             if (userId == null)
@@ -225,13 +310,12 @@ namespace scriptium_backend_dotnet.Controllers.SessionHandler
                 UpdateRecord.Name = UpdatedName;
             }
 
-            if (!string.IsNullOrWhiteSpace(model.Surname))
+            if (model.Surname != null)
             {
-                string UpdatedSurname = model.Surname.Trim();
-
-                UpdateLogRow += $" Surname: {UserRequested.Surname} -> {UpdatedSurname}";
-                UserRequested.Surname = UpdatedSurname;
-                UpdateRecord.Surname = UpdatedSurname;
+                string trimmed = model.Surname.Trim();
+                UpdateLogRow += $" Surname: {UserRequested.Surname} -> {trimmed}";
+                UserRequested.Surname = trimmed;
+                UpdateRecord.Surname = trimmed;
             }
 
             if (!string.IsNullOrWhiteSpace(model.Username))
@@ -243,11 +327,13 @@ namespace scriptium_backend_dotnet.Controllers.SessionHandler
                 UpdateRecord.Username = UpdatedUsername;
             }
 
-            string UpdatedBiography = (model.Biography ?? "").Trim();
-
-            UpdateLogRow += $" Biography: {UserRequested.Biography} -> {UpdatedBiography}";
-            UserRequested.Biography = UpdatedBiography;
-            UpdateRecord.Biography = UpdatedBiography;
+            if (model.Biography != null)
+            {
+                string trimmed = model.Biography.Trim();
+                UpdateLogRow += $" Biography: {UserRequested.Biography} -> {trimmed}";
+                UserRequested.Biography = trimmed;
+                UpdateRecord.Biography = trimmed;
+            }
 
 
             if (!string.IsNullOrWhiteSpace(model.Gender))
@@ -257,7 +343,6 @@ namespace scriptium_backend_dotnet.Controllers.SessionHandler
                 UpdateLogRow += $" Gender: {UserRequested.Gender} -> {UpdatedGender}";
                 UserRequested.Gender = UpdatedGender;
                 UpdateRecord.Gender = UpdatedGender;
-
             }
 
             if (model.LanguageId.HasValue)
@@ -273,7 +358,8 @@ namespace scriptium_backend_dotnet.Controllers.SessionHandler
 
             if (!updateResult.Succeeded)
             {
-                _logger.LogError($"Error occurred, while: User: [Id: {UserRequested.Id}, Username: {UserRequested.UserName}] is update his profile: {UpdateLogRow}. Error Details: {updateResult.Errors}");
+                _logger.LogError(
+                    $"Error occurred, while: User: [Id: {UserRequested.Id}, Username: {UserRequested.UserName}] is update his profile: {UpdateLogRow}. Error Details: {updateResult.Errors}");
                 return BadRequest(new
                 {
                     message = "Failed to update profile!",
@@ -285,7 +371,8 @@ namespace scriptium_backend_dotnet.Controllers.SessionHandler
             await _db.SaveChangesAsync();
 
 
-            _logger.LogInformation($"Operation completed. User: [Id: {UserRequested.Id}, Username: {UserRequested.UserName}] has updated his account: {UpdateLogRow}");
+            _logger.LogInformation(
+                $"Operation completed. User: [Id: {UserRequested.Id}, Username: {UserRequested.UserName}] has updated his account: {UpdateLogRow}");
             return Ok(new
             {
                 message = "Profile updated successfully!",
@@ -317,7 +404,8 @@ namespace scriptium_backend_dotnet.Controllers.SessionHandler
 
             if (!result.Succeeded)
             {
-                _logger.LogError($"Error occurred, while: User: [Id: {UserRequested.Id}, Username: {UserRequested.UserName}] is update his password. Error Details: {result.Errors}");
+                _logger.LogError(
+                    $"Error occurred, while: User: [Id: {UserRequested.Id}, Username: {UserRequested.UserName}] is update his password. Error Details: {result.Errors}");
 
                 return BadRequest(new
                 {
@@ -325,9 +413,10 @@ namespace scriptium_backend_dotnet.Controllers.SessionHandler
                     errors = result.Errors.Select(e => e.Description)
                 });
             }
-            _logger.LogInformation($"Operation completed: User: [Id: {UserRequested.Id}, Username: {UserRequested.UserName}] has updated his password.");
+
+            _logger.LogInformation(
+                $"Operation completed: User: [Id: {UserRequested.Id}, Username: {UserRequested.UserName}] has updated his password.");
             return Ok(new { message = "Password changed successfully!" });
         }
-
     }
 }

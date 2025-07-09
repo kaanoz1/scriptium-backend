@@ -153,5 +153,7 @@ namespace DTO
                 Meanings = scripture.Meanings.Select(m => m.ToScriptureMeaningDTO()).ToList()
             };
         }
+        
+        
     }
 }

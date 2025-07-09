@@ -77,6 +77,29 @@ namespace DTO
         public required List<VerseLowerMeanDTO> Verses { get; set; }
     }
 
+    
+    public class ChapterIndicatorDTO : IEquatable<ChapterIndicatorDTO>
+    {
+        public required int Scripture { get; set; }
+        public required int Section { get; set; }
+        public required int Chapter { get; set; }
+
+        public override bool Equals(object? obj) => Equals(obj as ChapterIndicatorDTO);
+
+        public bool Equals(ChapterIndicatorDTO? other)
+        {
+            if (other is null) return false;
+            return Scripture == other.Scripture &&
+                   Section == other.Section &&
+                   Chapter == other.Chapter;
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(Scripture, Section, Chapter);
+        }
+    }
+    
     public static class ChapterExtensions
     {
         public static ChapterUpperAndOneLevelLowerDTO ToChapterUpperAndOneLevelLowerDTO(this Chapter chapter)
