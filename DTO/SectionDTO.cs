@@ -1,8 +1,8 @@
-using scriptium_backend_dotnet.Models;
+using ScriptiumBackend.Models;
 
 namespace DTO
 {
-    public abstract class SectionBaseDTO
+    public abstract class SectionBaseDto
     {
         public short Id { get; set; }
 
@@ -11,81 +11,81 @@ namespace DTO
         public required short Number { get; set; }
     }
 
-    public abstract class SectionSimpleDTO : SectionBaseDTO
+    public abstract class SectionSimpleDto : SectionBaseDto
     {
-        public required List<SectionMeaningDTO> Meanings { get; set; } = [];
+        public required List<SectionMeaningDto> Meanings { get; set; } = [];
     }
 
-    public class SectionDTO : SectionSimpleDTO;
+    public class SectionDto : SectionSimpleDto;
 
 
-    public class SectionUpperDTO : SectionDTO
+    public class SectionUpperDto : SectionDto
     {
-        public required ScriptureDTO Scripture { get; set; }
+        public required ScriptureDto Scripture { get; set; }
     }
 
 
-    public class SectionLowerDTO : SectionDTO
+    public class SectionLowerDto : SectionDto
     {
-        public required List<ChapterLowerDTO> Chapters { get; set; }
+        public required List<ChapterLowerDto> Chapters { get; set; }
     }
 
-    public class SectionOneLevelLowerDTO : SectionDTO
+    public class SectionOneLevelLowerDto : SectionDto
     {
-        public required List<ChapterDTO> Chapters { get; set; }
+        public required List<ChapterDto> Chapters { get; set; }
     }
 
-    public class SectionBothDTO : SectionDTO
+    public class SectionBothDto : SectionDto
     {
-        public required ScriptureUpperDTO Scripture { get; set; }
-        public required List<ChapterLowerDTO> Chapters { get; set; }
+        public required ScriptureUpperDto Scripture { get; set; }
+        public required List<ChapterLowerDto> Chapters { get; set; }
     }
 
-    public class SectionOneLevelBothDTO : SectionDTO
+    public class SectionOneLevelBothDto : SectionDto
     {
-        public required ScriptureDTO Scripture { get; set; }
-        public required List<ChapterDTO> Chapters { get; set; }
+        public required ScriptureDto Scripture { get; set; }
+        public required List<ChapterDto> Chapters { get; set; }
     }
 
-    public class SectionMeaningDTO : Meaning;
+    public class SectionMeaningDto : Meaning;
 
-    public abstract class SectionConfinedDTO : SectionBaseDTO;
+    public abstract class SectionConfinedDto : SectionBaseDto;
 
-    public class SectionUpperConfinedDTO : SectionConfinedDTO
+    public class SectionUpperConfinedDto : SectionConfinedDto
     {
-        public required ScriptureUpperConfinedDTO Scripture { get; set; }
+        public required ScriptureUpperConfinedDto Scripture { get; set; }
     }
 
-    public class SectionLowerConfinedDTO : SectionConfinedDTO
+    public class SectionLowerConfinedDto : SectionConfinedDto
     {
-        public required List<ChapterLowerConfinedDTO> Chapters { get; set; }
+        public required List<ChapterLowerConfinedDto> Chapters { get; set; }
     }
 
-    //Custom DTOs
-    public class SectionMeanDTO : SectionBaseDTO
+    //Custom Dtos
+    public class SectionMeanDto : SectionBaseDto
     {
-        public required List<SectionMeaningDTO> Meanings { get; set; } = [];
+        public required List<SectionMeaningDto> Meanings { get; set; } = [];
     }
 
-    public class SectionUpperMeanDTO : SectionMeanDTO
+    public class SectionUpperMeanDto : SectionMeanDto
     {
-        public required ScriptureUpperMeanDTO Scripture { get; set; }
+        public required ScriptureUpperMeanDto Scripture { get; set; }
     }
 
-    public class SectionLowerMeanDTO : SectionMeanDTO
+    public class SectionLowerMeanDto : SectionMeanDto
     {
-        public required List<ChapterLowerMeanDTO> Chapters { get; set; }
+        public required List<ChapterLowerMeanDto> Chapters { get; set; }
     }
     
     
-    public class SectionIndicatorDTO : IEquatable<SectionIndicatorDTO>
+    public class SectionIndicatorDto : IEquatable<SectionIndicatorDto>
     {
         public required int Scripture { get; set; }
         public required int Section { get; set; }
 
-        public override bool Equals(object? obj) => Equals(obj as SectionIndicatorDTO);
+        public override bool Equals(object? obj) => Equals(obj as SectionIndicatorDto);
 
-        public bool Equals(SectionIndicatorDTO? other)
+        public bool Equals(SectionIndicatorDto? other)
         {
             if (other is null) return false;
             return Scripture == other.Scripture &&
@@ -100,118 +100,118 @@ namespace DTO
 
     public static class SectionExtensions
     {
-        public static SectionDTO ToSectionDTO(this Section section)
+        public static SectionDto ToSectionDto(this Section section)
         {
-            return new SectionDTO
+            return new SectionDto
             {
                 Id = section.Id,
                 Name = section.Name,
                 Number = section.Number,
-                Meanings = section.Meanings.Select(sm => sm.ToSectionMeaningDTO()).ToList(),
+                Meanings = section.Meanings.Select(sm => sm.ToSectionMeaningDto()).ToList(),
             };
         }
 
-        public static SectionUpperDTO ToSectionUpperDTO(this Section section)
+        public static SectionUpperDto ToSectionUpperDto(this Section section)
         {
-            return new SectionUpperDTO
+            return new SectionUpperDto
             {
                 Name = section.Name,
                 Number = section.Number,
-                Meanings = section.Meanings.Select(e => e.ToSectionMeaningDTO()).ToList(),
+                Meanings = section.Meanings.Select(e => e.ToSectionMeaningDto()).ToList(),
 
-                Scripture = section.Scripture.ToScriptureDTO(),
+                Scripture = section.Scripture.ToScriptureDto(),
             };
         }
 
-        public static SectionOneLevelLowerDTO ToSectionOneLevelLowerDTO(this Section section)
+        public static SectionOneLevelLowerDto ToSectionOneLevelLowerDto(this Section section)
         {
-            return new SectionOneLevelLowerDTO
+            return new SectionOneLevelLowerDto
             {
                 Name = section.Name,
                 Number = section.Number,
-                Meanings = section.Meanings.Select(e => e.ToSectionMeaningDTO()).ToList(),
+                Meanings = section.Meanings.Select(e => e.ToSectionMeaningDto()).ToList(),
 
-                Chapters = section.Chapters.Select(c => c.ToChapterDTO()).ToList(),
+                Chapters = section.Chapters.Select(c => c.ToChapterDto()).ToList(),
             };
         }
 
-        public static SectionLowerDTO ToSectionLowerDTO(this Section section)
+        public static SectionLowerDto ToSectionLowerDto(this Section section)
         {
-            return new SectionLowerDTO
+            return new SectionLowerDto
             {
                 Name = section.Name,
                 Number = section.Number,
-                Meanings = section.Meanings.Select(e => e.ToSectionMeaningDTO()).ToList(),
+                Meanings = section.Meanings.Select(e => e.ToSectionMeaningDto()).ToList(),
 
-                Chapters = section.Chapters.Select(c => c.ToChapterLowerDTO()).ToList(),
+                Chapters = section.Chapters.Select(c => c.ToChapterLowerDto()).ToList(),
             };
         }
 
-        public static SectionBothDTO ToSectionBothDTO(this Section section)
+        public static SectionBothDto ToSectionBothDto(this Section section)
         {
-            return new SectionBothDTO
+            return new SectionBothDto
             {
                 Name = section.Name,
                 Number = section.Number,
-                Meanings = section.Meanings.Select(e => e.ToSectionMeaningDTO()).ToList(),
+                Meanings = section.Meanings.Select(e => e.ToSectionMeaningDto()).ToList(),
 
-                Scripture = section.Scripture.ToScriptureUpperDTO(),
-                Chapters = section.Chapters.Select(c => c.ToChapterLowerDTO()).ToList(),
+                Scripture = section.Scripture.ToScriptureUpperDto(),
+                Chapters = section.Chapters.Select(c => c.ToChapterLowerDto()).ToList(),
             };
         }
 
-        public static SectionUpperConfinedDTO ToSectionUpperConfinedDTO(this Section section)
+        public static SectionUpperConfinedDto ToSectionUpperConfinedDto(this Section section)
         {
-            return new SectionUpperConfinedDTO
+            return new SectionUpperConfinedDto
             {
                 Name = section.Name,
                 Number = section.Number,
-                Scripture = section.Scripture.ToScriptureUpperConfinedDTO()
+                Scripture = section.Scripture.ToScriptureUpperConfinedDto()
             };
         }
 
-        public static SectionLowerConfinedDTO ToSectionLowerConfinedDTO(this Section section)
+        public static SectionLowerConfinedDto ToSectionLowerConfinedDto(this Section section)
         {
-            return new SectionLowerConfinedDTO
+            return new SectionLowerConfinedDto
             {
                 Name = section.Name,
                 Number = section.Number,
-                Chapters = section.Chapters.Select(c => c.ToChapterLowerConfinedDTO()).ToList()
+                Chapters = section.Chapters.Select(c => c.ToChapterLowerConfinedDto()).ToList()
             };
         }
 
-        public static SectionMeaningDTO ToSectionMeaningDTO(this SectionMeaning sectionMeaning)
+        public static SectionMeaningDto ToSectionMeaningDto(this SectionMeaning sectionMeaning)
         {
-            return new SectionMeaningDTO
+            return new SectionMeaningDto
             {
                 Text = sectionMeaning.Meaning,
-                Language = sectionMeaning.Language.ToLanguageDTO()
+                Language = sectionMeaning.Language.ToLanguageDto()
             };
         }
 
-        public static SectionUpperMeanDTO ToSectionUpperMeanDTO(this Section section)
+        public static SectionUpperMeanDto ToSectionUpperMeanDto(this Section section)
         {
-            return new SectionUpperMeanDTO
+            return new SectionUpperMeanDto
             {
                 Id = section.Id,
                 Name = section.Name,
                 Number = section.Number,
-                Meanings = section.Meanings.Select(sm => sm.ToSectionMeaningDTO()).ToList(),
-                Scripture = section.Scripture.ToScriptureUpperMeanDTO(),
+                Meanings = section.Meanings.Select(sm => sm.ToSectionMeaningDto()).ToList(),
+                Scripture = section.Scripture.ToScriptureUpperMeanDto(),
             };
         }
 
-        public static SectionOneLevelBothDTO ToSectionOneLevelBothDTO(this Section section)
+        public static SectionOneLevelBothDto ToSectionOneLevelBothDto(this Section section)
         {
-            return new SectionOneLevelBothDTO
+            return new SectionOneLevelBothDto
             {
                 Id = section.Id,
                 Name = section.Name,
                 Number = section.Number,
-                Meanings = section.Meanings.Select(sm => sm.ToSectionMeaningDTO()).ToList(),
+                Meanings = section.Meanings.Select(sm => sm.ToSectionMeaningDto()).ToList(),
 
-                Chapters = section.Chapters.Select(c => c.ToChapterDTO()).ToList(),
-                Scripture = section.Scripture.ToScriptureDTO()
+                Chapters = section.Chapters.Select(c => c.ToChapterDto()).ToList(),
+                Scripture = section.Scripture.ToScriptureDto()
             };
         }
     }

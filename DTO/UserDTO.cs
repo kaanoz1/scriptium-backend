@@ -1,9 +1,14 @@
-using scriptium_backend_dotnet.Models;
-using scriptium_backend_dotnet.Models.Util;
+
+/*
+This file is temporarily disabled. 
+Due to budgetary reasons, Scriptium is unable to provide the economic conditions necessary for legal and official procedures involving the collection, processing, and storage of user information.
+using ScriptiumBackend.Models;
+using ScriptiumBackend.Models.Util;
+
 
 namespace DTO
 {
-    public class UserDTO
+    public class UserDto
     {
         public required Guid Id { get; set; }
 
@@ -16,7 +21,7 @@ namespace DTO
         public required bool IsFrozen { get; set; } = false;
     }
 
-    public class UserFetchedDTO
+    public class UserFetchedDto
     {
         public required Guid Id { get; set; }
 
@@ -46,7 +51,7 @@ namespace DTO
 
         public required DateTime CreatedAt { get; set; }
 
-        public required int UpdateCount { get; set; }
+        // public required int UpdateCount { get; set; }
 
         public required bool IsFrozen { get; set; } = false;
 
@@ -55,10 +60,9 @@ namespace DTO
         public required string? followStatusUserInspecting { get; set; }
 
         public required bool IsUserInspectedBlocked { get; set; }
-
     }
 
-    public class UserOwnDTO
+    public class UserOwnDto
     {
         public required Guid Id { get; set; }
 
@@ -83,18 +87,16 @@ namespace DTO
         public required string? Gender { get; set; }
 
         public required List<string> Roles { get; set; }
-
     }
 
 
-    public static class UserDTOExtension
+    public static class UserDtoExtension
     {
-
-        public static UserDTO ToUserDTO(this User user)
+        public static UserDto ToUserDto(this User user)
         {
             bool isFrozen = user.IsFrozen.HasValue;
 
-            return new UserDTO
+            return new UserDto
             {
                 Id = user.Id,
                 Username = user.UserName,
@@ -103,7 +105,8 @@ namespace DTO
                 Image = isFrozen ? null : user.Image,
                 IsFrozen = user.IsFrozen.HasValue
             };
-
         }
     }
 }
+
+*/

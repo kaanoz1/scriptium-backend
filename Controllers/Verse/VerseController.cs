@@ -2,19 +2,20 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
-using scriptium_backend_dotnet.Controllers.Validation;
-using scriptium_backend_dotnet.DB;
-using scriptium_backend_dotnet.Models;
-using scriptium_backend_dotnet.Services;
+using ScriptiumBackend.Controllers.Validation;
+using ScriptiumBackend.Models;
+using ScriptiumBackend.Services;
 using DTO;
+using ScriptiumBackend.Interface;
+using ScriptiumBackend.DB;
 
-namespace scriptium_backend_dotnet.Controllers.VerseHandler
+namespace ScriptiumBackend.Controllers.VerseHandler
 {
     [ApiController, Route("verse"), EnableRateLimiting(policyName: "StaticControllerRateLimiter")]
-    public class VerseController(ApplicationDBContext db, ICacheService cacheService, ILogger<VerseController> logger)
+    public class VerseController(ApplicationDbContext db, ICacheService cacheService, ILogger<VerseController> logger)
         : ControllerBase
     {
-        private readonly ApplicationDBContext _db = db ?? throw new ArgumentNullException(nameof(db));
+        private readonly ApplicationDbContext _db = db ?? throw new ArgumentNullException(nameof(db));
 
         private readonly ICacheService _cacheService =
             cacheService ?? throw new ArgumentNullException(nameof(cacheService));
@@ -26,9 +27,9 @@ namespace scriptium_backend_dotnet.Controllers.VerseHandler
         {
             string requestPath = Request.Path.ToString();
 
-            VerseBothDTO? cache = await _cacheService.GetCachedDataAsync<VerseBothDTO>(requestPath);
+            VerseBothDto? cache = await _cacheService.GetCachedDataAsync<VerseBothDto>(requestPath);
 
-            VerseBothDTO data;
+            VerseBothDto data;
 
             if (cache != null)
             {
@@ -37,7 +38,7 @@ namespace scriptium_backend_dotnet.Controllers.VerseHandler
             }
             else
             {
-                Verse? verse = await _db.Verse
+                Verse? verse = await _db.Verses
                     .IgnoreAutoIncludes()
                     .AsNoTracking()
                     .Where(v => v.Number == model.VerseNumber &&
@@ -80,19 +81,20 @@ namespace scriptium_backend_dotnet.Controllers.VerseHandler
                     return NotFound("There is no verse matches with this information.");
                 }
 
-                data = verse.ToVerseBothDTO();
+                data = verse.ToVerseBothDto();
 
                 await _cacheService.SetCacheDataAsync(requestPath, data);
                 _logger.LogInformation($"Cache data for URL {requestPath} is renewing");
             }
 
+            /* Disabled since Scriptium does not hold and process user information data.
             string? UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
             if (UserId != null &&
                 await _db.CollectionVerse.AnyAsync(c =>
                     c.Collection.UserId.ToString() == UserId && c.VerseId == data.Id))
                 data.IsSaved = true;
-
+            */
 
             return Ok(new { data });
         }
@@ -103,8 +105,8 @@ namespace scriptium_backend_dotnet.Controllers.VerseHandler
         {
             string requestPath = Request.Path.ToString();
 
-            ChapterUpperAndOneLevelLowerDTO? cache =
-                await _cacheService.GetCachedDataAsync<ChapterUpperAndOneLevelLowerDTO>(requestPath);
+            ChapterUpperAndOneLevelLowerDto? cache =
+                await _cacheService.GetCachedDataAsync<ChapterUpperAndOneLevelLowerDto>(requestPath);
 
             if (cache != null) //Checking cache
             {
@@ -112,7 +114,7 @@ namespace scriptium_backend_dotnet.Controllers.VerseHandler
                 return Ok(new { data = cache });
             }
 
-            ChapterUpperAndOneLevelLowerDTO? data = await _db.Chapter
+            ChapterUpperAndOneLevelLowerDto? data = await _db.Chapters
                 .Where(c => c.Number == model.ChapterNumber &&
                             c.Section.Number == model.SectionNumber &&
                             c.Section.Scripture.Number == model.ScriptureNumber)
@@ -137,7 +139,7 @@ namespace scriptium_backend_dotnet.Controllers.VerseHandler
                 .ThenInclude(v => v.TranslationTexts)
                 .ThenInclude(tt => tt.FootNotes)
                 .ThenInclude(f => f.FootNoteText)
-                .Select(c => c.ToChapterUpperAndOneLevelLowerDTO())
+                .Select(c => c.ToChapterUpperAndOneLevelLowerDto())
                 .FirstOrDefaultAsync();
 
 
@@ -161,7 +163,7 @@ namespace scriptium_backend_dotnet.Controllers.VerseHandler
         {
             string requestPath = Request.Path.ToString();
 
-            SectionOneLevelBothDTO? cache = await _cacheService.GetCachedDataAsync<SectionOneLevelBothDTO>(requestPath);
+            SectionOneLevelBothDto? cache = await _cacheService.GetCachedDataAsync<SectionOneLevelBothDto>(requestPath);
 
             if (cache != null)
             {
@@ -170,13 +172,13 @@ namespace scriptium_backend_dotnet.Controllers.VerseHandler
             }
 
 
-            SectionOneLevelBothDTO? data = await _db.Section
+            SectionOneLevelBothDto? data = await _db.Sections
                 .Where(s => s.Number == model.SectionNumber && s.Scripture.Number == model.ScriptureNumber)
                 .AsNoTracking()
                 .Include(s => s.Meanings).ThenInclude(m => m.Language)
                 .Include(s => s.Scripture).ThenInclude(s => s.Meanings).ThenInclude(m => m.Language)
                 .Include(s => s.Chapters).ThenInclude(c => c.Meanings).ThenInclude(m => m.Language)
-                .Select(s => s.ToSectionOneLevelBothDTO()).FirstOrDefaultAsync();
+                .Select(s => s.ToSectionOneLevelBothDto()).FirstOrDefaultAsync();
 
 
             if (data == null)
@@ -199,23 +201,23 @@ namespace scriptium_backend_dotnet.Controllers.VerseHandler
         {
             string requestPath = Request.Path.ToString();
 
-            ScriptureOneLevelLowerDTO? cache =
-                await _cacheService.GetCachedDataAsync<ScriptureOneLevelLowerDTO>(requestPath);
+            ScriptureOneLevelLowerDto? cache =
+                await _cacheService.GetCachedDataAsync<ScriptureOneLevelLowerDto>(requestPath);
 
-            if (cache != null) //Checking cache
+            if (cache != null)
             {
                 _logger.LogInformation($"Cache data with URL {requestPath} is found. Sending.");
                 return Ok(new { data = cache });
             }
 
-            //Link queries make it impossible to fetch.
-            ScriptureOneLevelLowerDTO? data = await _db.Scripture
+
+            ScriptureOneLevelLowerDto? data = await _db.Scriptures
                 .Where(s => s.Number == model.ScriptureNumber)
                 .AsNoTracking()
                 .AsSplitQuery()
                 .Include(s => s.Sections).ThenInclude(s => s.Meanings).ThenInclude(m => m.Language)
                 .Include(s => s.Meanings).ThenInclude(m => m.Language)
-                .Select(s => s.ToScriptureOneLevelLowerDTO()).FirstOrDefaultAsync();
+                .Select(s => s.ToScriptureOneLevelLowerDto()).FirstOrDefaultAsync();
 
 
             if (data == null)

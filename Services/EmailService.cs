@@ -1,14 +1,18 @@
+/*
+This file is temporarily disabled. 
+Due to budgetary reasons, Scriptium is unable to provide the economic conditions necessary for legal and official procedures involving the collection, processing, and storage of user information.
+
+
+
+   namespace ScriptiumBackend.Services;
+
 
 using MailKit.Security;
-using scriptium_backend.Interface;
-using scriptium_backend.Models;
-
-namespace scriptium_backend_dotnet.Services;
-
+using ScriptiumBackend.Interface;
+using ScriptiumBackend.Models;
 using MailKit.Net.Smtp;
 using MimeKit;
 using Microsoft.Extensions.Options;
-
 public class EmailService(IOptions<EmailSettings> settings) : IEmailService
 {
     private readonly EmailSettings _settings = settings.Value;
@@ -58,3 +62,6 @@ public class EmailService(IOptions<EmailSettings> settings) : IEmailService
         }
     }
 }
+
+*/
+

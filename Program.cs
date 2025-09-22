@@ -1,21 +1,21 @@
+using System.Threading.RateLimiting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using scriptium_backend_dotnet.DB;
-using scriptium_backend_dotnet.Models;
-using scriptium_backend_dotnet.Services;
+using ScriptiumBackend.Models;
+using ScriptiumBackend.Services;
 using Serilog;
 using Microsoft.AspNetCore.RateLimiting;
 using FluentValidation.AspNetCore;
-using scriptium_backend_dotnet.MiddleWare;
-using scriptium_backend.Interface;
-using scriptium_backend.Models;
+using ScriptiumBackend.MiddleWare;
+using ScriptiumBackend.Interface;
+using ScriptiumBackend.DB;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.WebHost.ConfigureKestrel(options =>
 {
-    options.ListenAnyIP(5227); 
+    options.ListenAnyIP(5000); 
 });
 
 Log.Logger = new LoggerConfiguration()
@@ -34,27 +34,48 @@ Log.Information("Application is starting...");
 
 builder.Host.UseSerilog();
 
-builder.Services.AddRateLimiter(option =>
+builder.Services.AddRateLimiter(options =>
 {
-    option.AddFixedWindowLimiter(policyName: "StaticControllerRateLimiter", windowsOptions =>
-    {
-        windowsOptions.PermitLimit = 5;
-        windowsOptions.Window = TimeSpan.FromSeconds(10);
-    });
+    options.AddPolicy("StaticControllerRateLimiter", context =>
+        RateLimitPartition.GetFixedWindowLimiter(
+            partitionKey: context.Connection.RemoteIpAddress?.ToString() ?? "unknown",
+            factory: _ => new FixedWindowRateLimiterOptions
+            {
+                PermitLimit = 3,
+                Window = TimeSpan.FromSeconds(1),
+                AutoReplenishment = true,
+                QueueLimit = 0
+            }));
 
-    option.AddFixedWindowLimiter(policyName: "AuthControllerRateLimit", windowsOptions =>
-    {
-        windowsOptions.PermitLimit = 10;
-        windowsOptions.Window = TimeSpan.FromDays(1);
-    });
+    options.AddPolicy("AuthControllerRateLimit", context =>
+        RateLimitPartition.GetFixedWindowLimiter(
+            partitionKey: context.User?.Identity?.Name
+                          ?? context.Connection.RemoteIpAddress?.ToString()
+                          ?? "anon",
+            factory: _ => new FixedWindowRateLimiterOptions
+            {
+                PermitLimit = 10,               
+                Window = TimeSpan.FromSeconds(10),
+                AutoReplenishment = true,
+                QueueLimit = 0
+            }));
 
-    option.OnRejected = async (context, CancellationToken) =>
+    options.OnRejected = async (ctx, ct) =>
     {
-        ILogger<Program> logger = context.HttpContext.RequestServices.GetRequiredService<ILogger<Program>>();
-        logger.LogWarning("Rate limit exceeded for {Path} from User {User}", context.HttpContext.Request.Path, context.HttpContext.User.Identity?.Name ?? "unknown");
+        var logger = ctx.HttpContext.RequestServices.GetRequiredService<ILogger<Program>>();
+        logger.LogWarning("Rate limit exceeded for {Path} from User {User}",
+            ctx.HttpContext.Request.Path,
+            ctx.HttpContext.User.Identity?.Name ?? "unknown");
 
-        context.HttpContext.Response.StatusCode = StatusCodes.Status429TooManyRequests;
-        await context.HttpContext.Response.WriteAsync("Rate limit exceeded. Please try again later.", CancellationToken);
+        // Retry-After ekle (süzülen meta varsa kullan)
+        if (ctx.Lease.TryGetMetadata(MetadataName.RetryAfter, out var retryAfter))
+        {
+            ctx.HttpContext.Response.Headers.RetryAfter = ((int)retryAfter.TotalSeconds).ToString();
+        }
+
+        ctx.HttpContext.Response.StatusCode = StatusCodes.Status429TooManyRequests;
+        await ctx.HttpContext.Response.WriteAsync(
+            "Rate limit exceeded. Please try again later.", ct);
     };
 });
 
@@ -63,8 +84,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowAll", policy =>
     {
         policy
-            .WithOrigins("http://localhost:3000", "http://192.168.1.2:3000")
-            .AllowCredentials()
+            .AllowAnyOrigin()
             .AllowAnyHeader()
             .AllowAnyMethod();
     });
@@ -75,13 +95,23 @@ builder.Services.AddCors(options =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddDbContext<ApplicationDBContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"), options => options.CommandTimeout(180)));
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+{
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"),
+        sqlServerOptions => sqlServerOptions.CommandTimeout(180));
+});
+
+builder.Services.AddScoped<ICacheService, CacheService>();
+builder.Services.AddSingleton<LuceneIndexerService>();
+builder.Services.AddHostedService<IndexSyncBackgroundService>();
+builder.Services.AddScoped<ISearchService, LuceneSearcherService>();
+
+
+/*
+    THESE SERVICES ARE TEMPORARILY DISABLED SINCE THE BACKEND SERVICE IS CLOSED FOR USER DATA.
 
 builder.Services.AddSingleton<ITicketStore, SessionStore>();
-builder.Services.AddScoped<ICacheService, CacheService>();
 builder.Services.AddHostedService<UserDeletionBackgroundService>();
-
 builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
 builder.Services.AddScoped<IEmailService, EmailService>();
 
@@ -95,7 +125,7 @@ builder.Services.AddIdentity<User, Role>(options =>
     options.Password.RequiredLength = 6;
     options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyz0123456789._";
 })
-    .AddEntityFrameworkStores<ApplicationDBContext>()
+    .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultTokenProviders();
 
 builder.Services.ConfigureApplicationCookie(options =>
@@ -116,6 +146,7 @@ builder.Services.ConfigureApplicationCookie(options =>
     options.Cookie.SameSite = SameSiteMode.Strict;
     options.Cookie.Name = "sessionB";
 });
+*/
 
 builder.Services.AddFluentValidationAutoValidation();
 
@@ -132,28 +163,41 @@ builder.Services.AddControllers()
 
 var app = builder.Build();
 
-app.UseCors("AllowAll");
 
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+    Log.Information("Development environment detected. Swagger is enabled.");
+
+
+}
+
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    db.Database.Migrate();
 }
 
 app.UseSerilogRequestLogging();
 
-app.UseHttpsRedirection();
+if (app.Environment.IsProduction())
+{
+    app.UseHttpsRedirection();
+    Log.Information("Environment is production. HttpsRedirection enabled.");
+}
 
 app.UseRouting();
 
+app.UseCors("AllowAll");
 
 
-app.UseAuthentication();
-app.UseAuthorization();
+// app.UseAuthentication();
+// app.UseAuthorization();
 
-//app.UseRateLimiter();
+app.UseRateLimiter();
 
-//app.UseMiddleware<RequestLoggingMiddleware>();
+app.UseMiddleware<RequestLoggingMiddleware>();
 
 app.MapControllers();
 

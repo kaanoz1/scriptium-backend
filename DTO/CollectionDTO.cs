@@ -1,4 +1,8 @@
-using scriptium_backend_dotnet.Models;
+using ScriptiumBackend.Models;
+/*
+This file is temporarily disabled. 
+Due to budgetary reasons, Scriptium is unable to provide the economic conditions necessary for legal and official procedures involving the collection, processing, and storage of user information.
+
 
 namespace DTO
 {
@@ -9,14 +13,14 @@ namespace DTO
         AlreadyDone = 2,
         Succeed = 3
     }
-    public class CollectionProcessResultDTO
+    public class CollectionProcessResultDto
     {
         public required string CollectionName { get; set; }
         public required int Code { get; set; }
         public string? Message { get; set; }
     }
 
-    public class CollectionDTO
+    public class CollectionDto
     {
         public required int Id { get; set; }
         public required string Name { get; set; }
@@ -24,18 +28,18 @@ namespace DTO
         public required int SaveCount { get; set; }
     }
 
-    public class CollectionWithVerseSavedInformationDTO
+    public class CollectionWithVerseSavedInformationDto
     {
         public required string Name { get; set; }
         public required string? Description { get; set; }
         public required bool IsSaved { get; set; }
     }
 
-    public static class CollectionInsertResultDTOExtension
+    public static class CollectionInsertResultDtoExtension
     {
-        public static CollectionDTO ToCollectionDTO(this Collection Collection)
+        public static CollectionDto ToCollectionDto(this Collection Collection)
         {
-            return new CollectionDTO
+            return new CollectionDto
             {
                 Id = Collection.Id,
                 Name = Collection.Name,
@@ -44,9 +48,9 @@ namespace DTO
             };
         }
 
-        public static CollectionProcessResultDTO GetCollectionProcessResultDTO(this Collection? collection, string CollectionName)
+        public static CollectionProcessResultDto GetCollectionProcessResultDto(this Collection? collection, string CollectionName)
         {
-            return new CollectionProcessResultDTO
+            return new CollectionProcessResultDto
             {
                 CollectionName = CollectionName,
                 Code = 404,
@@ -55,10 +59,10 @@ namespace DTO
 
         }
 
-        public static CollectionProcessResultDTO GetCollectionProcessResultDTO(this Collection collection, CollectionStatus status)
+        public static CollectionProcessResultDto GetCollectionProcessResultDto(this Collection collection, CollectionStatus status)
         {
             if (status == CollectionStatus.Succeed)
-                return new CollectionProcessResultDTO
+                return new CollectionProcessResultDto
                 {
                     CollectionName = collection.Name,
                     Code = 200,
@@ -66,7 +70,7 @@ namespace DTO
                 };
 
             else if (status == CollectionStatus.AlreadyDone)
-                return new CollectionProcessResultDTO
+                return new CollectionProcessResultDto
                 {
                     CollectionName = collection.Name,
                     Code = 409,
@@ -75,7 +79,7 @@ namespace DTO
                 };
 
             else if (status == CollectionStatus.NotFound)
-                return new CollectionProcessResultDTO
+                return new CollectionProcessResultDto
                 {
                     CollectionName = collection.Name,
                     Code = 409,
@@ -83,7 +87,7 @@ namespace DTO
                 };
 
             else //Error case, which is more likely to not be.
-                return new CollectionProcessResultDTO
+                return new CollectionProcessResultDto
                 {
                     CollectionName = collection.Name,
                     Code = 500,
@@ -96,3 +100,4 @@ namespace DTO
 
     }
 }
+*/

@@ -1,43 +1,43 @@
-using scriptium_backend_dotnet.Models;
+using ScriptiumBackend.Models;
 
 namespace DTO
 {
-    public class TranslationDTO
+    public class TranslationDto
     {
         public required short Id { get; set; }
         public required string Name { get; set; }
-        public required LanguageDTO Language { get; set; }
-        public required List<TranslatorDTO> Translators { get; set; }
+        public required LanguageDto Language { get; set; }
+        public required List<TranslatorDto> Translators { get; set; }
         public required bool IsEager { get; set; }
     }
 
-    public class TranslationWithScriptureDTODTO : TranslationDTO
+    public class TranslationWithScriptureDtoDto : TranslationDto
     {
-        public required ScriptureDTO Scripture { get; set; }
+        public required ScriptureDto Scripture { get; set; }
     }
 
     public static class TranslationExtensions
     {
-        public static TranslationWithScriptureDTODTO ToTranslationWithScriptureDTODTO(this Translation translation)
+        public static TranslationWithScriptureDtoDto ToTranslationWithScriptureDtoDto(this Translation translation)
         {
-            return new TranslationWithScriptureDTODTO
+            return new TranslationWithScriptureDtoDto
             {
                 Id = translation.Id,
                 Name = translation.Name,
-                Language = translation.Language.ToLanguageDTO(),
-                Translators = translation.TranslatorTranslations.Select(e => e.Translator.ToTranslatorDTO()).ToList(),
+                Language = translation.Language.ToLanguageDto(),
+                Translators = translation.TranslatorTranslations.Select(e => e.Translator.ToTranslatorDto()).ToList(),
                 IsEager = translation.EagerFrom.HasValue,
-                Scripture = translation.Scripture.ToScriptureDTO()
+                Scripture = translation.Scripture.ToScriptureDto()
             };
         }
-        public static TranslationDTO ToTranslationDTO(this Translation translation)
+        public static TranslationDto ToTranslationDto(this Translation translation)
         {
-            return new TranslationDTO
+            return new TranslationDto
             {
                 Id = translation.Id,
                 Name = translation.Name,
-                Language = translation.Language.ToLanguageDTO(),
-                Translators = translation.TranslatorTranslations.Select(e => e.Translator.ToTranslatorDTO()).ToList(),
+                Language = translation.Language.ToLanguageDto(),
+                Translators = translation.TranslatorTranslations.Select(e => e.Translator.ToTranslatorDto()).ToList(),
                 IsEager = translation.EagerFrom.HasValue
             };
         }

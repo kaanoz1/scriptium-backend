@@ -1,8 +1,8 @@
-using scriptium_backend_dotnet.Models;
+using ScriptiumBackend.Models;
 
 namespace DTO
 {
-    public class LanguageDTO
+    public class LanguageDto
     {
         public string LangCode { get; set; } = string.Empty;
         public string LangOwn { get; set; } = string.Empty;
@@ -12,14 +12,14 @@ namespace DTO
     public abstract class Meaning
     {
         public required string Text { get; set; }
-        public required LanguageDTO Language { get; set; }
+        public required LanguageDto Language { get; set; }
     }
 
     public static class LanguageExtensions
     {
-        public static LanguageDTO ToLanguageDTO(this Language language)
+        public static LanguageDto ToLanguageDto(this Language language)
         {
-            return new LanguageDTO
+            return new LanguageDto
             {
                 LangCode = language.LangCode,
                 LangOwn = language.LangOwn,

@@ -1,9 +1,13 @@
+/*
+This file is temporarily disabled. 
+Due to budgetary reasons, Scriptium is unable to provide the economic conditions necessary for legal and official procedures involving the collection, processing, and storage of user information.
+
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace scriptium_backend_dotnet.Models
+namespace ScriptiumBackend.Models
 {
-    [Table("comment_note")]
+    [Table("comment_note"), NotMapped]
     public class CommentNote
     {
         [Key, Column("comment_id", TypeName = Utility.DBType64bitInteger)]
@@ -18,3 +22,4 @@ namespace scriptium_backend_dotnet.Models
     }
 
 }
+*/

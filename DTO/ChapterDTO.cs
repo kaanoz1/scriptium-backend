@@ -1,92 +1,92 @@
-using scriptium_backend_dotnet.Models;
+using ScriptiumBackend.Models;
 
 namespace DTO
 {
-    public abstract class ChapterBaseDTO
+    public abstract class ChapterBaseDto
     {
         public required int Id { get; set; }
         public required string Name { get; set; }
         public required short Number { get; set; }
     }
 
-    public abstract class ChapterSimpleDTO : ChapterBaseDTO
+    public abstract class ChapterSimpleDto : ChapterBaseDto
     {
-        public required List<ChapterMeaningDTO> Meanings { get; set; } = [];
+        public required List<ChapterMeaningDto> Meanings { get; set; } = [];
     }
 
-    public class ChapterDTO : ChapterSimpleDTO;
+    public class ChapterDto : ChapterSimpleDto;
 
-    public class ChapterUpperDTO : ChapterDTO
+    public class ChapterUpperDto : ChapterDto
     {
-        public required SectionUpperDTO Section { get; set; }
+        public required SectionUpperDto Section { get; set; }
     }
 
-    public class ChapterOneLevelUpperDTO : ChapterDTO
+    public class ChapterOneLevelUpperDto : ChapterDto
     {
-        public required SectionDTO Section { get; set; }
+        public required SectionDto Section { get; set; }
     }
 
-    public class ChapterLowerDTO : ChapterDTO
+    public class ChapterLowerDto : ChapterDto
     {
-        public required List<VerseLowerDTO> Verses { get; set; }
+        public required List<VerseLowerDto> Verses { get; set; }
     }
 
-    public class ChapterOneLevelLowerDTO : ChapterDTO
+    public class ChapterOneLevelLowerDto : ChapterDto
     {
-        public required List<VerseDTO> Verses { get; set; }
+        public required List<VerseDto> Verses { get; set; }
     }
 
-    public class ChapterUpperAndOneLevelLowerDTO : ChapterUpperDTO
+    public class ChapterUpperAndOneLevelLowerDto : ChapterUpperDto
     {
-        public required List<VerseDTO> Verses { get; set; }
+        public required List<VerseDto> Verses { get; set; }
     }
 
-    public class ChapterBothDTO : ChapterDTO
+    public class ChapterBothDto : ChapterDto
     {
-        public required SectionUpperDTO Section { get; set; }
-        public required List<VerseLowerDTO> Verses { get; set; }
+        public required SectionUpperDto Section { get; set; }
+        public required List<VerseLowerDto> Verses { get; set; }
     }
 
-    public class ChapterMeaningDTO : Meaning;
+    public class ChapterMeaningDto : Meaning;
 
-    public abstract class ChapterConfinedDTO : ChapterBaseDTO;
+    public abstract class ChapterConfinedDto : ChapterBaseDto;
 
-    public class ChapterUpperConfinedDTO : ChapterConfinedDTO
+    public class ChapterUpperConfinedDto : ChapterConfinedDto
     {
-        public required SectionUpperConfinedDTO Section { get; set; }
+        public required SectionUpperConfinedDto Section { get; set; }
     }
 
-    public class ChapterLowerConfinedDTO : ChapterConfinedDTO
+    public class ChapterLowerConfinedDto : ChapterConfinedDto
     {
-        public required List<VerseLowerConfinedDTO> Verses { get; set; }
+        public required List<VerseLowerConfinedDto> Verses { get; set; }
     }
 
-    //Custom DTOs
-    public class ChapterMeanDTO : ChapterBaseDTO
+    //Custom Dtos
+    public class ChapterMeanDto : ChapterBaseDto
     {
-        public required List<ChapterMeaningDTO> Meanings { get; set; } = [];
+        public required List<ChapterMeaningDto> Meanings { get; set; } = [];
     }
 
-    public class ChapterUpperMeanDTO : ChapterMeanDTO
+    public class ChapterUpperMeanDto : ChapterMeanDto
     {
-        public required SectionUpperMeanDTO Section { get; set; }
+        public required SectionUpperMeanDto Section { get; set; }
     }
 
-    public class ChapterLowerMeanDTO : ChapterMeanDTO
+    public class ChapterLowerMeanDto : ChapterMeanDto
     {
-        public required List<VerseLowerMeanDTO> Verses { get; set; }
+        public required List<VerseLowerMeanDto> Verses { get; set; }
     }
 
     
-    public class ChapterIndicatorDTO : IEquatable<ChapterIndicatorDTO>
+    public class ChapterIndicatorDto : IEquatable<ChapterIndicatorDto>
     {
         public required int Scripture { get; set; }
         public required int Section { get; set; }
         public required int Chapter { get; set; }
 
-        public override bool Equals(object? obj) => Equals(obj as ChapterIndicatorDTO);
+        public override bool Equals(object? obj) => Equals(obj as ChapterIndicatorDto);
 
-        public bool Equals(ChapterIndicatorDTO? other)
+        public bool Equals(ChapterIndicatorDto? other)
         {
             if (other is null) return false;
             return Scripture == other.Scripture &&
@@ -102,133 +102,133 @@ namespace DTO
     
     public static class ChapterExtensions
     {
-        public static ChapterUpperAndOneLevelLowerDTO ToChapterUpperAndOneLevelLowerDTO(this Chapter chapter)
+        public static ChapterUpperAndOneLevelLowerDto ToChapterUpperAndOneLevelLowerDto(this Chapter chapter)
         {
-            return new ChapterUpperAndOneLevelLowerDTO
+            return new ChapterUpperAndOneLevelLowerDto
             {
                 Id = chapter.Id,
-                Meanings = chapter.Meanings.Select(cm => cm.ToChapterMeaningDTO()).ToList(),
+                Meanings = chapter.Meanings.Select(cm => cm.ToChapterMeaningDto()).ToList(),
                 Name = chapter.Name,
                 Number = chapter.Number,
-                Section = chapter.Section.ToSectionUpperDTO(),
-                Verses = chapter.Verses.Select(v => v.ToVerseDTO()).ToList()
+                Section = chapter.Section.ToSectionUpperDto(),
+                Verses = chapter.Verses.Select(v => v.ToVerseDto()).ToList()
             };
         }
 
-        public static ChapterDTO ToChapterDTO(this Chapter chapter)
+        public static ChapterDto ToChapterDto(this Chapter chapter)
         {
-            return new ChapterDTO
-            {
-                Id = chapter.Id,
-                Name = chapter.Name,
-                Number = chapter.Number,
-                Meanings = chapter.Meanings.Select(cm => cm.ToChapterMeaningDTO()).ToList(),
-            };
-        }
-
-        public static ChapterUpperDTO ToChapterUpperDTO(this Chapter chapter)
-        {
-            return new ChapterUpperDTO
+            return new ChapterDto
             {
                 Id = chapter.Id,
                 Name = chapter.Name,
                 Number = chapter.Number,
-                Meanings = chapter.Meanings.Select(cm => cm.ToChapterMeaningDTO()).ToList(),
-                Section = chapter.Section.ToSectionUpperDTO(),
+                Meanings = chapter.Meanings.Select(cm => cm.ToChapterMeaningDto()).ToList(),
             };
         }
 
-        public static ChapterOneLevelUpperDTO ToChapterOneLevelUpperDTO(this Chapter chapter)
+        public static ChapterUpperDto ToChapterUpperDto(this Chapter chapter)
         {
-            return new ChapterOneLevelUpperDTO
+            return new ChapterUpperDto
             {
                 Id = chapter.Id,
                 Name = chapter.Name,
                 Number = chapter.Number,
-                Meanings = chapter.Meanings.Select(cm => cm.ToChapterMeaningDTO()).ToList(),
-                Section = chapter.Section.ToSectionDTO(),
+                Meanings = chapter.Meanings.Select(cm => cm.ToChapterMeaningDto()).ToList(),
+                Section = chapter.Section.ToSectionUpperDto(),
             };
         }
 
-        public static ChapterLowerDTO ToChapterLowerDTO(this Chapter chapter)
+        public static ChapterOneLevelUpperDto ToChapterOneLevelUpperDto(this Chapter chapter)
         {
-            return new ChapterLowerDTO
+            return new ChapterOneLevelUpperDto
             {
                 Id = chapter.Id,
                 Name = chapter.Name,
                 Number = chapter.Number,
-                Meanings = chapter.Meanings.Select(cm => cm.ToChapterMeaningDTO()).ToList(),
-                Verses = chapter.Verses.Select(v => v.ToVerseLowerDTO()).ToList(),
+                Meanings = chapter.Meanings.Select(cm => cm.ToChapterMeaningDto()).ToList(),
+                Section = chapter.Section.ToSectionDto(),
             };
         }
 
-        public static ChapterOneLevelLowerDTO ToChapterOneLevelLowerDTO(this Chapter chapter)
+        public static ChapterLowerDto ToChapterLowerDto(this Chapter chapter)
         {
-            return new ChapterOneLevelLowerDTO
+            return new ChapterLowerDto
             {
                 Id = chapter.Id,
                 Name = chapter.Name,
                 Number = chapter.Number,
-                Meanings = chapter.Meanings.Select(cm => cm.ToChapterMeaningDTO()).ToList(),
-                Verses = chapter.Verses.Select(v => v.ToVerseDTO()).ToList(),
+                Meanings = chapter.Meanings.Select(cm => cm.ToChapterMeaningDto()).ToList(),
+                Verses = chapter.Verses.Select(v => v.ToVerseLowerDto()).ToList(),
             };
         }
 
-        public static ChapterBothDTO ToChapterBothBaseDTO(this Chapter chapter)
+        public static ChapterOneLevelLowerDto ToChapterOneLevelLowerDto(this Chapter chapter)
         {
-            return new ChapterBothDTO
+            return new ChapterOneLevelLowerDto
             {
                 Id = chapter.Id,
                 Name = chapter.Name,
                 Number = chapter.Number,
-                Meanings = chapter.Meanings.Select(cm => cm.ToChapterMeaningDTO()).ToList(),
-
-                Verses = chapter.Verses.Select(v => v.ToVerseLowerDTO()).ToList(),
-                Section = chapter.Section.ToSectionUpperDTO(),
+                Meanings = chapter.Meanings.Select(cm => cm.ToChapterMeaningDto()).ToList(),
+                Verses = chapter.Verses.Select(v => v.ToVerseDto()).ToList(),
             };
         }
 
-        public static ChapterUpperConfinedDTO ToChapterUpperConfinedDTO(this Chapter chapter)
+        public static ChapterBothDto ToChapterBothBaseDto(this Chapter chapter)
         {
-            return new ChapterUpperConfinedDTO
+            return new ChapterBothDto
             {
                 Id = chapter.Id,
                 Name = chapter.Name,
                 Number = chapter.Number,
-                Section = chapter.Section.ToSectionUpperConfinedDTO(),
+                Meanings = chapter.Meanings.Select(cm => cm.ToChapterMeaningDto()).ToList(),
+
+                Verses = chapter.Verses.Select(v => v.ToVerseLowerDto()).ToList(),
+                Section = chapter.Section.ToSectionUpperDto(),
             };
         }
 
-        public static ChapterLowerConfinedDTO ToChapterLowerConfinedDTO(this Chapter chapter)
+        public static ChapterUpperConfinedDto ToChapterUpperConfinedDto(this Chapter chapter)
         {
-            return new ChapterLowerConfinedDTO
+            return new ChapterUpperConfinedDto
             {
                 Id = chapter.Id,
                 Name = chapter.Name,
                 Number = chapter.Number,
-                Verses = chapter.Verses.Select(v => v.ToVerseLowerConfinedDTO()).ToList()
+                Section = chapter.Section.ToSectionUpperConfinedDto(),
             };
         }
 
-        public static ChapterMeaningDTO ToChapterMeaningDTO(this ChapterMeaning chapterMeaning)
+        public static ChapterLowerConfinedDto ToChapterLowerConfinedDto(this Chapter chapter)
         {
-            return new ChapterMeaningDTO
+            return new ChapterLowerConfinedDto
+            {
+                Id = chapter.Id,
+                Name = chapter.Name,
+                Number = chapter.Number,
+                Verses = chapter.Verses.Select(v => v.ToVerseLowerConfinedDto()).ToList()
+            };
+        }
+
+        public static ChapterMeaningDto ToChapterMeaningDto(this ChapterMeaning chapterMeaning)
+        {
+            return new ChapterMeaningDto
             {
                 Text = chapterMeaning.Meaning,
-                Language = chapterMeaning.Language.ToLanguageDTO()
+                Language = chapterMeaning.Language.ToLanguageDto()
             };
         }
 
-        public static ChapterUpperMeanDTO ToChapterUpperMeanDTO(this Chapter chapter)
+        public static ChapterUpperMeanDto ToChapterUpperMeanDto(this Chapter chapter)
         {
-            return new ChapterUpperMeanDTO
+            return new ChapterUpperMeanDto
             {
                 Id = chapter.Id,
                 Name = chapter.Name,
                 Number = chapter.Number,
-                Meanings = chapter.Meanings.Select(cm => cm.ToChapterMeaningDTO()).ToList(),
+                Meanings = chapter.Meanings.Select(cm => cm.ToChapterMeaningDto()).ToList(),
 
-                Section = chapter.Section.ToSectionUpperMeanDTO(),
+                Section = chapter.Section.ToSectionUpperMeanDto(),
             };
         }
     }

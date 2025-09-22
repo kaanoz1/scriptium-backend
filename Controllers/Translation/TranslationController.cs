@@ -1,21 +1,18 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using DTO;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
-using scriptium_backend_dotnet.DB;
-using scriptium_backend_dotnet.Services;
+using ScriptiumBackend.Services;
+using ScriptiumBackend.Interface;
+using ScriptiumBackend.DB;
 
-namespace scriptium_backend_dotnet.Controllers.TranslatorsHandler
+namespace ScriptiumBackend.Controllers.TranslatorsHandler
 {
 
     [ApiController, Route("translations"), EnableRateLimiting(policyName: "StaticControllerRateLimiter")]
-    public class TranslationController(ApplicationDBContext db, ICacheService cacheService, ILogger<TranslationController> logger) : ControllerBase
+    public class TranslationController(ApplicationDbContext db, ICacheService cacheService, ILogger<TranslationController> logger) : ControllerBase
     {
-        private readonly ApplicationDBContext _db = db ?? throw new ArgumentNullException(nameof(db));
+        private readonly ApplicationDbContext _db = db ?? throw new ArgumentNullException(nameof(db));
         private readonly ICacheService _cacheService = cacheService ?? throw new ArgumentNullException(nameof(cacheService));
         private readonly ILogger<TranslationController> _logger = logger ?? throw new ArgumentNullException(nameof(logger));
 
@@ -24,7 +21,7 @@ namespace scriptium_backend_dotnet.Controllers.TranslatorsHandler
         {
             string requestPath = Request.Path.ToString();
 
-            List<TranslationWithScriptureDTODTO>? cache = await _cacheService.GetCachedDataAsync<List<TranslationWithScriptureDTODTO>>(requestPath);
+            List<TranslationWithScriptureDtoDto>? cache = await _cacheService.GetCachedDataAsync<List<TranslationWithScriptureDtoDto>>(requestPath);
 
             if (cache != null)
             {
@@ -32,13 +29,13 @@ namespace scriptium_backend_dotnet.Controllers.TranslatorsHandler
                 return Ok(new { data = cache });
             }
 
-            List<TranslationWithScriptureDTODTO> data = await _db.Translation
+            List<TranslationWithScriptureDtoDto> data = await _db.Translations
             .AsNoTracking()
             .Include(t => t.Language)
             .Include(t => t.TranslatorTranslations).ThenInclude(tt => tt.Translator).ThenInclude(t => t.Language)
             .Include(t => t.Scripture).ThenInclude(s => s.Meanings).ThenInclude(m => m.Language)
             .AsSplitQuery()
-            .Select(t => t.ToTranslationWithScriptureDTODTO()).ToListAsync();
+            .Select(t => t.ToTranslationWithScriptureDtoDto()).ToListAsync();
 
             await _cacheService.SetCacheDataAsync(requestPath, data);
 
@@ -54,7 +51,7 @@ namespace scriptium_backend_dotnet.Controllers.TranslatorsHandler
             string requestPath = Request.Path.ToString();
 
 
-            List<TranslationDTO>? cache = await _cacheService.GetCachedDataAsync<List<TranslationDTO>>(requestPath);
+            List<TranslationDto>? cache = await _cacheService.GetCachedDataAsync<List<TranslationDto>>(requestPath);
             
             if (cache != null) //Checking cache
             {
@@ -62,8 +59,12 @@ namespace scriptium_backend_dotnet.Controllers.TranslatorsHandler
                 return Ok(new { data = cache });
             }
 
-            List<TranslationDTO> data = await _db.Translation.Where(t => t.Scripture.Number == scriptureNumber)
-                .Select(t => t.ToTranslationDTO()).ToListAsync();
+            List<TranslationDto> data = await _db.Translations.Where(t => t.Scripture.Number == scriptureNumber)
+                .Include(t => t.Language)
+                .Include(t => t.TranslatorTranslations)
+                .ThenInclude(tt => tt.Translator)
+                .ThenInclude(t => t.Language)
+                .Select(t => t.ToTranslationDto()).ToListAsync();
             
             await _cacheService.SetCacheDataAsync(requestPath, data);
             

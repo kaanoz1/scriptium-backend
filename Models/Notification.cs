@@ -1,8 +1,15 @@
-using System.ComponentModel.DataAnnotations;
-using scriptium_backend_dotnet.Models.Util;
+/*
+This file is temporarily disabled. 
+Due to budgetary reasons, Scriptium is unable to provide the economic conditions necessary for legal and official procedures involving the collection, processing, and storage of user information.
 
-namespace scriptium_backend_dotnet.Models
+
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using ScriptiumBackend.Models.Util;
+
+namespace ScriptiumBackend.Models
 {
+    [NotMapped]
     public class Notification
     {
         public long Id { get; set; }
@@ -30,3 +37,4 @@ namespace scriptium_backend_dotnet.Models
     }
 
 }
+*/

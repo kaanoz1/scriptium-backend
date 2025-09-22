@@ -1,10 +1,16 @@
+/*
+This file is temporarily disabled. 
+Due to budgetary reasons, Scriptium is unable to provide the economic conditions necessary for legal and official procedures involving the collection, processing, and storage of user information.
+
+
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace scriptium_backend_dotnet.Models
+namespace ScriptiumBackend.Models
 {
 
 
+    [NotMapped]
     public class Suggestion
     {
         [Key]
@@ -28,3 +34,5 @@ namespace scriptium_backend_dotnet.Models
     }
 
 }
+
+*/

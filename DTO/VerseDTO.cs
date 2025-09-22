@@ -1,9 +1,9 @@
-using scriptium_backend_dotnet.Models;
+using ScriptiumBackend.Models;
 
 namespace DTO
 {
 
-    public abstract class VerseBaseDTO
+    public abstract class VerseBaseDto
     {
         public required int Id { get; set; }
 
@@ -11,74 +11,73 @@ namespace DTO
 
         public required TextVariation Variation { get; set; }
 
-
     }
 
-    public abstract class VerseSimpleDTO : VerseBaseDTO
+    public abstract class VerseSimpleDto : VerseBaseDto
     {
 
-        public required List<TransliterationDTO> Transliterations { get; set; } = [];
+        public required List<TransliterationDto> Transliterations { get; set; } = [];
 
-        public required List<TranslationTextDTO> TranslationTexts { get; set; } = [];
+        public required List<TranslationTextDto> TranslationTexts { get; set; } = [];
 
         public bool IsSaved { get; set; } = false;
 
     }
 
 
-    public class VerseDTO : VerseSimpleDTO;
+    public class VerseDto : VerseSimpleDto;
 
-    public class VerseUpperDTO : VerseDTO
+    public class VerseUpperDto : VerseDto
     {
-        public required ChapterUpperDTO Chapter { get; set; }
+        public required ChapterUpperDto Chapter { get; set; }
     }
 
-    public class VerseOneLevelUpperDTO : VerseDTO
+    public class VerseOneLevelUpperDto : VerseDto
     {
-        public required ChapterDTO Chapter { get; set; }
+        public required ChapterDto Chapter { get; set; }
     }
 
-    public class VerseOneLevelLowerDTO : VerseDTO
+    public class VerseOneLevelLowerDto : VerseDto
     {
-        public required List<WordDTO> Words { get; set; }
+        public required List<WordDto> Words { get; set; }
     }
 
-    public class VerseLowerDTO : VerseDTO
+    public class VerseLowerDto : VerseDto
     {
-        public required List<WordLowerDTO> Words { get; set; }
+        public required List<WordLowerDto> Words { get; set; }
 
     }
 
-    public class VerseBothDTO : VerseDTO
+    public class VerseBothDto : VerseDto
     {
-        public required ChapterUpperDTO Chapter { get; set; }
+        public required ChapterUpperDto Chapter { get; set; }
 
-        public required List<WordLowerDTO> Words { get; set; }
+        public required List<WordLowerDto> Words { get; set; }
     }
 
 
-    public abstract class VerseConfinedDTO : VerseBaseDTO;
+    public abstract class VerseConfinedDto : VerseBaseDto;
 
-    public class VerseUpperConfinedDTO : VerseConfinedDTO
+    public class VerseUpperConfinedDto : VerseConfinedDto
     {
-        public required ChapterUpperConfinedDTO Chapter { get; set; }
+        public required ChapterUpperConfinedDto Chapter { get; set; }
     }
-    public class VerseLowerConfinedDTO : VerseConfinedDTO
+    public class VerseLowerConfinedDto : VerseConfinedDto
     {
-        public required List<WordLowerConfinedDTO> Words { get; set; }
+        public required List<WordLowerConfinedDto> Words { get; set; }
     }
 
-    // Custom DTOs
+    // Custom Dtos
 
-    public class VerseMeanDTO : VerseBaseDTO;
+    public class VerseMeanDto : VerseBaseDto;
 
-    public class VerseUpperMeanDTO : VerseMeanDTO
+    public class VerseUpperMeanDto : VerseMeanDto
     {
-        public required ChapterUpperMeanDTO Chapter { get; set; }
+        public required ChapterUpperMeanDto Chapter { get; set; }
     }
     
     
-    public class VerseLowerMeanDTO : VerseMeanDTO;
+    public class VerseLowerMeanDto : VerseMeanDto;
 
     public class TextVariation
     {
@@ -89,7 +88,7 @@ namespace DTO
         public required string? WithoutVowel { get; set; }
     }
 
-    public class VerseUpperMeanStatisticsDTO : VerseUpperMeanDTO
+    public class VerseUpperMeanStatisticsDto : VerseUpperMeanDto
     {
         public required long Count { get; set; }
         
@@ -98,16 +97,16 @@ namespace DTO
 
     
     
-    public class VerseIndicatorDTO : IEquatable<VerseIndicatorDTO>
+    public class VerseIndicatorDto : IEquatable<VerseIndicatorDto>
     {
         public int Scripture { get; set; }
         public int Section { get; set; }
         public int Chapter { get; set; }
         public int Verse { get; set; }
 
-        public override bool Equals(object? obj) => Equals(obj as VerseIndicatorDTO);
+        public override bool Equals(object? obj) => Equals(obj as VerseIndicatorDto);
 
-        public bool Equals(VerseIndicatorDTO? other)
+        public bool Equals(VerseIndicatorDto? other)
         {
             return other != null &&
                    Scripture == other.Scripture &&
@@ -127,125 +126,125 @@ namespace DTO
 
     public static class VerseExtensions
     {
-        public static VerseUpperDTO ToVerseUpperDTO(this Verse verse, bool? isSaved = false)
+        public static VerseUpperDto ToVerseUpperDto(this Verse verse, bool? isSaved = false)
         {
-            return new VerseUpperDTO
+            return new VerseUpperDto
             {
                 Id = verse.Id,
                 Number = verse.Number,
                 Variation = new TextVariation { Usual = verse.Text, Simplified = verse.TextSimplified, WithoutVowel = verse.TextWithoutVowel },
-                Transliterations = verse.Transliterations.Select(e => e.ToTransliterationDTO()).ToList(),
-                TranslationTexts = verse.TranslationTexts.Select(e => e.ToTranslationTextDTO()).ToList(),
+                Transliterations = verse.Transliterations.Select(e => e.ToTransliterationDto()).ToList(),
+                TranslationTexts = verse.TranslationTexts.Select(e => e.ToTranslationTextDto()).ToList(),
                 IsSaved = isSaved ?? false,
-                Chapter = verse.Chapter.ToChapterUpperDTO(),
+                Chapter = verse.Chapter.ToChapterUpperDto(),
 
             };
         }
 
-        public static VerseOneLevelUpperDTO ToVerseOneLevelUpperDTO(this Verse verse)
+        public static VerseOneLevelUpperDto ToVerseOneLevelUpperDto(this Verse verse)
         {
-            return new VerseOneLevelUpperDTO
+            return new VerseOneLevelUpperDto
             {
                 Id = verse.Id,
                 Number = verse.Number,
                 Variation = new TextVariation { Usual = verse.Text, Simplified = verse.TextSimplified, WithoutVowel = verse.TextWithoutVowel },
-                Transliterations = verse.Transliterations.Select(e => e.ToTransliterationDTO()).ToList(),
-                TranslationTexts = verse.TranslationTexts.Select(e => e.ToTranslationTextDTO()).ToList(),
+                Transliterations = verse.Transliterations.Select(e => e.ToTransliterationDto()).ToList(),
+                TranslationTexts = verse.TranslationTexts.Select(e => e.ToTranslationTextDto()).ToList(),
 
-                Chapter = verse.Chapter.ToChapterDTO(),
+                Chapter = verse.Chapter.ToChapterDto(),
 
             };
         }
 
-        public static VerseLowerDTO ToVerseLowerDTO(this Verse verse)
+        public static VerseLowerDto ToVerseLowerDto(this Verse verse)
         {
-            return new VerseLowerDTO
+            return new VerseLowerDto
             {
                 Id = verse.Id,
                 Number = verse.Number,
                 Variation = new TextVariation { Usual = verse.Text, Simplified = verse.TextSimplified, WithoutVowel = verse.TextWithoutVowel },
-                Transliterations = verse.Transliterations.Select(e => e.ToTransliterationDTO()).ToList(),
-                TranslationTexts = verse.TranslationTexts.Select(e => e.ToTranslationTextDTO()).ToList(),
+                Transliterations = verse.Transliterations.Select(e => e.ToTransliterationDto()).ToList(),
+                TranslationTexts = verse.TranslationTexts.Select(e => e.ToTranslationTextDto()).ToList(),
 
-                Words = verse.Words.Select(w => w.ToWordLowerDTO()).ToList()
+                Words = verse.Words.Select(w => w.ToWordLowerDto()).ToList()
             };
         }
 
-        public static VerseOneLevelLowerDTO ToVerseOneLevelLowerDTO(this Verse verse)
+        public static VerseOneLevelLowerDto ToVerseOneLevelLowerDto(this Verse verse)
         {
-            return new VerseOneLevelLowerDTO
+            return new VerseOneLevelLowerDto
             {
                 Id = verse.Id,
                 Number = verse.Number,
                 Variation = new TextVariation { Usual = verse.Text, Simplified = verse.TextSimplified, WithoutVowel = verse.TextWithoutVowel },
-                Transliterations = verse.Transliterations.Select(e => e.ToTransliterationDTO()).ToList(),
-                TranslationTexts = verse.TranslationTexts.Select(e => e.ToTranslationTextDTO()).ToList(),
+                Transliterations = verse.Transliterations.Select(e => e.ToTransliterationDto()).ToList(),
+                TranslationTexts = verse.TranslationTexts.Select(e => e.ToTranslationTextDto()).ToList(),
 
-                Words = verse.Words.Select(w => w.ToWordDTO()).ToList()
-
-            };
-        }
-
-        public static VerseDTO ToVerseDTO(this Verse verse)
-        {
-            return new VerseDTO
-            {
-                Id = verse.Id,
-                Number = verse.Number,
-                Variation = new TextVariation { Usual = verse.Text, Simplified = verse.TextSimplified, WithoutVowel = verse.TextWithoutVowel },
-                Transliterations = verse.Transliterations.Select(t => t.ToTransliterationDTO()).ToList(),
-                TranslationTexts = verse.TranslationTexts.Select(tt => tt.ToTranslationTextDTO()).ToList()
-            };
-        }
-
-        public static VerseBothDTO ToVerseBothDTO(this Verse verse)
-        {
-            return new VerseBothDTO
-            {
-                Id = verse.Id,
-                Number = verse.Number,
-                Variation = new TextVariation { Usual = verse.Text, Simplified = verse.TextSimplified, WithoutVowel = verse.TextWithoutVowel },
-                Transliterations = verse.Transliterations.Select(e => e.ToTransliterationDTO()).ToList(),
-                TranslationTexts = verse.TranslationTexts.Select(e => e.ToTranslationTextDTO()).ToList(),
-
-                Chapter = verse.Chapter.ToChapterUpperDTO(),
-                Words = verse.Words.Select(w => w.ToWordLowerDTO()).ToList()
+                Words = verse.Words.Select(w => w.ToWordDto()).ToList()
 
             };
         }
 
-        public static VerseLowerConfinedDTO ToVerseLowerConfinedDTO(this Verse verse)
+        public static VerseDto ToVerseDto(this Verse verse)
         {
-            return new VerseLowerConfinedDTO
+            return new VerseDto
+            {
+                Id = verse.Id,
+                Number = verse.Number,
+                Variation = new TextVariation { Usual = verse.Text, Simplified = verse.TextSimplified, WithoutVowel = verse.TextWithoutVowel },
+                Transliterations = verse.Transliterations.Select(t => t.ToTransliterationDto()).ToList(),
+                TranslationTexts = verse.TranslationTexts.Select(tt => tt.ToTranslationTextDto()).ToList()
+            };
+        }
+
+        public static VerseBothDto ToVerseBothDto(this Verse verse)
+        {
+            return new VerseBothDto
+            {
+                Id = verse.Id,
+                Number = verse.Number,
+                Variation = new TextVariation { Usual = verse.Text, Simplified = verse.TextSimplified, WithoutVowel = verse.TextWithoutVowel },
+                Transliterations = verse.Transliterations.Select(e => e.ToTransliterationDto()).ToList(),
+                TranslationTexts = verse.TranslationTexts.Select(e => e.ToTranslationTextDto()).ToList(),
+
+                Chapter = verse.Chapter.ToChapterUpperDto(),
+                Words = verse.Words.Select(w => w.ToWordLowerDto()).ToList()
+
+            };
+        }
+
+        public static VerseLowerConfinedDto ToVerseLowerConfinedDto(this Verse verse)
+        {
+            return new VerseLowerConfinedDto
             {
 
                 Id = verse.Id,
                 Number = verse.Number,
-                Words = verse.Words.Select(w => w.ToWordLowerConfinedDTO()).ToList(),
+                Words = verse.Words.Select(w => w.ToWordLowerConfinedDto()).ToList(),
                 Variation = new TextVariation { Usual = verse.Text, Simplified = verse.TextSimplified, WithoutVowel = verse.TextWithoutVowel },
             };
         }
 
-        public static VerseUpperConfinedDTO ToVerseUpperConfinedDTO(this Verse verse)
+        public static VerseUpperConfinedDto ToVerseUpperConfinedDto(this Verse verse)
         {
-            return new VerseUpperConfinedDTO
+            return new VerseUpperConfinedDto
             {
                 Id = verse.Id,
                 Number = verse.Number,
-                Chapter = verse.Chapter.ToChapterUpperConfinedDTO(),
+                Chapter = verse.Chapter.ToChapterUpperConfinedDto(),
                 Variation = new TextVariation { Usual = verse.Text, Simplified = verse.TextSimplified, WithoutVowel = verse.TextWithoutVowel },
 
             };
         }
 
-        public static VerseUpperMeanDTO ToVerseUpperMeanDTO(this Verse verse)
+        public static VerseUpperMeanDto ToVerseUpperMeanDto(this Verse verse)
         {
-            return new VerseUpperMeanDTO
+            return new VerseUpperMeanDto
             {
                 Id = verse.Id,
                 Number = verse.Number,
                 Variation = new TextVariation { Usual = verse.Text, Simplified = verse.TextSimplified, WithoutVowel = verse.TextWithoutVowel },
-                Chapter = verse.Chapter.ToChapterUpperMeanDTO(),
+                Chapter = verse.Chapter.ToChapterUpperMeanDto(),
 
             };
         }

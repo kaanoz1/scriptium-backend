@@ -1,7 +1,8 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using ScriptiumBackend.Models;
 
-namespace scriptium_backend_dotnet.Models
+namespace ScriptiumBackend.Models
 {
     public class Translation
     {
@@ -32,6 +33,7 @@ namespace scriptium_backend_dotnet.Models
 
         public virtual List<TranslatorTranslation> TranslatorTranslations { get; set; } = [];
 
+        
         public virtual List<TranslationText> TranslationTexts { get; set; } = [];
     }
 }

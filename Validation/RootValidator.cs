@@ -1,15 +1,15 @@
 using FluentValidation;
 
 
-namespace scriptium_backend_dotnet.Controllers.Validation
+namespace ScriptiumBackend.Controllers.Validation
 {
 
-    public class RootValidatedDTO
+    public class RootValidatedDto
     {
         public required short ScriptureNumber { get; set; }
         public required string RootLatin { get; set; }
     }
-    public class RootValidator : AbstractValidator<RootValidatedDTO>
+    public class RootValidator : AbstractValidator<RootValidatedDto>
     {
         public RootValidator()
         {

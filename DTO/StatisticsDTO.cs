@@ -1,6 +1,6 @@
 namespace DTO;
 
-public class GeneralStatisticsDTO
+public class GeneralStatisticsDto
 {
     public required int UserCount { get; set; }
     public required int RequestCount { get; set; }

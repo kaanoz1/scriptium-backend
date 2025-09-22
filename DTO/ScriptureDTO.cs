@@ -1,8 +1,8 @@
-using scriptium_backend_dotnet.Models;
+using ScriptiumBackend.Models;
 
 namespace DTO
 {
-    public abstract class ScriptureBaseDTO
+    public abstract class ScriptureBaseDto
     {
         public required short Id { get; set; }
 
@@ -13,102 +13,102 @@ namespace DTO
         public required char Code { get; set; }
     }
 
-    public abstract class ScriptureSimpleDTO : ScriptureBaseDTO
+    public abstract class ScriptureSimpleDto : ScriptureBaseDto
     {
-        public List<ScriptureMeaningDTO> Meanings { get; set; } = [];
+        public List<ScriptureMeaningDto> Meanings { get; set; } = [];
     }
 
-    public class ScriptureDTO : ScriptureSimpleDTO;
+    public class ScriptureDto : ScriptureSimpleDto;
 
-    public class ScriptureLowerDTO : ScriptureDTO
+    public class ScriptureLowerDto : ScriptureDto
     {
-        public required List<SectionLowerDTO> Sections { get; set; }
+        public required List<SectionLowerDto> Sections { get; set; }
     }
 
-    public class ScriptureUpperDTO : ScriptureDTO;
+    public class ScriptureUpperDto : ScriptureDto;
 
-    public class ScriptureOneLevelUpperDTO : ScriptureDTO;
+    public class ScriptureOneLevelUpperDto : ScriptureDto;
 
-    public class ScriptureOneLevelLowerDTO : ScriptureDTO
+    public class ScriptureOneLevelLowerDto : ScriptureDto
     {
-        public required List<SectionDTO> Sections { get; set; }
+        public required List<SectionDto> Sections { get; set; }
     }
 
-    public class ScriptureMeaningDTO : Meaning;
+    public class ScriptureMeaningDto : Meaning;
 
-    public abstract class ScriptureConfinedDTO : ScriptureBaseDTO;
+    public abstract class ScriptureConfinedDto : ScriptureBaseDto;
 
-    public class ScriptureUpperConfinedDTO : ScriptureConfinedDTO;
+    public class ScriptureUpperConfinedDto : ScriptureConfinedDto;
 
-    public class ScriptureLowerConfinedDTO : ScriptureConfinedDTO
+    public class ScriptureLowerConfinedDto : ScriptureConfinedDto
     {
-        public required List<SectionLowerConfinedDTO> Sections { get; set; }
+        public required List<SectionLowerConfinedDto> Sections { get; set; }
     }
 
-    // Custom DTOs
-    public class ScriptureMeanDTO : ScriptureBaseDTO
+    // Custom Dtos
+    public class ScriptureMeanDto : ScriptureBaseDto
     {
-        public List<ScriptureMeaningDTO> Meanings { get; set; } = [];
+        public List<ScriptureMeaningDto> Meanings { get; set; } = [];
     }
 
-    public class ScriptureUpperMeanDTO : ScriptureMeanDTO;
+    public class ScriptureUpperMeanDto : ScriptureMeanDto;
 
-    public class ScriptureLowerMeanDTO : ScriptureMeanDTO
+    public class ScriptureLowerMeanDto : ScriptureMeanDto
     {
-        public required List<SectionLowerMeanDTO> Sections { get; set; }
+        public required List<SectionLowerMeanDto> Sections { get; set; }
     }
 
     public static class ScriptureExtensions
     {
-        public static ScriptureMeaningDTO ToScriptureMeaningDTO(this ScriptureMeaning scriptureMeaning)
+        public static ScriptureMeaningDto ToScriptureMeaningDto(this ScriptureMeaning scriptureMeaning)
         {
-            return new ScriptureMeaningDTO
+            return new ScriptureMeaningDto
             {
                 Text = scriptureMeaning.Meaning,
-                Language = scriptureMeaning.Language.ToLanguageDTO()
+                Language = scriptureMeaning.Language.ToLanguageDto()
             };
         }
 
-        public static ScriptureDTO ToScriptureDTO(this Scripture scripture)
+        public static ScriptureDto ToScriptureDto(this Scripture scripture)
         {
-            return new ScriptureDTO
+            return new ScriptureDto
             {
                 Id = scripture.Id,
                 Name = scripture.Name,
                 Code = scripture.Code,
                 Number = scripture.Number,
-                Meanings = scripture.Meanings.Select(m => m.ToScriptureMeaningDTO()).ToList()
+                Meanings = scripture.Meanings.Select(m => m.ToScriptureMeaningDto()).ToList()
             };
         }
 
-        public static ScriptureOneLevelLowerDTO ToScriptureOneLevelLowerDTO(this Scripture scripture)
+        public static ScriptureOneLevelLowerDto ToScriptureOneLevelLowerDto(this Scripture scripture)
         {
-            return new ScriptureOneLevelLowerDTO
+            return new ScriptureOneLevelLowerDto
             {
                 Id = scripture.Id,
                 Name = scripture.Name,
                 Code = scripture.Code,
                 Number = scripture.Number,
-                Meanings = scripture.Meanings.Select(m => m.ToScriptureMeaningDTO()).ToList(),
-                Sections = scripture.Sections.Select(s => s.ToSectionDTO()).ToList()
+                Meanings = scripture.Meanings.Select(m => m.ToScriptureMeaningDto()).ToList(),
+                Sections = scripture.Sections.Select(s => s.ToSectionDto()).ToList()
             };
         }
 
-        public static ScriptureLowerDTO ToScriptureLowerDTO(this Scripture scripture)
+        public static ScriptureLowerDto ToScriptureLowerDto(this Scripture scripture)
         {
-            return new ScriptureLowerDTO
+            return new ScriptureLowerDto
             {
                 Id = scripture.Id,
                 Code = scripture.Code,
                 Name = scripture.Name,
                 Number = scripture.Number,
-                Sections = scripture.Sections.Select(s => s.ToSectionLowerDTO()).ToList()
+                Sections = scripture.Sections.Select(s => s.ToSectionLowerDto()).ToList()
             };
         }
 
-        public static ScriptureUpperConfinedDTO ToScriptureUpperConfinedDTO(this Scripture scripture)
+        public static ScriptureUpperConfinedDto ToScriptureUpperConfinedDto(this Scripture scripture)
         {
-            return new ScriptureUpperConfinedDTO
+            return new ScriptureUpperConfinedDto
             {
                 Id = scripture.Id,
                 Code = scripture.Code,
@@ -117,40 +117,40 @@ namespace DTO
             };
         }
 
-        public static ScriptureLowerConfinedDTO ToScriptureLowerConfinedDTO(this Scripture scripture)
+        public static ScriptureLowerConfinedDto ToScriptureLowerConfinedDto(this Scripture scripture)
         {
-            return new ScriptureLowerConfinedDTO
+            return new ScriptureLowerConfinedDto
             {
                 Code = scripture.Code,
                 Id = scripture.Id,
                 Name = scripture.Name,
                 Number = scripture.Number,
-                Sections = scripture.Sections.Select(s => s.ToSectionLowerConfinedDTO()).ToList()
+                Sections = scripture.Sections.Select(s => s.ToSectionLowerConfinedDto()).ToList()
             };
         }
 
-        public static ScriptureUpperMeanDTO ToScriptureUpperMeanDTO(this Scripture scripture)
+        public static ScriptureUpperMeanDto ToScriptureUpperMeanDto(this Scripture scripture)
         {
-            return new ScriptureUpperMeanDTO
+            return new ScriptureUpperMeanDto
             {
                 Id = scripture.Id,
                 Code = scripture.Code,
                 Name = scripture.Name,
                 Number = scripture.Number,
-                Meanings = scripture.Meanings.Select(m => m.ToScriptureMeaningDTO()).ToList()
+                Meanings = scripture.Meanings.Select(m => m.ToScriptureMeaningDto()).ToList()
             };
         }
 
 
-        public static ScriptureUpperDTO ToScriptureUpperDTO(this Scripture scripture)
+        public static ScriptureUpperDto ToScriptureUpperDto(this Scripture scripture)
         {
-            return new ScriptureUpperDTO
+            return new ScriptureUpperDto
             {
                 Id = scripture.Id,
                 Name = scripture.Name,
                 Code = scripture.Code,
                 Number = scripture.Number,
-                Meanings = scripture.Meanings.Select(m => m.ToScriptureMeaningDTO()).ToList()
+                Meanings = scripture.Meanings.Select(m => m.ToScriptureMeaningDto()).ToList()
             };
         }
         

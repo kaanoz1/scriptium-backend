@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 
 
-namespace scriptium_backend_dotnet.Models
+namespace ScriptiumBackend.Models
 {
     public class Word
     {

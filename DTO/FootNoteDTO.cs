@@ -1,8 +1,8 @@
-using scriptium_backend_dotnet.Models;
+using ScriptiumBackend.Models;
 
 namespace DTO
 {
-    public class FootNoteDTO
+    public class FootNoteDto
     {
         public required short Index { get; set; }
         public required string Text { get; set; }
@@ -10,9 +10,9 @@ namespace DTO
 
     public static class FootNoteSimpleExtensions
     {
-        public static FootNoteDTO ToFootNoteDTO(this FootNote footNote)
+        public static FootNoteDto ToFootNoteDto(this FootNote footNote)
         {
-            return new FootNoteDTO
+            return new FootNoteDto
             {
                 Index = footNote.Index,
                 Text = footNote.FootNoteText.Text

@@ -1,9 +1,10 @@
+/*
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace scriptium_backend_dotnet.Models
+namespace ScriptiumBackend.Models
 {
-    [Table("collection_verse")]
+    [Table("collection_verse"), NotMapped]
     public class CollectionVerse
     {
         [Key, Column("id", TypeName = Utility.DBType64bitInteger)]
@@ -26,3 +27,4 @@ namespace scriptium_backend_dotnet.Models
         public string? Note { get; set; }
     }
 }
+*/

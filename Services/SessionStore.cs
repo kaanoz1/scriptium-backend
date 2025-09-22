@@ -1,3 +1,10 @@
+/*
+This file is temporarily disabled. 
+Due to budgetary reasons, Scriptium is unable to provide the economic conditions necessary for legal and official procedures involving the collection, processing, and storage of user information.
+    
+
+
+
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -5,10 +12,10 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using scriptium_backend_dotnet.DB;
-using scriptium_backend_dotnet.Models;
+using ScriptiumBackend.Models;
+using ScriptiumBackend.DB;
 
-namespace scriptium_backend_dotnet.Services
+namespace ScriptiumBackend.Services
 {
     public class SessionStore : ITicketStore
     {
@@ -28,7 +35,7 @@ namespace scriptium_backend_dotnet.Services
 
             using var scope = _serviceProvider.CreateScope();
             {
-                var db = scope.ServiceProvider.GetRequiredService<ApplicationDBContext>();
+                var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 
                 var userIdClaim = ticket.Principal.FindFirst(ClaimTypes.NameIdentifier)?.Value;
                 if (string.IsNullOrEmpty(userIdClaim))
@@ -75,7 +82,7 @@ namespace scriptium_backend_dotnet.Services
 
             using (var scope = _serviceProvider.CreateScope())
             {
-                var db = scope.ServiceProvider.GetRequiredService<ApplicationDBContext>();
+                var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 
                 try
                 {
@@ -112,7 +119,7 @@ namespace scriptium_backend_dotnet.Services
 
             using (var scope = _serviceProvider.CreateScope())
             {
-                var db = scope.ServiceProvider.GetRequiredService<ApplicationDBContext>();
+                var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 
                 try
                 {
@@ -178,7 +185,7 @@ namespace scriptium_backend_dotnet.Services
 
             using (var scope = _serviceProvider.CreateScope())
             {
-                var db = scope.ServiceProvider.GetRequiredService<ApplicationDBContext>();
+                var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 
                 try
                 {
@@ -204,3 +211,4 @@ namespace scriptium_backend_dotnet.Services
         }
     }
 }
+*/

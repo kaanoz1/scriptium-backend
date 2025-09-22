@@ -1,9 +1,14 @@
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage;
-using scriptium_backend_dotnet.DB;
-using scriptium_backend_dotnet.Models;
-
-namespace scriptium_backend_dotnet.Services;
+/*
+This file is temporarily disabled. 
+Due to budgetary reasons, Scriptium is unable to provide the economic conditions necessary for legal and official procedures involving the collection, processing, and storage of user information.
+    
+ 
+ using Microsoft.EntityFrameworkCore;
+   using Microsoft.EntityFrameworkCore.Storage;
+   using ScriptiumBackend.DB;
+   using ScriptiumBackend.Models;
+ 
+namespace ScriptiumBackend.Services;
 
 public class UserDeletionBackgroundService(IServiceProvider serviceProvider, ILogger<UserDeletionBackgroundService> logger) : BackgroundService
 {
@@ -17,7 +22,7 @@ public class UserDeletionBackgroundService(IServiceProvider serviceProvider, ILo
         while (!stoppingToken.IsCancellationRequested)
         {
             using IServiceScope scope = _serviceProvider.CreateScope();
-            ApplicationDBContext db = scope.ServiceProvider.GetRequiredService<ApplicationDBContext>();
+            ApplicationDbContext db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 
             DateTime thresholdDate = DateTime.UtcNow.AddDays(periodOfCheck);
 
@@ -58,3 +63,5 @@ public class UserDeletionBackgroundService(IServiceProvider serviceProvider, ILo
         }
     }
 }
+
+*/

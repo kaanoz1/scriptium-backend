@@ -1,26 +1,28 @@
-using System;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Logging;
-using scriptium_backend_dotnet.Models;
-using scriptium_backend_dotnet.DB;
+using ScriptiumBackend.Models;
+using ScriptiumBackend.DB;
 
-namespace scriptium_backend_dotnet.MiddleWare
+namespace ScriptiumBackend.MiddleWare
 {
-    public class RequestLoggingMiddleware(RequestDelegate next, ApplicationDBContext db, ILogger<RequestLoggingMiddleware> logger)
+    public class RequestLoggingMiddleware
     {
-        private readonly RequestDelegate _next = next ?? throw new ArgumentNullException(nameof(next));
-        private readonly ApplicationDBContext _db = db ?? throw new ArgumentNullException(nameof(db));
-        private readonly ILogger<RequestLoggingMiddleware> _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        private readonly RequestDelegate _next;
+        private readonly ILogger<RequestLoggingMiddleware> _logger;
+
+        public RequestLoggingMiddleware(RequestDelegate next, ILogger<RequestLoggingMiddleware> logger)
+        {
+            _next = next ?? throw new ArgumentNullException(nameof(next));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        }
 
         public async Task InvokeAsync(HttpContext context)
         {
-            var identifier = context.User.Identity?.Name ?? context.Connection.RemoteIpAddress?.ToString() ?? "unknown";
+            var db = context.RequestServices.GetRequiredService<ApplicationDbContext>();
+
+            var identifier = context.Connection.RemoteIpAddress?.ToString() ?? "unknown";
             var endpoint = context.Request.Path.ToString();
             var method = context.Request.Method;
 
             await _next(context);
-
 
             context.Response.OnCompleted(async () =>
             {
@@ -35,11 +37,11 @@ namespace scriptium_backend_dotnet.MiddleWare
                     OccurredAt = DateTime.UtcNow
                 };
 
-                //_db.RequestLogs.Add(requestLog);
+                db.RequestLogs.Add(requestLog);
 
                 try
                 {
-                    await _db.SaveChangesAsync();
+                    await db.SaveChangesAsync();
                     _logger.LogInformation($"Request logged successfully: {requestLog}");
                 }
                 catch (Exception ex)

@@ -31,7 +31,7 @@ Thank you for your interest in contributing to **Scriptium**! Your contributions
 ### 🚀 **How to Contribute**
 
 1. **Check for Existing Issues:**  
-   Before starting to work on something, check the [Issues](https://github.com/kaanoz1/scriptium-backend/issues) to see if the problem has already been reported or if someone else is working on it.
+   Before starting to work on something, check the [Issues](https://github.com/kaanoz1/ScriptiumBackend/issues) to see if the problem has already been reported or if someone else is working on it.
 
    - **If the issue exists:** Feel free to join the discussion.
    - **If not:** Open a new issue to describe the problem or feature request.

@@ -1,8 +1,8 @@
-using scriptium_backend_dotnet.Models;
+using ScriptiumBackend.Models;
 
 namespace DTO
 {
-    public abstract class WordBaseDTO
+    public abstract class WordBaseDto
     {
         public required long Id { get; set; }
 
@@ -11,115 +11,115 @@ namespace DTO
 
     }
 
-    public abstract class WordSimpleDTO : WordBaseDTO
+    public abstract class WordSimpleDto : WordBaseDto
     {
         public required TextVariation Variation { get; set; }
-        public required List<WordMeaningDTO> Meanings { get; set; } = [];
+        public required List<WordMeaningDto> Meanings { get; set; } = [];
     }
 
-    public class WordDTO: WordSimpleDTO;
+    public class WordDto: WordSimpleDto;
 
-    public class WordUpperDTO : WordDTO
+    public class WordUpperDto : WordDto
     {
-        public required VerseUpperDTO Verse { get; set; }
+        public required VerseUpperDto Verse { get; set; }
     }
 
-    public class WordOneLevelUpperDTO : WordDTO
+    public class WordOneLevelUpperDto : WordDto
     {
 
-        public required VerseDTO Verse { get; set;}
+        public required VerseDto Verse { get; set;}
     }
 
 
-    public class WordLowerDTO : WordDTO
+    public class WordLowerDto : WordDto
     {
-        public List<RootDTO> Roots { get; set; } = [];
+        public List<RootDto> Roots { get; set; } = [];
     }
 
-    public class WordBothDTO : WordDTO
+    public class WordBothDto : WordDto
     {
-        public required VerseDTO Verse { get; set; }
+        public required VerseDto Verse { get; set; }
 
-        public List<RootDTO> Roots { get; set; } = [];
+        public List<RootDto> Roots { get; set; } = [];
 
     }
 
-    public class WordMeaningDTO: Meaning;
+    public class WordMeaningDto: Meaning;
 
-    public abstract class WordConfinedDTO : WordBaseDTO;
+    public abstract class WordConfinedDto : WordBaseDto;
 
-    public class WordUpperConfinedDTO : WordConfinedDTO
+    public class WordUpperConfinedDto : WordConfinedDto
     {
-        public required VerseUpperConfinedDTO Verse { get; set; }
+        public required VerseUpperConfinedDto Verse { get; set; }
     }
-    public class WordLowerConfinedDTO : WordConfinedDTO
+    public class WordLowerConfinedDto : WordConfinedDto
     {
-        public required List<RootLowerConfinedDTO> Roots { get; set; }
+        public required List<RootLowerConfinedDto> Roots { get; set; }
     }
     public static class WordExtensions
     {
 
-        public static WordDTO ToWordDTO(this Word word)
+        public static WordDto ToWordDto(this Word word)
         {
-            return new WordDTO
+            return new WordDto
             {
                 Id = word.Id,
                 SequenceNumber = word.SequenceNumber,
                 Variation = new TextVariation { Usual = word.Text, Simplified = word.TextSimplified, WithoutVowel = word.TextWithoutVowel},
-                Meanings = word.WordMeanings.Select(wm => wm.ToWordMeaningDTO()).ToList()
+                Meanings = word.WordMeanings.Select(wm => wm.ToWordMeaningDto()).ToList()
             };
         }
-        public static WordLowerDTO ToWordLowerDTO(this Word word)
+        public static WordLowerDto ToWordLowerDto(this Word word)
         {
-            return new WordLowerDTO
+            return new WordLowerDto
             {
                 Id = word.Id,
                 SequenceNumber = word.SequenceNumber,
                 Variation = new TextVariation { Simplified = word.TextSimplified, Usual = word.Text, WithoutVowel = word.TextWithoutVowel },
-                Roots = word.Roots.Select(r => r.ToRootDTO()).ToList(),
-                Meanings = word.WordMeanings.Select(wm => wm.ToWordMeaningDTO()).ToList()
+                Roots = word.Roots.Select(r => r.ToRootDto()).ToList(),
+                Meanings = word.WordMeanings.Select(wm => wm.ToWordMeaningDto()).ToList()
             };
         }
 
-        public static WordUpperDTO ToWordUpperDTO(this Word word)
+        public static WordUpperDto ToWordUpperDto(this Word word)
         {
-            return new WordUpperDTO()
+            return new WordUpperDto()
             {
                 Id = word.Id,
                 SequenceNumber = word.SequenceNumber,
                 Variation = new TextVariation { Simplified = word.TextSimplified, Usual = word.Text, WithoutVowel = word.TextWithoutVowel },
-                Meanings = word.WordMeanings.Select(wm => wm.ToWordMeaningDTO()).ToList(),
-                Verse = word.Verse.ToVerseUpperDTO()
+                Meanings = word.WordMeanings.Select(wm => wm.ToWordMeaningDto()).ToList(),
+                Verse = word.Verse.ToVerseUpperDto()
             };
         }
 
-        public static WordUpperConfinedDTO ToWordUpperConfinedDTO(this Word word)
+        public static WordUpperConfinedDto ToWordUpperConfinedDto(this Word word)
         {
-            return new WordUpperConfinedDTO
+            return new WordUpperConfinedDto
             {
                 Id = word.Id,
                 SequenceNumber = word.SequenceNumber,
-                Verse = word.Verse.ToVerseUpperConfinedDTO(),
+                Verse = word.Verse.ToVerseUpperConfinedDto(),
 
             };
         }
 
-        public static WordLowerConfinedDTO ToWordLowerConfinedDTO(this Word word)
+        public static WordLowerConfinedDto ToWordLowerConfinedDto(this Word word)
         {
-            return new WordLowerConfinedDTO
+            return new WordLowerConfinedDto
             {
                 Id = word.Id,
                 SequenceNumber = word.SequenceNumber,
-                Roots = word.Roots.Select(r => r.ToRootLowerConfinedDTO()).ToList(),
+                Roots = word.Roots.Select(r => r.ToRootLowerConfinedDto()).ToList(),
             };
         }
 
-        public static WordMeaningDTO ToWordMeaningDTO(this WordMeaning meaning)
+        public static WordMeaningDto ToWordMeaningDto(this WordMeaning meaning)
         {
 
-            return new WordMeaningDTO
+            return new WordMeaningDto
             {
-                Language = meaning.Language.ToLanguageDTO(),
+                Language = meaning.Language.ToLanguageDto(),
                 Text = meaning.Meaning
             };
         }

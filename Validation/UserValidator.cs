@@ -1,6 +1,11 @@
+/*
+This file is temporarily disabled. 
+Due to budgetary reasons, Scriptium is unable to provide the economic conditions necessary for legal and official procedures involving the collection, processing, and storage of user information.
+
+
 using FluentValidation;
 
-namespace scriptium_backend_dotnet.Controllers.Validation
+namespace ScriptiumBackend.Controllers.Validation
 {
     public class UserNameModel
     {
@@ -41,3 +46,4 @@ namespace scriptium_backend_dotnet.Controllers.Validation
     }
 
 }
+*/

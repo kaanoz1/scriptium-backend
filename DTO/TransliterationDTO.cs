@@ -1,21 +1,21 @@
-using scriptium_backend_dotnet.Models;
+using ScriptiumBackend.Models;
 
 namespace DTO
 {
-    public class TransliterationDTO
+    public class TransliterationDto
     {
         public required string Transliteration { get; set; }
-        public required LanguageDTO Language { get; set; }
+        public required LanguageDto Language { get; set; }
     }
 
     public static class TransliterationExtensions
     {
-        public static TransliterationDTO ToTransliterationDTO(this Transliteration transliteration)
+        public static TransliterationDto ToTransliterationDto(this Transliteration transliteration)
         {
-            return new TransliterationDTO
+            return new TransliterationDto
             {
                 Transliteration = transliteration.Text,
-                Language = transliteration.Language.ToLanguageDTO()
+                Language = transliteration.Language.ToLanguageDto()
             };
         }
     }

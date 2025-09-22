@@ -1,48 +1,48 @@
-using scriptium_backend_dotnet.Models;
+using ScriptiumBackend.Models;
 
 namespace DTO
 {
-    public class RootBaseDTO
+    public class RootBaseDto
     {
         public required string Latin { get; set; }
 
         public required string Own { get; set; }
     }
 
-    public class RootDTO : RootBaseDTO;
+    public class RootDto : RootBaseDto;
 
-    public class RootUpperDTO : RootDTO
+    public class RootUpperDto : RootDto
     {
-        public required List<WordUpperDTO> Words { get; set; }
+        public required List<WordUpperDto> Words { get; set; }
     }
 
-    public class RootLowerDTO : RootDTO;
+    public class RootLowerDto : RootDto;
 
-    public abstract class RootConfinedDTO : RootBaseDTO;
+    public abstract class RootConfinedDto : RootBaseDto;
 
-    public class RootUpperConfinedDTO : RootConfinedDTO
+    public class RootUpperConfinedDto : RootConfinedDto
     {
-        public required List<WordUpperConfinedDTO> Words { get; set; }
+        public required List<WordUpperConfinedDto> Words { get; set; }
     }
 
-    public class RootLowerConfinedDTO : RootConfinedDTO;
+    public class RootLowerConfinedDto : RootConfinedDto;
 
 
     
     
-    public class RootScriptureConfinedDTO
+    public class RootScriptureConfinedDto
     {
         public required string Latin { get; set; }
 
         public required string Own { get; set; }
 
-        public required ScriptureUpperMeanDTO Scripture { get; set; }
+        public required ScriptureUpperMeanDto Scripture { get; set; }
         
     }
     
     
     
-    public class RootIdentifierDTO
+    public class RootIdentifierDto
     {
         public required string Latin { get; set; }
 
@@ -52,38 +52,38 @@ namespace DTO
     }
     public static class RootExtensions
     {
-        public static RootDTO ToRootDTO(this Root root)
+        public static RootDto ToRootDto(this Root root)
         {
-            return new RootDTO
+            return new RootDto
             {
                 Own = root.Own,
                 Latin = root.Latin
             };
         }
 
-        public static RootUpperDTO ToRootUpperDTO(this Root root)
+        public static RootUpperDto ToRootUpperDto(this Root root)
         {
-            return new RootUpperDTO
+            return new RootUpperDto
             {
                 Own = root.Own,
                 Latin = root.Latin,
-                Words = root.Words.Select(w => w.ToWordUpperDTO()).ToList()
+                Words = root.Words.Select(w => w.ToWordUpperDto()).ToList()
             };
         }
 
-        public static RootUpperConfinedDTO ToRootUpperConfinedDTO(this Root root)
+        public static RootUpperConfinedDto ToRootUpperConfinedDto(this Root root)
         {
-            return new RootUpperConfinedDTO
+            return new RootUpperConfinedDto
             {
                 Latin = root.Latin,
                 Own = root.Own,
-                Words = root.Words.Select(w => w.ToWordUpperConfinedDTO()).ToList()
+                Words = root.Words.Select(w => w.ToWordUpperConfinedDto()).ToList()
             };
         }
 
-        public static RootLowerConfinedDTO ToRootLowerConfinedDTO(this Root root)
+        public static RootLowerConfinedDto ToRootLowerConfinedDto(this Root root)
         {
-            return new RootLowerConfinedDTO
+            return new RootLowerConfinedDto
             {
                 Latin = root.Latin,
                 Own = root.Own,

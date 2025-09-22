@@ -2,27 +2,28 @@ using DTO;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
-using scriptium_backend_dotnet.Controllers.Validation;
-using scriptium_backend_dotnet.DB;
-using scriptium_backend_dotnet.Services;
+using ScriptiumBackend.Controllers.Validation;
+using ScriptiumBackend.Services;
+using ScriptiumBackend.Interface;
+using ScriptiumBackend.DB;
 
-namespace scriptium_backend_dotnet.Controllers.RootHandler
+namespace ScriptiumBackend.Controllers.RootHandler
 {
 
     [ApiController, Route("root"), EnableRateLimiting(policyName: "StaticControllerRateLimiter")]
-    public class RootController(ApplicationDBContext db, ICacheService cacheService, ILogger<RootController> logger) : ControllerBase
+    public class RootController(ApplicationDbContext db, ICacheService cacheService, ILogger<RootController> logger) : ControllerBase
     {
-        private readonly ApplicationDBContext _db = db ?? throw new ArgumentNullException(nameof(db));
+        private readonly ApplicationDbContext _db = db ?? throw new ArgumentNullException(nameof(db));
         private readonly ICacheService _cacheService = cacheService ?? throw new ArgumentNullException(nameof(cacheService));
         private readonly ILogger<RootController> _logger = logger ?? throw new ArgumentNullException(nameof(logger));
 
 
         [HttpGet("{ScriptureNumber}/{RootLatin}")]
-        public async Task<IActionResult> GetRoot([FromRoute] RootValidatedDTO model)
+        public async Task<IActionResult> GetRoot([FromRoute] RootValidatedDto model)
         {
             string requestPath = Request.Path.ToString();
 
-            RootUpperDTO? cache = await _cacheService.GetCachedDataAsync<RootUpperDTO>(requestPath);
+            RootUpperDto? cache = await _cacheService.GetCachedDataAsync<RootUpperDto>(requestPath);
             
             if (cache != null)
             {
@@ -31,7 +32,7 @@ namespace scriptium_backend_dotnet.Controllers.RootHandler
             }
 
 
-            RootUpperDTO? data = await _db.Root
+            RootUpperDto? data = await _db.Roots
                 .Where(r => r.Scripture.Number == model.ScriptureNumber && r.Latin == model.RootLatin)
                 .AsNoTracking()
                 .IgnoreAutoIncludes()
@@ -63,7 +64,7 @@ namespace scriptium_backend_dotnet.Controllers.RootHandler
                                     .ThenInclude(s => s.Meanings)
                                         .ThenInclude(m => m.Language)
                 .AsSplitQuery()
-                .Select(r => r.ToRootUpperDTO())
+                .Select(r => r.ToRootUpperDto())
                 .FirstOrDefaultAsync();
 
             if (data == null)

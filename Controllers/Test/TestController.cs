@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 
-namespace scriptium_backend.Controllers.Test;
+namespace ScriptiumBackend.Controllers.Test;
 
 [ApiController, Route("test")] 
 public class TestController: ControllerBase

@@ -1,9 +1,13 @@
-using scriptium_backend_dotnet.Models;
+using ScriptiumBackend.Models;
+/*
+This file is temporarily disabled. 
+Due to budgetary reasons, Scriptium is unable to provide the economic conditions necessary for legal and official procedures involving the collection, processing, and storage of user information.
+
 
 namespace DTO
 {
 
-    public class NoteOwnDTO
+    public class NoteOwnDto
     {
         public required long Id { get; set; }
 
@@ -21,31 +25,31 @@ namespace DTO
         
     }
     
-    public class NoteOwnVerseDTO : NoteOwnDTO
+    public class NoteOwnVerseDto : NoteOwnDto
     {
 
-        public required VerseUpperMeanDTO Verse { get; set; }
+        public required VerseUpperMeanDto Verse { get; set; }
     }
 
-    public class NoteOwnerDTO : NoteOwnDTO
+    public class NoteOwnerDto : NoteOwnDto
     {
-        public required UserDTO Creator { get; set; }
+        public required UserDto Creator { get; set; }
     }
     
-    public class NoteOwnerVerseDTO : NoteOwnerDTO
+    public class NoteOwnerVerseDto : NoteOwnerDto
     {
-        public required VerseUpperMeanDTO Verse { get; set; }
+        public required VerseUpperMeanDto Verse { get; set; }
     }
 
 
 
 
-    public static class NoteDTOExtension
+    public static class NoteDtoExtension
     {
 
-        public static NoteOwnDTO ToNoteOwnDTO(this Note note, User userRequested)
+        public static NoteOwnDto ToNoteOwnDto(this Note note, User userRequested)
         {
-            return new NoteOwnDTO
+            return new NoteOwnDto
             {
                 Id = note.Id,
                 Text = note.Text,
@@ -58,9 +62,9 @@ namespace DTO
         }
         
         
-        public static NoteOwnDTO ToNoteOwnDTO(this Note note, bool isLiked)
+        public static NoteOwnDto ToNoteOwnDto(this Note note, bool isLiked)
         {
-            return new NoteOwnDTO
+            return new NoteOwnDto
             {
                 Id = note.Id,
                 Text = note.Text,
@@ -72,13 +76,13 @@ namespace DTO
             };
         }
 
-        public static NoteOwnerDTO ToNoteOwnerDTO(this Note note, User UserRequested)
+        public static NoteOwnerDto ToNoteOwnerDto(this Note note, User UserRequested)
         {
-            return new NoteOwnerDTO
+            return new NoteOwnerDto
             {
                 Id = note.Id,
                 Text = note.Text,
-                Creator = note.User.ToUserDTO(),
+                Creator = note.User.ToUserDto(),
                 CreatedAt = note.CreatedAt,
                 UpdatedAt = note.UpdatedAt,
                 LikeCount = note.Likes?.Count ?? 0,
@@ -89,9 +93,9 @@ namespace DTO
         }
 
         
-        public static NoteOwnVerseDTO ToNoteOwnVerseDTO(this Note note, User userRequested)
+        public static NoteOwnVerseDto ToNoteOwnVerseDto(this Note note, User userRequested)
         {
-            return new NoteOwnVerseDTO
+            return new NoteOwnVerseDto
             {
                 Id = note.Id,
                 Text = note.Text,
@@ -100,13 +104,13 @@ namespace DTO
                 LikeCount = note.Likes?.Count ?? 0,
                 ReplyCount = note.Comments?.Count ?? 0,
                 IsLiked = note.Likes.Any(n => n.Like.UserId == userRequested.Id),
-                Verse = note.Verse.ToVerseUpperMeanDTO()
+                Verse = note.Verse.ToVerseUpperMeanDto()
             };
         }
         
-        public static NoteOwnerVerseDTO ToNoteOwnerVerseDTO(this Note note, User userRequested)
+        public static NoteOwnerVerseDto ToNoteOwnerVerseDto(this Note note, User userRequested)
         {
-            return new NoteOwnerVerseDTO
+            return new NoteOwnerVerseDto
             {
                 Id = note.Id,
                 Text = note.Text,
@@ -115,14 +119,14 @@ namespace DTO
                 LikeCount = note.Likes?.Count ?? 0,
                 ReplyCount = note.Comments?.Count ?? 0,
                 IsLiked = note.Likes.Any(n => n.Like.UserId == userRequested.Id),
-                Verse = note.Verse.ToVerseUpperMeanDTO(),
-                Creator = note.User.ToUserDTO()
+                Verse = note.Verse.ToVerseUpperMeanDto(),
+                Creator = note.User.ToUserDto()
             };
         }
         
-        public static NoteOwnVerseDTO ToNoteOwnVerseDTO(this Note note, bool isLiked)
+        public static NoteOwnVerseDto ToNoteOwnVerseDto(this Note note, bool isLiked)
         {
-            return new NoteOwnVerseDTO
+            return new NoteOwnVerseDto
             {
                 Id = note.Id,
                 Text = note.Text,
@@ -131,16 +135,16 @@ namespace DTO
                 LikeCount = note.Likes?.Count ?? 0,
                 ReplyCount = note.Comments?.Count ?? 0,
                 IsLiked = isLiked,
-                Verse = note.Verse.ToVerseUpperMeanDTO()
+                Verse = note.Verse.ToVerseUpperMeanDto()
             };
         }
-        public static NoteOwnerDTO ToNoteOwnerDTO(this Note note, bool isLiked)
+        public static NoteOwnerDto ToNoteOwnerDto(this Note note, bool isLiked)
         {
-            return new NoteOwnerDTO
+            return new NoteOwnerDto
             {
                 Id = note.Id,
                 Text = note.Text,
-                Creator = note.User.ToUserDTO(),
+                Creator = note.User.ToUserDto(),
                 CreatedAt = note.CreatedAt,
                 UpdatedAt = note.UpdatedAt,
                 LikeCount = note.Likes?.Count ?? 0,
@@ -151,3 +155,5 @@ namespace DTO
         }
     }
 }
+
+*/

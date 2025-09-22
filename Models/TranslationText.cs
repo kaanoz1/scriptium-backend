@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace scriptium_backend_dotnet.Models
+namespace ScriptiumBackend.Models
 {
     public class TranslationText
     {
@@ -22,8 +22,10 @@ namespace scriptium_backend_dotnet.Models
         public virtual Verse Verse { get; set; } = null!;
 
         public virtual List<FootNote> FootNotes { get; set; } = [];
+/*
+        Unused properties, but kept for future use or reference.
 
         public virtual List<Suggestion>? Suggestions { get; set; }
-
+*/
     }
 }

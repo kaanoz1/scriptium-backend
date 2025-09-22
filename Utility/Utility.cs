@@ -6,6 +6,32 @@ using SixLabors.ImageSharp;
 
 public static class Utility
 {
+    public static bool IsEffectivelyEmpty<T>(T obj) //TODO: Remove
+    {
+        var props = typeof(T).GetProperties();
+
+        foreach (var prop in props)
+        {
+            var value = prop.GetValue(obj);
+
+            if (value is string s)
+            {
+                if (!string.IsNullOrWhiteSpace(s)) return false;
+            }
+            else if (value is System.Collections.IEnumerable e && !(value is string))
+            {
+               
+                if (e.Cast<object>().Any()) return false;
+            }
+            else if (value != null)
+            {
+                return false;
+            }
+        }
+
+        return true; // Hepsi null veya boş
+    }
+
 
     public const string DBTypeDateTime = "datetime";
 
@@ -20,7 +46,7 @@ public static class Utility
     public const string DBTypeVARBINARYMAX = "varbinary(max)";
 
     public const string DBTypeNVARCHARMAX = "NVARCHAR(MAX)";
-
+    
     public const string DBTypeNVARCHAR1000 = "NVARCHAR(1000)";
 
     public const string DBTypeNVARCHAR255 = "NVARCHAR(255)";

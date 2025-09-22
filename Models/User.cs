@@ -1,13 +1,17 @@
+/*
+This file is temporarily disabled. 
+Due to budgetary reasons, Scriptium is unable to provide the economic conditions necessary for legal and official procedures involving the collection, processing, and storage of user information.
+
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.AspNetCore.Identity;
-using scriptium_backend_dotnet.Models.Util;
+using ScriptiumBackend.Models.Util;
 
 
-namespace scriptium_backend_dotnet.Models
+namespace ScriptiumBackend.Models
 {
-    [Table("user")]
-    public class User : IdentityUser<Guid>
+    [Table("user"), NotMapped]
+    public class User //: IdentityUser<Guid>
     {
 
         [Required, MaxLength(30)]
@@ -71,10 +75,6 @@ namespace scriptium_backend_dotnet.Models
         [NotMapped]
         public int FollowingCount => Followings?.Count ?? 0;
 
-        public virtual List<FollowR>? FollowerRs { get; set; }
-
-        public virtual List<FollowR>? FollowRing { get; set; }
-
         public virtual List<Block>? BlockedUsers { get; set; }
 
         public virtual List<Block>? BlockedByUsers { get; set; }
@@ -94,14 +94,10 @@ namespace scriptium_backend_dotnet.Models
 
         [NotMapped]
         public int SuggestionCount => Suggestions?.Count ?? 0;
-
-        public virtual List<UserUpdateR>? UpdateRecords { get; set; }
-
-        [NotMapped]
-        public int UpdateCount => UpdateRecords?.Count ?? 0;
-
-
+        
         public DateTime? DeletedAt { get; set; }
 
     }
 }
+
+*/

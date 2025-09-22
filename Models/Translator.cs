@@ -1,8 +1,9 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using ScriptiumBackend.Models;
 
 
-namespace scriptium_backend_dotnet.Models
+namespace ScriptiumBackend.Models
 {
     public class Translator
     {
@@ -24,5 +25,8 @@ namespace scriptium_backend_dotnet.Models
         public virtual Language Language { get; set; } = null!;
 
         public virtual List<TranslatorTranslation>? TranslatorTranslations { get; set; }
+        
+        public virtual List<BookTranslationBookTranslator> TranslationBookTranslators { get; set; } = [];
+        
     }
 }

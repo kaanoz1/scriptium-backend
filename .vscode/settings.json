@@ -12,7 +12,7 @@
     "NVARCHAR",
     "NVARCHARMAX",
     "Replyable",
-    "scriptium",
+    "Scriptium",
     "Serilog",
     "tinyint",
     "uniqueidentifier",

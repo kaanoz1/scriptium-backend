@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace scriptium_backend_dotnet.Models
+namespace ScriptiumBackend.Models
 {
     public class Cache
     {
@@ -17,6 +17,6 @@ namespace scriptium_backend_dotnet.Models
         [Required, Column(TypeName = Utility.DBTypeDateTime)]
         public DateTime ExpirationDate { get; set; } = DateTime.UtcNow;
 
-        public virtual List<CacheR>? CacheRs { get; set; }
+        public virtual List<CacheRecord>? Records { get; set; }
     }
 }

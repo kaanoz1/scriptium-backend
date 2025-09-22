@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 
 
-namespace scriptium_backend_dotnet.Models
+namespace ScriptiumBackend.Models
 {
     public class Verse
     {
@@ -33,12 +33,18 @@ namespace scriptium_backend_dotnet.Models
 
         public virtual List<TranslationText> TranslationTexts { get; set; } = [];
 
+/*
+        Unused properties, but kept for future use or reference.
+
+        [NotMapped]
         public virtual List<CollectionVerse> CollectionVerses { get; set; } = [];
 
+        [NotMapped]
         public virtual List<Note> Notes { get; set; } = [];
 
+        [NotMapped]
         public virtual List<CommentVerse> Comments { get; set; } = [];
 
-
+*/
     }
 }

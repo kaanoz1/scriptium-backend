@@ -1,56 +1,56 @@
-using scriptium_backend_dotnet.Models;
+using ScriptiumBackend.Models;
 
 namespace DTO
 {
-    public class TranslationTextDTO
+    public class TranslationTextDto
     {
         public required string Text { get; set; }
-        public required TranslationDTO Translation { get; set; }
-        public required List<FootNoteDTO> FootNotes { get; set; }
+        public required TranslationDto Translation { get; set; }
+        public required List<FootNoteDto> FootNotes { get; set; }
 
     }
 
-    public class TranslationTextWithVerseUpperConfinedDTO
+    public class TranslationTextWithVerseUpperConfinedDto
     {
-        public required TranslationTextDTO TranslationText { get; set; }
+        public required TranslationTextDto TranslationText { get; set; }
 
-        public required VerseUpperConfinedDTO Verse { get; set; }
+        public required VerseUpperConfinedDto Verse { get; set; }
     }
 
-    public class TranslationTextWithVerseUpperMeanDTO
+    public class TranslationTextWithVerseUpperMeanDto
     {
-        public required TranslationTextDTO TranslationText { get; set; }
+        public required TranslationTextDto TranslationText { get; set; }
 
-        public required VerseUpperMeanDTO Verse { get; set; }
+        public required VerseUpperMeanDto Verse { get; set; }
     }
 
     public static class TranslationTextExtensions
     {
-        public static TranslationTextDTO ToTranslationTextDTO(this TranslationText translationText)
+        public static TranslationTextDto ToTranslationTextDto(this TranslationText translationText)
         {
-            return new TranslationTextDTO
+            return new TranslationTextDto
             {
                 Text = translationText.Text,
-                Translation = translationText.Translation.ToTranslationDTO(),
-                FootNotes = translationText.FootNotes.Select(e => e.ToFootNoteDTO()).ToList(),
+                Translation = translationText.Translation.ToTranslationDto(),
+                FootNotes = translationText.FootNotes.Select(e => e.ToFootNoteDto()).ToList(),
             };
         }
 
-        public static TranslationTextWithVerseUpperConfinedDTO ToTranslationTextWithVerseUpperConfinedDTO(this TranslationText translationText)
+        public static TranslationTextWithVerseUpperConfinedDto ToTranslationTextWithVerseUpperConfinedDto(this TranslationText translationText)
         {
-            return new TranslationTextWithVerseUpperConfinedDTO
+            return new TranslationTextWithVerseUpperConfinedDto
             {
-                TranslationText = translationText.ToTranslationTextDTO(),
-                Verse = translationText.Verse.ToVerseUpperConfinedDTO()
+                TranslationText = translationText.ToTranslationTextDto(),
+                Verse = translationText.Verse.ToVerseUpperConfinedDto()
             };
         }
 
-        public static TranslationTextWithVerseUpperMeanDTO ToTranslationTextWithVerseUpperMeanDTO(this TranslationText translationText)
+        public static TranslationTextWithVerseUpperMeanDto ToTranslationTextWithVerseUpperMeanDto(this TranslationText translationText)
         {
-            return new TranslationTextWithVerseUpperMeanDTO
+            return new TranslationTextWithVerseUpperMeanDto
             {
-                TranslationText = translationText.ToTranslationTextDTO(),
-                Verse = translationText.Verse.ToVerseUpperMeanDTO()
+                TranslationText = translationText.ToTranslationTextDto(),
+                Verse = translationText.Verse.ToVerseUpperMeanDto()
             };
         }
     }

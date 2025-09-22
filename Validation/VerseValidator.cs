@@ -1,7 +1,7 @@
 using FluentValidation;
 
 
-namespace scriptium_backend_dotnet.Controllers.Validation
+namespace ScriptiumBackend.Controllers.Validation
 {
     public class VerseValidatedModel
     {

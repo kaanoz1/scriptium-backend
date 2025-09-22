@@ -1,57 +1,85 @@
-using DTO;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
-using scriptium_backend_dotnet.Models;
-using scriptium_backend_dotnet.Models.Util;
-using static System.Runtime.InteropServices.JavaScript.JSType;
+using ScriptiumBackend.Models;
 
 
-namespace scriptium_backend_dotnet.DB
+namespace ScriptiumBackend.DB
 {
-    public class ApplicationDBContext(
-        DbContextOptions<ApplicationDBContext> options,
-        ILogger<ApplicationDBContext> logger) : IdentityDbContext<User, Role, Guid>(options)
+    public class ApplicationDbContext(
+        DbContextOptions<ApplicationDbContext> options) : DbContext(options) //IdentityDbContext<User, Role, Guid>(options)
     {
-        private readonly ILogger<ApplicationDBContext> _logger = logger;
 
-        public DbSet<Language> Language { get; set; }
+        //Static 
+        public DbSet<Language> Languages { get; set; }
 
-        public DbSet<Scripture> Scripture { get; set; }
+        public DbSet<Scripture> Scriptures { get; set; }
 
-        public DbSet<ScriptureMeaning> ScriptureMeaning { get; set; }
+        public DbSet<ScriptureMeaning> ScriptureMeanings { get; set; }
 
-        public DbSet<Section> Section { get; set; }
+        public DbSet<Section> Sections { get; set; }
 
-        public DbSet<SectionMeaning> SectionMeaning { get; set; }
 
-        public DbSet<Chapter> Chapter { get; set; }
+        public DbSet<SectionMeaning> SectionMeanings { get; set; }
 
-        public DbSet<ChapterMeaning> ChapterMeaning { get; set; }
+        public DbSet<Chapter> Chapters { get; set; }
 
-        public DbSet<Root> Root { get; set; }
 
-        public DbSet<Verse> Verse { get; set; }
+        public DbSet<ChapterMeaning> ChapterMeanings { get; set; }
 
-        public DbSet<Word> Word { get; set; }
+        public DbSet<Root> Roots { get; set; }
 
-        public DbSet<WordMeaning> WordMeaning { get; set; }
+        public DbSet<Verse> Verses { get; set; }
 
-        public DbSet<Transliteration> Transliteration { get; set; }
 
-        public DbSet<Translator> Translator { get; set; }
+        public DbSet<Word> Words { get; set; }
 
-        public DbSet<Translation> Translation { get; set; }
 
-        public DbSet<TranslatorTranslation> TranslatorTranslation { get; set; }
+        public DbSet<WordMeaning> WordMeanings { get; set; }
 
-        public DbSet<TranslationText> TranslationText { get; set; }
 
-        public DbSet<FootNoteText> FootNoteText { get; set; }
+        public DbSet<Transliteration> Transliterations { get; set; }
 
-        public DbSet<FootNote> FootNote { get; set; }
 
+        public DbSet<Translator> Translators { get; set; }
+
+        public DbSet<Translation> Translations { get; set; }
+
+
+        public DbSet<TranslatorTranslation> TranslatorTranslations { get; set; }
+
+        public DbSet<TranslationText> TranslationTexts { get; set; }
+
+
+        public DbSet<FootNoteText> FootNoteTexts { get; set; }
+
+
+        public DbSet<FootNote> FootNotes { get; set; }
+
+        public DbSet<Cache> Caches { get; set; }
+
+        public DbSet<CacheRecord> CacheRecords { get; set; }
+
+        public DbSet<RequestLog> RequestLogs { get; set; }
+
+        public DbSet<Book> Books { get; set; }
+
+        public DbSet<BookMeaning> BookMeanings { get; set; }
+
+        public DbSet<BookNode> BookNodes { get; set; }
+
+        public DbSet<BookNodeMeaning> BookNodeMeanings { get; set; }
+
+        public DbSet<BookText> BookText { get; set; }
+
+        public DbSet<BookTranslation> BookTranslations { get; set; }
+
+        public DbSet<BookTranslationText> BookTranslationTexts { get; set; }
+        
+        public DbSet<BookTranslationTextFootNote> BookTranslationTextFootNotes { get; set; }
+
+        
+
+        // Dynamic, user data.
+/*
         public DbSet<User> User { get; set; }
 
         public DbSet<Session> Session { get; set; }
@@ -70,8 +98,6 @@ namespace scriptium_backend_dotnet.DB
 
         public DbSet<Follow> Follow { get; set; }
 
-        public DbSet<FollowR> FollowR { get; set; }
-
         public DbSet<Block> Block { get; set; }
 
         public DbSet<FreezeR> FreezeR { get; set; }
@@ -84,676 +110,729 @@ namespace scriptium_backend_dotnet.DB
 
         public DbSet<Notification> Notification { get; set; }
 
-        public DbSet<Cache> Cache { get; set; }
-
-        public DbSet<CacheR> CacheR { get; set; }
-
         public DbSet<Suggestion> Suggestion { get; set; }
 
-        public DbSet<UserUpdateR> UserUpdateRs { get; set; }
-
-        //public DbSet<RequestLog> RequestLogs { get; set; }
+*/
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<Language>(Language =>
+            modelBuilder.Entity<Language>(language =>
             {
-                Language.ToTable("language");
+                language.ToTable("language");
 
-                Language.HasKey(e => e.Id);
+                language.HasKey(e => e.Id);
 
-                Language.Property(e => e.Id)
+                language.Property(e => e.Id)
                     .HasColumnName("id")
                     .HasColumnType(Utility.DBType8bitInteger)
-                    .IsRequired(true);
+                    .IsRequired();
 
-                Language.HasIndex(e => e.LangCode)
+                language.HasIndex(e => e.LangCode)
                     .IsUnique();
 
-                Language.Property(l => l.LangCode).HasColumnName("lang_code").HasColumnType(Utility.DBTypeVARCHAR2)
-                    .IsRequired(true);
+                language.Property(l => l.LangCode).HasColumnName("lang_code").HasColumnType(Utility.DBTypeVARCHAR2)
+                    .IsRequired();
 
-                Language.Property(l => l.LangEnglish).HasColumnName("lang_english")
-                    .HasColumnType(Utility.DBTypeVARCHAR16).IsRequired(true);
+                language.Property(l => l.LangEnglish).HasColumnName("lang_english")
+                    .HasColumnType(Utility.DBTypeVARCHAR16).IsRequired();
 
-                Language.Property(l => l.LangOwn).HasColumnName("lang_own").HasColumnType(Utility.DBTypeVARCHAR16)
-                    .IsRequired(true);
+                language.Property(l => l.LangOwn).HasColumnName("lang_own").HasColumnType(Utility.DBTypeVARCHAR16)
+                    .IsRequired();
 
 
-                Language.HasMany(l => l.ScriptureMeanings).WithOne(sm => sm.Language).OnDelete(DeleteBehavior.NoAction);
-                Language.HasMany(l => l.SectionMeanings).WithOne(sm => sm.Language).OnDelete(DeleteBehavior.NoAction);
-                Language.HasMany(l => l.ChapterMeanings).WithOne(cm => cm.Language).OnDelete(DeleteBehavior.NoAction);
-                Language.HasMany(l => l.WordMeanings).WithOne(wm => wm.Language).OnDelete(DeleteBehavior.NoAction);
-                Language.HasMany(l => l.Transliterations).WithOne(t => t.Language).OnDelete(DeleteBehavior.NoAction);
-                Language.HasMany(l => l.Translators).WithOne(t => t.Language).OnDelete(DeleteBehavior.NoAction);
-                Language.HasMany(l => l.Translations).WithOne(t => t.Language).OnDelete(DeleteBehavior.NoAction);
-                Language.HasMany(l => l.PreferredUsers).WithOne(u => u.PreferredLanguage)
-                    .OnDelete(DeleteBehavior.NoAction);
+                language.HasMany(l => l.ScriptureMeanings).WithOne(sm => sm.Language).OnDelete(DeleteBehavior.NoAction);
+                language.HasMany(l => l.SectionMeanings).WithOne(sm => sm.Language).OnDelete(DeleteBehavior.NoAction);
+                language.HasMany(l => l.ChapterMeanings).WithOne(cm => cm.Language).OnDelete(DeleteBehavior.NoAction);
+                language.HasMany(l => l.WordMeanings).WithOne(wm => wm.Language).OnDelete(DeleteBehavior.NoAction);
+                language.HasMany(l => l.Transliterations).WithOne(t => t.Language).OnDelete(DeleteBehavior.NoAction);
+                language.HasMany(l => l.Translators).WithOne(t => t.Language).OnDelete(DeleteBehavior.NoAction);
+                language.HasMany(l => l.Translations).WithOne(t => t.Language).OnDelete(DeleteBehavior.NoAction);
 
-                Language.HasData(
+                language.HasData(
                     new Language { Id = 1, LangCode = "en", LangOwn = "English", LangEnglish = "English" },
                     new Language { Id = 2, LangCode = "de", LangOwn = "Deutsch", LangEnglish = "German" }
                 );
             });
 
-            modelBuilder.Entity<Scripture>(Scripture =>
+            modelBuilder.Entity<Scripture>(scripture =>
 
             {
-                Scripture.ToTable("scripture");
+                scripture.ToTable("scripture");
 
-                Scripture.HasKey(s => s.Id);
+                scripture.HasKey(s => s.Id);
 
-                Scripture.Property(s => s.Id).HasColumnName("id")
-                    .HasColumnType(Utility.DBType16bitInteger).IsRequired(true).ValueGeneratedOnAdd();
+                scripture.Property(s => s.Id).HasColumnName("id")
+                    .HasColumnType(Utility.DBType16bitInteger).IsRequired().ValueGeneratedOnAdd();
 
-                Scripture.Property(s => s.Name)
+                scripture.Property(s => s.Name)
                     .HasColumnName("name")
-                    .HasColumnType(Utility.DBTypeNVARCHAR255).IsRequired(true);
+                    .HasColumnType(Utility.DBTypeNVARCHAR255).IsRequired();
 
-                Scripture.Property(s => s.Code)
+                scripture.Property(s => s.Code)
                     .HasColumnName("code")
-                    .HasColumnType(Utility.DBTypeCHAR1).HasMaxLength(1).IsRequired(true);
+                    .HasColumnType(Utility.DBTypeCHAR1).HasMaxLength(1).IsRequired();
 
-                Scripture.Property(s => s.Number)
+                scripture.Property(s => s.Number)
                     .HasColumnName("number")
-                    .HasColumnType(Utility.DBType8bitInteger).IsRequired(true);
+                    .HasColumnType(Utility.DBType8bitInteger).IsRequired();
 
-                Scripture.HasIndex(e => e.Name)
+                scripture.HasIndex(e => e.Name)
                     .IsUnique();
 
-                Scripture.HasIndex(e => e.Code)
+                scripture.HasIndex(e => e.Code)
                     .IsUnique();
 
-                Scripture.HasMany(s => s.Meanings).WithOne(m => m.Scripture).OnDelete(DeleteBehavior.NoAction);
-                Scripture.HasMany(s => s.Sections).WithOne(s => s.Scripture).OnDelete(DeleteBehavior.Restrict);
-                Scripture.HasMany(s => s.Roots).WithOne(r => r.Scripture).OnDelete(DeleteBehavior.Restrict);
-                Scripture.HasMany(s => s.Translations).WithOne(r => r.Scripture).OnDelete(DeleteBehavior.NoAction);
+                scripture.HasMany(s => s.Meanings).WithOne(m => m.Scripture).OnDelete(DeleteBehavior.NoAction);
+                scripture.HasMany(s => s.Sections).WithOne(s => s.Scripture).OnDelete(DeleteBehavior.Restrict);
+                scripture.HasMany(s => s.Roots).WithOne(r => r.Scripture).OnDelete(DeleteBehavior.Restrict);
+                scripture.HasMany(s => s.Translations).WithOne(r => r.Scripture).OnDelete(DeleteBehavior.NoAction);
             });
 
-            modelBuilder.Entity<ScriptureMeaning>(ScriptureMeaning =>
+            modelBuilder.Entity<ScriptureMeaning>(scriptureMeaning =>
             {
-                ScriptureMeaning.ToTable("scripture_meaning");
+                scriptureMeaning.ToTable("scripture_meaning");
 
-                ScriptureMeaning.HasKey(s => s.Id);
+                scriptureMeaning.HasKey(s => s.Id);
 
-                ScriptureMeaning.Property(sm => sm.Id).HasColumnName("id").HasColumnType(Utility.DBType16bitInteger)
-                    .IsRequired(true);
+                scriptureMeaning.Property(sm => sm.Id).HasColumnName("id").HasColumnType(Utility.DBType16bitInteger)
+                    .IsRequired();
 
-                ScriptureMeaning.Property(sm => sm.Meaning).HasColumnName("meaning")
-                    .HasColumnType(Utility.DBTypeVARCHAR50).IsRequired(true);
+                scriptureMeaning.Property(sm => sm.Meaning).HasColumnName("meaning")
+                    .HasColumnType(Utility.DBTypeVARCHAR50).IsRequired();
 
-                ScriptureMeaning.Property(sm => sm.ScriptureId).HasColumnName("scripture_id")
-                    .HasColumnType(Utility.DBType16bitInteger).IsRequired(true);
+                scriptureMeaning.Property(sm => sm.ScriptureId).HasColumnName("scripture_id")
+                    .HasColumnType(Utility.DBType16bitInteger).IsRequired();
 
-                ScriptureMeaning.HasOne(c => c.Scripture)
+                scriptureMeaning.HasOne(c => c.Scripture)
                     .WithMany(p => p.Meanings)
                     .HasForeignKey(c => c.ScriptureId)
                     .OnDelete(DeleteBehavior.Cascade);
 
-                ScriptureMeaning.Property(sm => sm.LanguageId).HasColumnName("language_id")
-                    .HasColumnType(Utility.DBType8bitInteger).IsRequired(true);
+                scriptureMeaning.Property(sm => sm.LanguageId).HasColumnName("language_id")
+                    .HasColumnType(Utility.DBType8bitInteger).IsRequired();
 
-                ScriptureMeaning.HasOne(c => c.Language)
+                scriptureMeaning.HasOne(c => c.Language)
                     .WithMany(p => p.ScriptureMeanings)
                     .HasForeignKey(c => c.LanguageId)
                     .OnDelete(DeleteBehavior.Restrict);
 
-                ScriptureMeaning.HasIndex(e => new { e.LanguageId, e.ScriptureId })
+                scriptureMeaning.HasIndex(e => new { e.LanguageId, e.ScriptureId })
                     .IsUnique();
             });
 
-            modelBuilder.Entity<Section>(Section =>
+            modelBuilder.Entity<Section>(section =>
             {
-                Section.ToTable("section");
+                section.ToTable("section");
 
-                Section.HasKey(s => s.Id);
+                section.HasKey(s => s.Id);
 
-                Section.Property(s => s.Id).HasColumnName("id").HasColumnType(Utility.DBType16bitInteger)
-                    .IsRequired(true);
+                section.Property(s => s.Id).HasColumnName("id").HasColumnType(Utility.DBType16bitInteger)
+                    .IsRequired();
 
-                Section.Property(s => s.Name).HasColumnName("name").HasColumnType(Utility.DBTypeNVARCHAR255)
-                    .IsRequired(true);
+                section.Property(s => s.Name).HasColumnName("name").HasColumnType(Utility.DBTypeNVARCHAR255)
+                    .IsRequired();
 
-                Section.Property(s => s.ScriptureId).HasColumnName("scripture_id")
-                    .HasColumnType(Utility.DBType16bitInteger).IsRequired(true);
+                section.Property(s => s.ScriptureId).HasColumnName("scripture_id")
+                    .HasColumnType(Utility.DBType16bitInteger).IsRequired();
 
-                Section.HasOne(s => s.Scripture)
+                section.HasOne(s => s.Scripture)
                     .WithMany(scr => scr.Sections)
                     .HasForeignKey(s => s.ScriptureId)
                     .OnDelete(DeleteBehavior.Restrict);
 
-                Section.HasIndex(e => e.Name)
+                section.HasIndex(e => e.Name)
                     .IsUnique();
 
-                Section.HasIndex(e => new { e.ScriptureId, e.Number })
+                section.HasIndex(e => new { e.ScriptureId, e.Number })
                     .IsUnique();
 
-                Section.HasMany(s => s.Chapters).WithOne(c => c.Section).OnDelete(DeleteBehavior.Restrict);
+                section.HasMany(s => s.Chapters).WithOne(c => c.Section).OnDelete(DeleteBehavior.Restrict);
 
-                Section.HasMany(s => s.Meanings).WithOne(sm => sm.Section).OnDelete(DeleteBehavior.NoAction);
+                section.HasMany(s => s.Meanings).WithOne(sm => sm.Section).OnDelete(DeleteBehavior.NoAction);
             });
 
-            modelBuilder.Entity<SectionMeaning>(SectionMeaning =>
+            modelBuilder.Entity<SectionMeaning>(sectionMeaning =>
             {
-                SectionMeaning.ToTable("section_meaning");
+                sectionMeaning.ToTable("section_meaning");
 
-                SectionMeaning.HasKey(s => s.Id);
+                sectionMeaning.HasKey(s => s.Id);
 
-                SectionMeaning.Property(s => s.Id).HasColumnName("id").HasColumnType(Utility.DBType16bitInteger)
-                    .IsRequired(true);
+                sectionMeaning.Property(s => s.Id).HasColumnName("id").HasColumnType(Utility.DBType16bitInteger)
+                    .IsRequired();
 
-                SectionMeaning.Property(s => s.Meaning).HasColumnName("meaning").HasColumnType(Utility.DBTypeVARCHAR100)
-                    .IsRequired(true);
+                sectionMeaning.Property(s => s.Meaning).HasColumnName("meaning").HasColumnType(Utility.DBTypeVARCHAR100)
+                    .IsRequired();
 
-                SectionMeaning.Property(s => s.SectionId).HasColumnName("section_id")
-                    .HasColumnType(Utility.DBType16bitInteger).IsRequired(true);
+                sectionMeaning.Property(s => s.SectionId).HasColumnName("section_id")
+                    .HasColumnType(Utility.DBType16bitInteger).IsRequired();
 
-                SectionMeaning.HasOne(c => c.Section)
+                sectionMeaning.HasOne(c => c.Section)
                     .WithMany(e => e.Meanings)
                     .HasForeignKey(e => e.SectionId)
                     .OnDelete(DeleteBehavior.Restrict);
 
-                SectionMeaning.Property(s => s.LanguageId).HasColumnName("language_id")
-                    .HasColumnType(Utility.DBType8bitInteger).IsRequired(true);
+                sectionMeaning.Property(s => s.LanguageId).HasColumnName("language_id")
+                    .HasColumnType(Utility.DBType8bitInteger).IsRequired();
 
-                SectionMeaning.HasOne(c => c.Language)
+                sectionMeaning.HasOne(c => c.Language)
                     .WithMany(e => e.SectionMeanings)
                     .HasForeignKey(e => e.LanguageId)
                     .OnDelete(DeleteBehavior.Restrict);
 
-                SectionMeaning.HasIndex(e => new { e.LanguageId, e.SectionId })
+                sectionMeaning.HasIndex(e => new { e.LanguageId, e.SectionId })
                     .IsUnique();
             });
 
-            modelBuilder.Entity<Chapter>(Chapter =>
+            modelBuilder.Entity<Chapter>(chapter =>
             {
-                Chapter.ToTable("chapter");
+                chapter.ToTable("chapter");
 
-                Chapter.HasKey(c => c.Id);
+                chapter.HasKey(c => c.Id);
 
-                Chapter.Property(c => c.Id).HasColumnName("id").HasColumnType(Utility.DBType16bitInteger)
-                    .IsRequired(true);
+                chapter.Property(c => c.Id).HasColumnName("id").HasColumnType(Utility.DBType16bitInteger)
+                    .IsRequired();
 
-                Chapter.Property(c => c.Name).HasColumnName("name").HasColumnType(Utility.DBTypeNVARCHAR255)
-                    .IsRequired(true);
+                chapter.Property(c => c.Name).HasColumnName("name").HasColumnType(Utility.DBTypeNVARCHAR255)
+                    .IsRequired();
 
-                Chapter.Property(c => c.Number).HasColumnName("number").HasColumnType(Utility.DBType8bitInteger)
-                    .IsRequired(true);
+                chapter.Property(c => c.Number).HasColumnName("number").HasColumnType(Utility.DBType8bitInteger)
+                    .IsRequired();
 
-                Chapter.Property(c => c.SectionId).HasColumnName("section_id").HasColumnType(Utility.DBType16bitInteger)
-                    .IsRequired(true);
+                chapter.Property(c => c.SectionId).HasColumnName("section_id").HasColumnType(Utility.DBType16bitInteger)
+                    .IsRequired();
 
-                Chapter.HasOne(c => c.Section)
+                chapter.HasOne(c => c.Section)
                     .WithMany(s => s.Chapters)
                     .HasForeignKey(c => c.SectionId)
                     .OnDelete(DeleteBehavior.Restrict);
 
-                Chapter.HasMany(c => c.Verses).WithOne(v => v.Chapter).OnDelete(DeleteBehavior.Restrict);
+                chapter.HasMany(c => c.Verses).WithOne(v => v.Chapter).OnDelete(DeleteBehavior.Restrict);
 
-                Chapter.HasMany(c => c.Meanings).WithOne(m => m.Chapter).OnDelete(DeleteBehavior.NoAction);
+                chapter.HasMany(c => c.Meanings).WithOne(m => m.Chapter).OnDelete(DeleteBehavior.NoAction);
 
-                Chapter.HasIndex(c => c.Name)
+                chapter.HasIndex(c => c.Name)
                     .IsUnique();
 
-                Chapter.HasIndex(c => new { c.SectionId, c.Number })
+                chapter.HasIndex(c => new { c.SectionId, c.Number })
                     .IsUnique();
             });
 
-            modelBuilder.Entity<ChapterMeaning>(ChapterMeaning =>
+            modelBuilder.Entity<ChapterMeaning>(chapterMeaning =>
             {
-                ChapterMeaning.ToTable("chapter_meaning");
+                chapterMeaning.ToTable("chapter_meaning");
 
-                ChapterMeaning.HasKey(cm => cm.Id);
+                chapterMeaning.HasKey(cm => cm.Id);
 
-                ChapterMeaning.Property(cm => cm.Id).HasColumnName("id").HasColumnType(Utility.DBType32bitInteger)
-                    .IsRequired(true);
+                chapterMeaning.Property(cm => cm.Id).HasColumnName("id").HasColumnType(Utility.DBType32bitInteger)
+                    .IsRequired();
 
-                ChapterMeaning.Property(s => s.Meaning).HasColumnName("meaning").HasColumnType(Utility.DBTypeVARCHAR100)
-                    .IsRequired(true);
+                chapterMeaning.Property(s => s.Meaning).HasColumnName("meaning").HasColumnType(Utility.DBTypeVARCHAR100)
+                    .IsRequired();
 
-                ChapterMeaning.Property(s => s.ChapterId).HasColumnName("chapter_id")
-                    .HasColumnType(Utility.DBType16bitInteger).IsRequired(true);
+                chapterMeaning.Property(s => s.ChapterId).HasColumnName("chapter_id")
+                    .HasColumnType(Utility.DBType16bitInteger).IsRequired();
 
-                ChapterMeaning.HasOne(c => c.Chapter)
+                chapterMeaning.HasOne(c => c.Chapter)
                     .WithMany(p => p.Meanings)
                     .HasForeignKey(c => c.ChapterId)
                     .OnDelete(DeleteBehavior.Restrict);
 
-                ChapterMeaning.Property(s => s.LanguageId).HasColumnName("language_id")
-                    .HasColumnType(Utility.DBType8bitInteger).IsRequired(true);
+                chapterMeaning.Property(s => s.LanguageId).HasColumnName("language_id")
+                    .HasColumnType(Utility.DBType8bitInteger).IsRequired();
 
-                ChapterMeaning.HasOne(cm => cm.Language)
+                chapterMeaning.HasOne(cm => cm.Language)
                     .WithMany(l => l.ChapterMeanings)
                     .HasForeignKey(cm => cm.LanguageId)
                     .OnDelete(DeleteBehavior.Restrict);
 
-                ChapterMeaning.HasIndex(cm => new { cm.ChapterId, cm.LanguageId })
+                chapterMeaning.HasIndex(cm => new { cm.ChapterId, cm.LanguageId })
                     .IsUnique();
             });
 
-            modelBuilder.Entity<Root>(Root =>
+            modelBuilder.Entity<Root>(root =>
             {
-                Root.ToTable("root");
+                root.ToTable("root");
 
-                Root.HasKey(r => r.Id);
+                root.HasKey(r => r.Id);
 
-                Root.Property(r => r.Id)
+                root.Property(r => r.Id)
                     .HasColumnName("id")
                     .HasColumnType(Utility.DBType64bitInteger)
-                    .IsRequired(true);
+                    .IsRequired();
 
-                Root.Property(r => r.Latin)
+                root.Property(r => r.Latin)
                     .HasColumnName("latin")
                     .HasColumnType(Utility.DBTypeNVARCHAR30)
-                    .IsRequired(true)
+                    .IsRequired()
                     .UseCollation("SQL_Latin1_General_CP1_CS_AS"); // Case-sensitive
 
-                Root.Property(r => r.Own)
+                root.Property(r => r.Own)
                     .HasColumnName("own")
                     .HasColumnType(Utility.DBTypeNVARCHAR30)
-                    .IsRequired(true);
+                    .IsRequired();
 
-                Root.Property(r => r.ScriptureId)
+                root.Property(r => r.ScriptureId)
                     .HasColumnName("scripture_id")
                     .HasColumnType(Utility.DBType16bitInteger)
-                    .IsRequired(true);
+                    .IsRequired();
 
-                Root.HasOne(r => r.Scripture)
+                root.HasOne(r => r.Scripture)
                     .WithMany(sc => sc.Roots)
                     .HasForeignKey(r => r.ScriptureId)
                     .OnDelete(DeleteBehavior.Restrict);
 
-                Root.HasMany(r => r.Words).WithMany(w => w.Roots);
+                root.HasMany(r => r.Words).WithMany(w => w.Roots);
 
-                Root.HasIndex(r => new { r.Latin, r.ScriptureId })
-                    .IsUnique(true);
+                root.HasIndex(r => new { r.Latin, r.ScriptureId })
+                    .IsUnique();
             });
 
 
-            modelBuilder.Entity<Verse>(Verse =>
+            modelBuilder.Entity<Verse>(verse =>
             {
-                Verse.ToTable("verse");
+                verse.ToTable("verse");
 
-                Verse.HasKey(v => v.Id);
+                verse.HasKey(v => v.Id);
 
-                Verse.Property(v => v.Id).HasColumnName("id").HasColumnType(Utility.DBType32bitInteger)
-                    .IsRequired(true);
+                verse.Property(v => v.Id).HasColumnName("id").HasColumnType(Utility.DBType32bitInteger)
+                    .IsRequired();
 
-                Verse.Property(v => v.Number).HasColumnName("number").HasColumnType(Utility.DBType16bitInteger)
-                    .IsRequired(true);
+                verse.Property(v => v.Number).HasColumnName("number").HasColumnType(Utility.DBType16bitInteger)
+                    .IsRequired();
 
-                Verse.Property(v => v.Text).HasColumnName("text").HasColumnType(Utility.DBTypeNVARCHAR1000)
-                    .IsRequired(true);
+                verse.Property(v => v.Text).HasColumnName("text").HasColumnType(Utility.DBTypeNVARCHAR1000)
+                    .IsRequired();
 
-                Verse.Property(v => v.TextWithoutVowel).HasColumnName("text_without_vowel")
+                verse.Property(v => v.TextWithoutVowel).HasColumnName("text_without_vowel")
                     .HasColumnType(Utility.DBTypeNVARCHAR1000).IsRequired(false);
 
-                Verse.Property(v => v.TextSimplified).HasColumnName("text_simplified")
+                verse.Property(v => v.TextSimplified).HasColumnName("text_simplified")
                     .HasColumnType(Utility.DBTypeNVARCHAR1000).IsRequired(false);
 
-                Verse.Property(v => v.ChapterId).HasColumnName("chapter_id").HasColumnType(Utility.DBType16bitInteger)
-                    .IsRequired(true);
+                verse.Property(v => v.ChapterId).HasColumnName("chapter_id").HasColumnType(Utility.DBType16bitInteger)
+                    .IsRequired();
 
-                Verse.HasOne(v => v.Chapter)
+                verse.HasOne(v => v.Chapter)
                     .WithMany(c => c.Verses)
                     .HasForeignKey(v => v.ChapterId)
                     .OnDelete(DeleteBehavior.Restrict);
 
-                Verse.HasMany(v => v.Words).WithOne(w => w.Verse).OnDelete(DeleteBehavior.Restrict);
-                Verse.HasMany(v => v.Transliterations).WithOne(t => t.Verse).OnDelete(DeleteBehavior.NoAction);
-                Verse.HasMany(v => v.TranslationTexts).WithOne(tt => tt.Verse).OnDelete(DeleteBehavior.NoAction);
-                Verse.HasMany(v => v.CollectionVerses).WithOne(w => w.Verse).OnDelete(DeleteBehavior.NoAction);
-                Verse.HasMany(v => v.Notes).WithOne(w => w.Verse).OnDelete(DeleteBehavior.NoAction);
-                Verse.HasMany(v => v.Comments).WithOne(w => w.Verse).OnDelete(DeleteBehavior.NoAction);
+                verse.HasMany(v => v.Words).WithOne(w => w.Verse).OnDelete(DeleteBehavior.Restrict);
+                verse.HasMany(v => v.Transliterations).WithOne(t => t.Verse).OnDelete(DeleteBehavior.NoAction);
+                verse.HasMany(v => v.TranslationTexts).WithOne(tt => tt.Verse).OnDelete(DeleteBehavior.NoAction);
+                // Unused properties, but kept for future use or reference.
+                // verse.HasMany(v => v.CollectionVerses).WithOne(w => w.Verse).OnDelete(DeleteBehavior.NoAction);
+                // verse.HasMany(v => v.Notes).WithOne(w => w.Verse).OnDelete(DeleteBehavior.NoAction);
+                // verse.HasMany(v => v.Comments).WithOne(w => w.Verse).OnDelete(DeleteBehavior.NoAction);
 
-                Verse.HasIndex(v => new { v.ChapterId, v.Number })
+                verse.HasIndex(v => new { v.ChapterId, v.Number })
                     .IsUnique();
             });
 
-            modelBuilder.Entity<Word>(Word =>
+            modelBuilder.Entity<Word>(word =>
             {
-                Word.ToTable("word");
+                word.ToTable("word");
 
-                Word.HasKey(w => w.Id);
+                word.HasKey(w => w.Id);
 
-                Word.Property(v => v.Id).HasColumnName("id").HasColumnType(Utility.DBType64bitInteger).IsRequired(true);
+                word.Property(v => v.Id).HasColumnName("id").HasColumnType(Utility.DBType64bitInteger).IsRequired();
 
-                Word.Property(v => v.SequenceNumber).HasColumnName("sequence_number")
-                    .HasColumnType(Utility.DBType16bitInteger).IsRequired(true);
+                word.Property(v => v.SequenceNumber).HasColumnName("sequence_number")
+                    .HasColumnType(Utility.DBType16bitInteger).IsRequired();
 
-                Word.Property(v => v.Text).HasColumnName("text").HasColumnType(Utility.DBTypeNVARCHAR50)
-                    .IsRequired(true);
+                word.Property(v => v.Text).HasColumnName("text").HasColumnType(Utility.DBTypeNVARCHAR50)
+                    .IsRequired();
 
-                Word.Property(v => v.TextWithoutVowel).HasColumnName("text_without_vowel")
+                word.Property(v => v.TextWithoutVowel).HasColumnName("text_without_vowel")
                     .HasColumnType(Utility.DBTypeNVARCHAR50);
 
-                Word.Property(v => v.TextSimplified).HasColumnName("text_simplified")
+                word.Property(v => v.TextSimplified).HasColumnName("text_simplified")
                     .HasColumnType(Utility.DBTypeNVARCHAR50);
 
-                Word.Property(v => v.VerseId).HasColumnName("verse_id").HasColumnType(Utility.DBType32bitInteger)
-                    .IsRequired(true);
+                word.Property(v => v.VerseId).HasColumnName("verse_id").HasColumnType(Utility.DBType32bitInteger)
+                    .IsRequired();
 
-                Word.HasOne(w => w.Verse)
+                word.HasOne(w => w.Verse)
                     .WithMany(v => v.Words)
                     .HasForeignKey(w => w.VerseId)
                     .OnDelete(DeleteBehavior.Restrict);
 
 
-                Word.HasMany(w => w.Roots)
+                word.HasMany(w => w.Roots)
                     .WithMany(r => r.Words);
 
 
-                Word.HasMany(w => w.WordMeanings)
+                word.HasMany(w => w.WordMeanings)
                     .WithOne(r => r.Word)
                     .OnDelete(DeleteBehavior.NoAction);
 
-                Word.HasIndex(w => new { w.SequenceNumber, w.VerseId })
+                word.HasIndex(w => new { w.SequenceNumber, w.VerseId })
                     .IsUnique();
             });
 
-            modelBuilder.Entity<WordMeaning>(WordMeaning =>
+            modelBuilder.Entity<WordMeaning>(wordMeaning =>
             {
-                WordMeaning.ToTable("word_meaning");
+                wordMeaning.ToTable("word_meaning");
 
-                WordMeaning.HasKey(wm => wm.Id);
+                wordMeaning.HasKey(wm => wm.Id);
 
-                WordMeaning.Property(wm => wm.Id)
+                wordMeaning.Property(wm => wm.Id)
                     .HasColumnName("id")
                     .HasColumnType(Utility.DBType64bitInteger)
-                    .IsRequired(true);
+                    .IsRequired();
 
-                WordMeaning.Property(wm => wm.Meaning)
+                wordMeaning.Property(wm => wm.Meaning)
                     .HasColumnName("meaning")
                     .HasColumnType(Utility.DBTypeVARCHAR100)
-                    .IsRequired(true);
+                    .IsRequired();
 
-                WordMeaning.Property(wm => wm.WordId).HasColumnName("word_id").HasColumnType(Utility.DBType64bitInteger)
-                    .IsRequired(true);
+                wordMeaning.Property(wm => wm.WordId).HasColumnName("word_id").HasColumnType(Utility.DBType64bitInteger)
+                    .IsRequired();
 
-                WordMeaning.Property(wm => wm.LanguageId).HasColumnName("language_id")
+                wordMeaning.Property(wm => wm.LanguageId).HasColumnName("language_id")
                     .HasColumnType(Utility.DBType8bitInteger)
-                    .IsRequired(true);
+                    .IsRequired();
 
-                WordMeaning.HasOne(wm => wm.Word)
+                wordMeaning.HasOne(wm => wm.Word)
                     .WithMany(w => w.WordMeanings)
                     .HasForeignKey(wm => wm.WordId)
                     .OnDelete(DeleteBehavior.Restrict);
 
-                WordMeaning.HasOne(wm => wm.Language)
+                wordMeaning.HasOne(wm => wm.Language)
                     .WithMany(l => l.WordMeanings)
                     .HasForeignKey(wm => wm.LanguageId)
                     .OnDelete(DeleteBehavior.Restrict);
             });
 
-            modelBuilder.Entity<Transliteration>(Transliteration =>
+            modelBuilder.Entity<Transliteration>(transliteration =>
             {
-                Transliteration.ToTable("transliteration");
+                transliteration.ToTable("transliteration");
 
-                Transliteration.HasKey(t => t.Id);
+                transliteration.HasKey(t => t.Id);
 
-                Transliteration.Property(t => t.Id)
+                transliteration.Property(t => t.Id)
                     .HasColumnName("id").HasColumnType(Utility.DBType32bitInteger)
-                    .IsRequired(true);
+                    .IsRequired();
 
-                Transliteration.Property(t => t.Text).HasColumnName("text")
+                transliteration.Property(t => t.Text).HasColumnName("text")
                     .HasColumnType(Utility.DBTypeVARCHARMAX)
-                    .IsRequired(true);
+                    .IsRequired();
 
-                Transliteration.Property(t => t.LanguageId).HasColumnName("language_id")
+                transliteration.Property(t => t.LanguageId).HasColumnName("language_id")
                     .HasColumnType(Utility.DBType8bitInteger)
-                    .IsRequired(true);
+                    .IsRequired();
 
-                Transliteration.HasOne(t => t.Language)
+                transliteration.HasOne(t => t.Language)
                     .WithMany(l => l.Transliterations)
                     .HasForeignKey(t => t.LanguageId)
                     .OnDelete(DeleteBehavior.Restrict);
 
-                Transliteration.HasOne(t => t.Verse)
+                transliteration.HasOne(t => t.Verse)
                     .WithMany(v => v.Transliterations)
                     .HasForeignKey(t => t.VerseId)
                     .OnDelete(DeleteBehavior.Restrict);
 
-                Transliteration.HasIndex(e => new { e.VerseId, e.LanguageId }).IsUnique(true);
+                transliteration.HasIndex(e => new { e.VerseId, e.LanguageId }).IsUnique();
             });
 
-            modelBuilder.Entity<Translator>(Translator =>
+            modelBuilder.Entity<Translator>(translator =>
             {
-                Translator.ToTable("translator");
+                translator.ToTable("translator");
 
-                Translator.HasKey(e => e.Id);
+                translator.HasKey(e => e.Id);
 
-                Translator.Property(e => e.Id)
+                translator.Property(e => e.Id)
                     .HasColumnName("id")
                     .HasColumnType(Utility.DBType16bitInteger)
-                    .IsRequired(true);
+                    .IsRequired();
 
-                Translator.Property(e => e.Name)
+                translator.Property(e => e.Name)
                     .HasColumnName("name")
                     .HasColumnType(Utility.DBTypeVARCHAR250)
                     .IsRequired();
 
-                Translator.Property(e => e.Description)
+                translator.Property(e => e.Description)
                     .HasColumnName("description")
                     .HasColumnType(Utility.DBTypeVARCHARMAX);
 
-                Translator.Property(e => e.Url)
+                translator.Property(e => e.Url)
                     .HasColumnType(Utility.DBTypeVARCHARMAX);
 
-                Translator.Property(e => e.LanguageId)
+                translator.Property(e => e.LanguageId)
                     .HasColumnName("language_id");
 
-                Translator.HasOne(e => e.Language)
+                translator.HasOne(e => e.Language)
                     .WithMany(l => l.Translators)
                     .HasForeignKey(e => e.LanguageId)
                     .OnDelete(DeleteBehavior.Restrict);
 
-                Translator.HasMany(e => e.TranslatorTranslations)
+                translator.HasMany(e => e.TranslatorTranslations)
+                    .WithOne(tt => tt.Translator)
+                    .HasForeignKey(tt => tt.TranslatorId)
+                    .OnDelete(DeleteBehavior.NoAction);
+
+                translator.HasMany(e => e.TranslationBookTranslators)
                     .WithOne(tt => tt.Translator)
                     .HasForeignKey(tt => tt.TranslatorId)
                     .OnDelete(DeleteBehavior.NoAction);
             });
 
-            modelBuilder.Entity<Translation>(Translation =>
+            modelBuilder.Entity<BookTranslation>(bookTranslation =>
             {
-                Translation.ToTable("translation");
+                bookTranslation.HasMany(e => e.TranslationBookTranslators)
+                    .WithOne(tt => tt.Translation)
+                    .HasForeignKey(tt => tt.TranslatorId)
+                    .OnDelete(DeleteBehavior.NoAction);
+            });
 
-                Translation.HasKey(t => t.Id);
+            modelBuilder.Entity<Translation>(translation =>
+            {
+                translation.ToTable("translation");
 
-                Translation.Property(t => t.Id)
+                translation.HasKey(t => t.Id);
+
+                translation.Property(t => t.Id)
                     .HasColumnName("id")
                     .HasColumnType(Utility.DBType16bitInteger)
-                    .IsRequired(true);
+                    .IsRequired();
 
 
-                Translation.Property(t => t.Name)
+                translation.Property(t => t.Name)
                     .HasColumnName("name")
                     .HasColumnType(Utility.DBTypeVARCHAR250)
-                    .IsRequired(true);
+                    .IsRequired();
 
-                Translation.Property(t => t.ProductionTime)
+                translation.Property(t => t.ProductionTime)
                     .HasColumnName("production_year")
                     .HasColumnType(Utility.DBTypeDateTime);
 
-                Translation.Property(t => t.AddedAt)
+                translation.Property(t => t.AddedAt)
                     .HasColumnName("added_at")
                     .HasColumnType(Utility.DBTypeDateTime)
                     .HasDefaultValueSql(Utility.DBDefaultDateTimeFunction)
-                    .IsRequired(true);
+                    .IsRequired();
 
-                Translation.Property(t => t.EagerFrom)
+                translation.Property(t => t.EagerFrom)
                     .HasColumnName("eager_from")
                     .HasColumnType(Utility.DBTypeDateTime);
 
-                Translation.Property(t => t.LanguageId)
+                translation.Property(t => t.LanguageId)
                     .HasColumnName("language_id").HasColumnType(Utility.DBType8bitInteger)
-                    .IsRequired(true)
+                    .IsRequired()
                     .HasDefaultValue(1);
 
-                Translation.Property(t => t.ScriptureId)
+                translation.Property(t => t.ScriptureId)
                     .HasColumnName("scripture_id")
                     .HasColumnType(Utility.DBType16bitInteger)
-                    .IsRequired(true);
+                    .IsRequired();
 
 
-                Translation.HasOne(t => t.Language)
+                translation.HasOne(t => t.Language)
                     .WithMany(l => l.Translations)
                     .HasForeignKey(e => e.LanguageId)
                     .OnDelete(DeleteBehavior.Restrict);
 
-                Translation.HasMany(t => t.TranslatorTranslations)
+                translation.HasMany(t => t.TranslatorTranslations)
                     .WithOne(tt => tt.Translation)
                     .HasForeignKey(t => t.TranslationId)
                     .OnDelete(DeleteBehavior.NoAction);
 
-                Translation.HasMany(e => e.TranslationTexts)
+
+                translation.HasMany(e => e.TranslationTexts)
                     .WithOne(ttx => ttx.Translation)
                     .HasForeignKey(ttx => ttx.TranslationId)
                     .OnDelete(DeleteBehavior.NoAction);
 
-                Translation.HasOne(t => t.Scripture)
+                translation.HasOne(t => t.Scripture)
                     .WithMany(s => s.Translations)
                     .HasForeignKey(t => t.ScriptureId)
                     .OnDelete(DeleteBehavior.Restrict);
             });
 
-            modelBuilder.Entity<TranslatorTranslation>(TranslatorTranslation =>
+            modelBuilder.Entity<TranslatorTranslation>(translatorTranslation =>
             {
-                TranslatorTranslation.ToTable("translator_translation");
+                translatorTranslation.ToTable("translator_translation");
 
-                TranslatorTranslation.HasKey(tt => new { tt.TranslatorId, tt.TranslationId });
+                translatorTranslation.HasKey(tt => new { tt.TranslatorId, tt.TranslationId });
 
-                TranslatorTranslation.Property(tt => tt.TranslatorId)
+                translatorTranslation.Property(tt => tt.TranslatorId)
                     .HasColumnName("translator_id")
                     .HasColumnType(Utility.DBType16bitInteger)
-                    .IsRequired(true);
+                    .IsRequired();
 
-                TranslatorTranslation.Property(tt => tt.TranslationId)
+                translatorTranslation.Property(tt => tt.TranslationId)
                     .HasColumnName("translation_id")
                     .HasColumnType(Utility.DBType16bitInteger)
-                    .IsRequired(true);
+                    .IsRequired();
 
-                TranslatorTranslation.Property(tt => tt.AssignedOn)
+                translatorTranslation.Property(tt => tt.AssignedOn)
                     .HasColumnName("assigned_on")
                     .HasColumnType(Utility.DBTypeDateTime)
                     .HasDefaultValueSql(Utility.DBDefaultDateTimeFunction)
-                    .IsRequired(true);
+                    .IsRequired();
 
 
-                TranslatorTranslation.HasOne(tt => tt.Translator)
+                translatorTranslation.HasOne(tt => tt.Translator)
                     .WithMany(tr => tr.TranslatorTranslations)
                     .HasForeignKey(tt => tt.TranslatorId)
                     .OnDelete(DeleteBehavior.Cascade);
 
-                TranslatorTranslation.HasOne(tt => tt.Translation)
+                translatorTranslation.HasOne(tt => tt.Translation)
                     .WithMany(tr => tr.TranslatorTranslations)
                     .HasForeignKey(tt => tt.TranslationId)
                     .OnDelete(DeleteBehavior.Cascade);
             });
 
-            modelBuilder.Entity<TranslationText>(TranslationText =>
+            modelBuilder.Entity<TranslationText>(translationText =>
             {
-                TranslationText.ToTable("translation_text");
+                translationText.ToTable("translation_text");
 
-                TranslationText.HasKey(tt => tt.Id);
+                translationText.HasKey(tt => tt.Id);
 
-                TranslationText.Property(tt => tt.Id)
+                translationText.Property(tt => tt.Id)
                     .HasColumnName("id")
                     .HasColumnType(Utility.DBType64bitInteger)
-                    .IsRequired(true)
+                    .IsRequired()
                     ;
 
-                TranslationText.Property(tt => tt.Text).HasColumnName("text").HasColumnType(Utility.DBTypeVARCHARMAX)
-                    .IsRequired(true);
+                translationText.Property(tt => tt.Text).HasColumnName("text").HasColumnType(Utility.DBTypeVARCHARMAX)
+                    .IsRequired();
 
-                TranslationText.Property(tt => tt.TranslationId)
+                translationText.Property(tt => tt.TranslationId)
                     .HasColumnName("translation_id")
                     .HasColumnType(Utility.DBType16bitInteger)
-                    .IsRequired(true);
+                    .IsRequired();
 
-                TranslationText.Property(tt => tt.VerseId)
+                translationText.Property(tt => tt.VerseId)
                     .HasColumnName("verse_id")
                     .HasColumnType(Utility.DBType32bitInteger)
-                    .IsRequired(true);
+                    .IsRequired();
 
 
-                TranslationText.HasOne(tt => tt.Translation)
+                translationText.HasOne(tt => tt.Translation)
                     .WithMany(tr => tr.TranslationTexts)
                     .HasForeignKey(tt => tt.TranslationId)
                     .OnDelete(DeleteBehavior.Cascade);
 
-                TranslationText.HasOne(tt => tt.Verse)
+                translationText.HasOne(tt => tt.Verse)
                     .WithMany(v => v.TranslationTexts)
                     .HasForeignKey(tt => tt.VerseId)
                     .OnDelete(DeleteBehavior.Restrict);
 
-                TranslationText.HasMany(tt => tt.FootNotes)
+                translationText.HasMany(tt => tt.FootNotes)
                     .WithOne(fn => fn.TranslationText)
                     .HasForeignKey(fn => fn.TranslationTextId)
                     .OnDelete(DeleteBehavior.NoAction);
 
-                TranslationText.HasMany(tt => tt.Suggestions)
-                    .WithOne(s => s.TranslationText)
-                    .OnDelete(DeleteBehavior.NoAction);
+                // Unused properties, but kept for future use or reference.
+                // translationText.HasMany(tt => tt.Suggestions)
+                //     .WithOne(s => s.TranslationText)
+                //     .OnDelete(DeleteBehavior.NoAction);
 
-                TranslationText.HasIndex(tt => new { tt.VerseId, tt.TranslationId });
+                translationText.HasIndex(tt => new { tt.VerseId, tt.TranslationId });
             });
 
-            modelBuilder.Entity<FootNoteText>(FootNoteText =>
+            modelBuilder.Entity<FootNoteText>(footNoteText =>
             {
-                FootNoteText.ToTable("footnote_text");
+                footNoteText.ToTable("footnote_text");
 
-                FootNoteText.HasKey(ft => ft.Id);
+                footNoteText.HasKey(ft => ft.Id);
 
-                FootNoteText.Property(ft => ft.Id)
+                footNoteText.Property(ft => ft.Id)
                     .HasColumnName("id")
                     .HasColumnType(Utility.DBType64bitInteger)
-                    .IsRequired(true)
+                    .IsRequired()
                     ;
 
-                FootNoteText.Property(ft => ft.Text).HasColumnName("text").HasColumnType(Utility.DBTypeNVARCHARMAX)
-                    .IsRequired(true);
+                footNoteText.Property(ft => ft.Text).HasColumnName("text").HasColumnType(Utility.DBTypeNVARCHARMAX)
+                    .IsRequired();
 
-                FootNoteText.HasMany(ftnt => ftnt.FootNotes).WithOne(ft => ft.FootNoteText)
+                footNoteText.HasMany(footnoteText => footnoteText.FootNotes).WithOne(ft => ft.FootNoteText)
                     .OnDelete(DeleteBehavior.NoAction);
             });
 
-            modelBuilder.Entity<FootNote>(FootNote =>
+            modelBuilder.Entity<FootNote>(footNote =>
             {
-                FootNote.ToTable("footnote");
+                footNote.ToTable("footnote");
 
-                FootNote.HasKey(fn => fn.Id);
+                footNote.HasKey(fn => fn.Id);
 
-                FootNote.Property(fn => fn.Id)
+                footNote.Property(fn => fn.Id)
                     .HasColumnName("id")
                     .HasColumnType(Utility.DBType64bitInteger)
-                    .IsRequired(true)
+                    .IsRequired()
                     ;
 
-                FootNote.Property(fn => fn.Index)
+                footNote.Property(fn => fn.Index)
                     .HasColumnName("index")
                     .HasColumnType(Utility.DBType16bitInteger)
-                    .IsRequired(true);
+                    .IsRequired();
 
-                FootNote.HasOne(fn => fn.TranslationText)
+                footNote.HasOne(fn => fn.TranslationText)
                     .WithMany(tt => tt.FootNotes)
                     .HasForeignKey(fn => fn.TranslationTextId)
                     .OnDelete(DeleteBehavior.Cascade);
 
-                FootNote.HasOne(fn => fn.FootNoteText)
+                footNote.HasOne(fn => fn.FootNoteText)
                     .WithMany(fnt => fnt.FootNotes)
                     .HasForeignKey(fn => fn.FootNoteTextId)
                     .OnDelete(DeleteBehavior.Cascade);
 
-                FootNote.HasIndex(fn => new { fn.Index, fn.TranslationTextId });
+                footNote.HasIndex(fn => new { fn.Index, fn.TranslationTextId });
             });
 
+            modelBuilder.Entity<Cache>(cache =>
+            {
+                cache.ToTable("cache");
+
+                cache.HasKey(e => e.Id);
+
+                cache.Property(e => e.Id).HasColumnName("id").HasColumnType(Utility.DBType64bitInteger)
+                    .IsRequired();
+
+                cache.Property(e => e.Key).HasColumnName("key").HasColumnType(Utility.DBTypeVARCHAR126)
+                    .IsRequired();
+
+                cache.Property(e => e.Data)
+                    .HasColumnType("NVARCHAR(MAX)").IsRequired();
+            });
+
+            modelBuilder.Entity<CacheRecord>(cacheRecord =>
+            {
+                cacheRecord.ToTable("cache_r");
+
+                cacheRecord.HasKey(e => e.Id);
+
+                cacheRecord.Property(e => e.Id)
+                    .HasColumnName("id")
+                    .HasColumnType(Utility.DBType64bitInteger)
+                    .IsRequired()
+                    .ValueGeneratedOnAdd();
+
+                cacheRecord.Property(e => e.CacheId)
+                    .HasColumnName("cache_id")
+                    .HasColumnType(Utility.DBType64bitInteger)
+                    .IsRequired();
+
+                cacheRecord.Property(e => e.FetchedAt)
+                    .HasColumnName("fetched_at")
+                    .HasColumnType(Utility.DBTypeDateTime)
+                    .HasDefaultValueSql(Utility.DBDefaultDateTimeFunction)
+                    .IsRequired();
+
+                cacheRecord.HasOne(e => e.Cache)
+                    .WithMany(c => c.Records)
+                    .HasForeignKey(e => e.CacheId)
+                    .OnDelete(DeleteBehavior.Restrict);
+            });
+/*  User properties. Disabled since Scriptium does not process user data for a while.
             modelBuilder.Entity<Role>(Role => { Role.ToTable("role"); });
 
             modelBuilder.Entity<User>(User =>
             {
                 User.HasQueryFilter(u => u.DeletedAt == null);
-                
+
                 User.ToTable("user");
 
                 User.HasKey(e => e.Id);
@@ -762,13 +841,13 @@ namespace scriptium_backend_dotnet.DB
                     .HasColumnName("id")
                     .HasColumnType(Utility.DBTypeUUID)
                     .HasDefaultValueSql(Utility.DBDefaultUUIDFunction)
-                    .IsRequired(true);
+                    .IsRequired();
 
                 User.Property(e => e.UserName)
                     .HasColumnName("username")
                     .HasColumnType(Utility.DBTypeVARCHAR16)
                     .HasMaxLength(16)
-                    .IsRequired(true)
+                    .IsRequired()
                     .HasColumnName("username");
 
                 User.Property(e => e.Name)
@@ -798,7 +877,7 @@ namespace scriptium_backend_dotnet.DB
                     .HasColumnName("created_at")
                     .HasColumnType(Utility.DBTypeDateTime)
                     .HasDefaultValueSql(Utility.DBDefaultDateTimeFunction)
-                    .IsRequired(true);
+                    .IsRequired();
 
                 User.Property(e => e.LastActive)
                     .HasColumnName("last_active")
@@ -818,19 +897,19 @@ namespace scriptium_backend_dotnet.DB
                     .HasColumnName("preferred_languageId")
                     .HasColumnType(Utility.DBType8bitInteger)
                     .HasDefaultValue(1)
-                    .IsRequired(true);
+                    .IsRequired();
 
                 User.HasIndex(e => e.NormalizedEmail)
-                    .IsUnique(true);
+                    .IsUnique();
 
                 User.HasIndex(e => e.NormalizedUserName)
-                    .IsUnique(true);
+                    .IsUnique();
 
                 User.HasIndex(e => e.Email)
-                    .IsUnique(true);
+                    .IsUnique();
 
                 User.HasIndex(e => e.UserName)
-                    .IsUnique(true);
+                    .IsUnique();
 
                 User.HasOne(e => e.PreferredLanguage)
                     .WithMany(l => l.PreferredUsers)
@@ -848,13 +927,13 @@ namespace scriptium_backend_dotnet.DB
                 Collection.Property(e => e.Id)
                     .HasColumnName("id")
                     .HasColumnType(Utility.DBType32bitInteger)
-                    .IsRequired(true);
+                    .IsRequired();
 
                 Collection.Property(e => e.Name)
                     .HasColumnName("name")
                     .HasColumnType(Utility.DBTypeVARCHAR24)
                     .HasMaxLength(24)
-                    .IsRequired(true)
+                    .IsRequired()
                     .HasDefaultValue(string.Empty);
 
                 Collection.Property(e => e.Description)
@@ -872,10 +951,10 @@ namespace scriptium_backend_dotnet.DB
                     .HasColumnName("created_at")
                     .HasColumnType(Utility.DBTypeDateTime)
                     .HasDefaultValueSql(Utility.DBDefaultDateTimeFunction)
-                    .IsRequired(true);
+                    .IsRequired();
 
                 Collection.HasIndex(e => new { e.UserId, e.Name })
-                    .IsUnique(true);
+                    .IsUnique();
 
                 Collection.HasOne(e => e.User)
                     .WithMany(u => u.Collections)
@@ -893,23 +972,23 @@ namespace scriptium_backend_dotnet.DB
 
                 CollectionVerse.Property(e => e.Id)
                     .HasColumnName("id")
-                    .HasColumnType(Utility.DBType64bitInteger).IsRequired(true);
+                    .HasColumnType(Utility.DBType64bitInteger).IsRequired();
 
                 CollectionVerse.Property(e => e.CollectionId)
                     .HasColumnName("collection_id")
                     .HasColumnType(Utility.DBType32bitInteger)
-                    .IsRequired(true);
+                    .IsRequired();
 
                 CollectionVerse.Property(e => e.VerseId)
                     .HasColumnName("verse_id")
                     .HasColumnType(Utility.DBType32bitInteger)
-                    .IsRequired(true);
+                    .IsRequired();
 
                 CollectionVerse.Property(e => e.SavedAt)
                     .HasColumnName("saved_at")
                     .HasColumnType(Utility.DBTypeDateTime)
                     .HasDefaultValueSql(Utility.DBDefaultDateTimeFunction)
-                    .IsRequired(true);
+                    .IsRequired();
 
                 CollectionVerse.Property(e => e.Note)
                     .HasColumnName("note")
@@ -918,7 +997,7 @@ namespace scriptium_backend_dotnet.DB
                     .IsRequired(false);
 
                 CollectionVerse.HasIndex(e => new { e.CollectionId, e.VerseId })
-                    .IsUnique(true);
+                    .IsUnique();
 
                 CollectionVerse.HasOne(e => e.Collection)
                     .WithMany(c => c.Verses)
@@ -939,28 +1018,28 @@ namespace scriptium_backend_dotnet.DB
 
                 Note.Property(e => e.Id)
                     .HasColumnName("id")
-                    .HasColumnType(Utility.DBType64bitInteger).IsRequired(true);
+                    .HasColumnType(Utility.DBType64bitInteger).IsRequired();
 
                 Note.Property(e => e.UserId)
                     .HasColumnName("user_id")
                     .HasColumnType(Utility.DBTypeUUID)
-                    .IsRequired(true);
+                    .IsRequired();
 
                 Note.Property(e => e.Text)
                     .HasColumnName("text")
                     .HasColumnType(Utility.DBTypeVARCHARMAX)
-                    .IsRequired(true);
+                    .IsRequired();
 
                 Note.Property(e => e.VerseId)
                     .HasColumnName("verse_id")
                     .HasColumnType(Utility.DBType32bitInteger)
-                    .IsRequired(true);
+                    .IsRequired();
 
                 Note.Property(e => e.CreatedAt)
                     .HasColumnName("created_at")
                     .HasColumnType(Utility.DBTypeDateTime)
                     .HasDefaultValueSql(Utility.DBDefaultDateTimeFunction)
-                    .IsRequired(true);
+                    .IsRequired();
 
                 Note.Property(e => e.UpdatedAt)
                     .HasColumnName("updated_at")
@@ -989,7 +1068,7 @@ namespace scriptium_backend_dotnet.DB
                 Comment.Property(e => e.Id)
                     .HasColumnName("id")
                     .HasColumnType(Utility.DBType64bitInteger)
-                    .IsRequired(true);
+                    .IsRequired();
 
                 Comment.Property(e => e.UserId)
                     .HasColumnName("user_id")
@@ -999,13 +1078,13 @@ namespace scriptium_backend_dotnet.DB
                 Comment.Property(e => e.Text)
                     .HasColumnName("text")
                     .HasColumnType(Utility.DBTypeVARCHAR500)
-                    .IsRequired(true);
+                    .IsRequired();
 
                 Comment.Property(e => e.CreatedAt)
                     .HasColumnName("created_at")
                     .HasColumnType(Utility.DBTypeDateTime)
                     .HasDefaultValueSql(Utility.DBDefaultDateTimeFunction)
-                    .IsRequired(true);
+                    .IsRequired();
 
                 Comment.Property(e => e.UpdatedAt)
                     .HasColumnName("updated_at")
@@ -1049,7 +1128,7 @@ namespace scriptium_backend_dotnet.DB
                 CommentVerse.Property(e => e.VerseId)
                     .HasColumnName("verse_id")
                     .HasColumnType(Utility.DBType32bitInteger)
-                    .IsRequired(true);
+                    .IsRequired();
 
                 CommentVerse.HasOne(e => e.Verse)
                     .WithMany(v => v.Comments)
@@ -1075,7 +1154,7 @@ namespace scriptium_backend_dotnet.DB
                 CommentNote.Property(e => e.NoteId)
                     .HasColumnName("note_id")
                     .HasColumnType(Utility.DBType64bitInteger)
-                    .IsRequired(true);
+                    .IsRequired();
 
                 CommentNote.HasOne(e => e.Note)
                     .WithMany(v => v.Comments)
@@ -1096,24 +1175,24 @@ namespace scriptium_backend_dotnet.DB
 
                 Follow.Property(e => e.Id)
                     .HasColumnName("id")
-                    .IsRequired(true)
+                    .IsRequired()
                     ;
 
                 Follow.Property(e => e.FollowerId)
                     .HasColumnName("follower_id")
-                    .IsRequired(true);
+                    .IsRequired();
 
                 Follow.Property(e => e.FollowedId)
                     .HasColumnName("followed_id")
-                    .IsRequired(true);
+                    .IsRequired();
 
                 Follow.Property(e => e.Status)
                     .HasColumnName("status").HasConversion<int>()
-                    .IsRequired(true);
+                    .IsRequired();
 
                 Follow.Property(e => e.OccurredAt)
                     .HasColumnName("occurred_at")
-                    .IsRequired(true)
+                    .IsRequired()
                     .HasColumnType(Utility.DBTypeDateTime)
                     .HasDefaultValueSql(Utility.DBDefaultDateTimeFunction);
 
@@ -1131,48 +1210,6 @@ namespace scriptium_backend_dotnet.DB
                     .OnDelete(DeleteBehavior.Restrict); //TODO: ON DELETE CASCADE
             });
 
-            modelBuilder.Entity<FollowR>(FollowR =>
-            {
-                FollowR.ToTable("follow_r");
-
-                FollowR.HasKey(e => e.Id);
-
-                FollowR.Property(e => e.Id)
-                    .HasColumnName("id")
-                    .IsRequired(true)
-                    ;
-
-                FollowR.Property(e => e.FollowerId)
-                    .HasColumnName("follower_id")
-                    .IsRequired(true);
-
-                FollowR.Property(e => e.FollowedId)
-                    .HasColumnName("followed_id")
-                    .IsRequired(true);
-
-                FollowR.Property(e => e.Status)
-                    .HasColumnName("status").HasConversion<int>()
-                    .IsRequired(true);
-
-                FollowR.Property(e => e.OccurredAt)
-                    .HasColumnName("occurred_at")
-                    .IsRequired(true)
-                    .HasColumnType(Utility.DBTypeDateTime)
-                    .HasDefaultValueSql(Utility.DBDefaultDateTimeFunction);
-
-                FollowR.HasIndex(e => new { e.FollowerId, e.FollowedId })
-                    .IsUnique();
-
-                FollowR.HasOne(e => e.Follower)
-                    .WithMany(u => u.FollowRing)
-                    .HasForeignKey(e => e.FollowerId)
-                    .OnDelete(DeleteBehavior.Restrict); //TODO: ON DELETE CASCADE
-
-                FollowR.HasOne(e => e.Followed)
-                    .WithMany(u => u.FollowerRs)
-                    .HasForeignKey(e => e.FollowedId)
-                    .OnDelete(DeleteBehavior.Restrict); //TODO: ON DELETE CASCADE
-            });
 
             modelBuilder.Entity<Block>(Block =>
             {
@@ -1182,16 +1219,16 @@ namespace scriptium_backend_dotnet.DB
 
                 Block.Property(e => e.Id)
                     .HasColumnName("id")
-                    .IsRequired(true)
+                    .IsRequired()
                     ;
 
                 Block.Property(e => e.BlockerId)
                     .HasColumnName("blocker_id")
-                    .IsRequired(true);
+                    .IsRequired();
 
                 Block.Property(e => e.BlockedId)
                     .HasColumnName("blocked_id")
-                    .IsRequired(true);
+                    .IsRequired();
 
                 Block.Property(e => e.BlockedAt)
                     .HasColumnName("blocked_at")
@@ -1204,7 +1241,7 @@ namespace scriptium_backend_dotnet.DB
                     .HasMaxLength(100);
 
                 Block.HasIndex(e => new { e.BlockerId, e.BlockedId })
-                    .IsUnique(true);
+                    .IsUnique();
 
                 Block.HasOne(e => e.Blocker)
                     .WithMany(u => u.BlockedUsers)
@@ -1225,20 +1262,20 @@ namespace scriptium_backend_dotnet.DB
 
                 FreezeR.Property(e => e.Id)
                     .HasColumnName("id")
-                    .IsRequired(true)
+                    .IsRequired()
                     ;
 
                 FreezeR.Property(e => e.Status)
                     .HasColumnName("status").HasConversion<int>()
-                    .IsRequired(true);
+                    .IsRequired();
 
                 FreezeR.Property(e => e.UserId)
                     .HasColumnName("user_id").HasColumnType(Utility.DBTypeUUID)
-                    .IsRequired(true);
+                    .IsRequired();
 
                 FreezeR.Property(e => e.ProceedAt)
                     .HasColumnName("proceed_at")
-                    .IsRequired(true)
+                    .IsRequired()
                     .HasColumnType(Utility.DBTypeDateTime)
                     .HasDefaultValueSql(Utility.DBDefaultDateTimeFunction);
 
@@ -1256,12 +1293,12 @@ namespace scriptium_backend_dotnet.DB
 
                 Like.Property(e => e.Id)
                     .HasColumnName("id")
-                    .IsRequired(true)
+                    .IsRequired()
                     ;
 
                 Like.Property(e => e.UserId)
                     .HasColumnName("user_id").HasColumnType(Utility.DBTypeUUID)
-                    .IsRequired(true);
+                    .IsRequired();
 
                 Like.Property(e => e.CreatedAt)
                     .HasColumnName("created_at")
@@ -1321,11 +1358,11 @@ namespace scriptium_backend_dotnet.DB
 
                 LikeNote.Property(e => e.LikeId)
                     .HasColumnName("like_id").HasColumnType(Utility.DBType64bitInteger)
-                    .IsRequired(true);
+                    .IsRequired();
 
                 LikeNote.Property(e => e.NoteId)
                     .HasColumnName("note_id").HasColumnType(Utility.DBType64bitInteger)
-                    .IsRequired(true);
+                    .IsRequired();
 
                 LikeNote.HasIndex(e => e.NoteId);
 
@@ -1348,19 +1385,19 @@ namespace scriptium_backend_dotnet.DB
 
                 Notification.Property(e => e.Id)
                     .HasColumnName("id")
-                    .IsRequired(true);
+                    .IsRequired();
 
                 Notification.Property(e => e.RecipientId)
                     .HasColumnName("recipient_id")
-                    .IsRequired(true);
+                    .IsRequired();
 
                 Notification.Property(e => e.ActorId)
                     .HasColumnName("actor_id")
-                    .IsRequired(true);
+                    .IsRequired();
 
                 Notification.Property(e => e.NotificationType)
                     .HasColumnName("notification_type").HasConversion<int>()
-                    .IsRequired(true);
+                    .IsRequired();
 
                 Notification.Property(e => e.EntityType).HasConversion<int>()
                     .HasColumnName("entity_type");
@@ -1390,50 +1427,7 @@ namespace scriptium_backend_dotnet.DB
                 //TODO: Add check "recipient_id <> actor_id AND ((entity_type IS NOT NULL AND entity_id IS NOT NULL) OR (entity_type IS NULL AND entity_id IS NULL))");
             });
 
-            modelBuilder.Entity<Cache>(Cache =>
-            {
-                Cache.ToTable("cache");
 
-                Cache.HasKey(e => e.Id);
-
-                Cache.Property(e => e.Id).HasColumnName("id").HasColumnType(Utility.DBType64bitInteger)
-                    .IsRequired(true);
-
-                Cache.Property(e => e.Key).HasColumnName("key").HasColumnType(Utility.DBTypeVARCHAR126)
-                    .IsRequired(true);
-
-                Cache.Property(e => e.Data)
-                    .HasColumnType("NVARCHAR(MAX)").IsRequired(true);
-            });
-
-            modelBuilder.Entity<CacheR>(CacheR =>
-            {
-                CacheR.ToTable("cache_r");
-
-                CacheR.HasKey(e => e.Id);
-
-                CacheR.Property(e => e.Id)
-                    .HasColumnName("id")
-                    .HasColumnType(Utility.DBType64bitInteger)
-                    .IsRequired()
-                    .ValueGeneratedOnAdd();
-
-                CacheR.Property(e => e.CacheId)
-                    .HasColumnName("cache_id")
-                    .HasColumnType(Utility.DBType64bitInteger)
-                    .IsRequired(true);
-
-                CacheR.Property(e => e.FetchedAt)
-                    .HasColumnName("fetched_at")
-                    .HasColumnType(Utility.DBTypeDateTime)
-                    .HasDefaultValueSql(Utility.DBDefaultDateTimeFunction)
-                    .IsRequired(true);
-
-                CacheR.HasOne(e => e.Cache)
-                    .WithMany(c => c.CacheRs)
-                    .HasForeignKey(e => e.CacheId)
-                    .OnDelete(DeleteBehavior.Restrict);
-            });
 
             modelBuilder.Entity<Suggestion>(Suggestion =>
             {
@@ -1442,10 +1436,10 @@ namespace scriptium_backend_dotnet.DB
                 Suggestion.HasKey(e => e.Id);
 
                 Suggestion.Property(e => e.UserId).HasColumnName("user_id").HasColumnType(Utility.DBTypeUUID)
-                    .IsRequired(true);
+                    .IsRequired();
 
                 Suggestion.Property(e => e.TranslationTextId)
-                    .IsRequired(true);
+                    .IsRequired();
 
                 Suggestion.Property(e => e.SuggestionText)
                     .HasColumnName("suggestion_text").HasColumnType(Utility.DBTypeVARCHAR500)
@@ -1455,7 +1449,7 @@ namespace scriptium_backend_dotnet.DB
                     .HasDefaultValueSql(Utility.DBDefaultDateTimeFunction);
 
                 Suggestion.HasIndex(e => new { e.UserId, e.TranslationTextId })
-                    .IsUnique(true);
+                    .IsUnique();
 
                 Suggestion.HasOne(e => e.User)
                     .WithMany(u => u.Suggestions)
@@ -1468,59 +1462,12 @@ namespace scriptium_backend_dotnet.DB
                     .OnDelete(DeleteBehavior.Cascade);
             });
 
-            modelBuilder.Entity<UserUpdateR>(UpdateR =>
-            {
-                UpdateR.ToTable("user_update_r");
-
-                UpdateR.HasKey(u => u.Id);
-
-                UpdateR.Property(u => u.UserId).HasColumnName("user_id").IsRequired(true);
-
-                UpdateR.HasOne(u => u.User)
-                    .WithMany(u => u.UpdateRecords)
-                    .HasForeignKey(u => u.UserId)
-                    .OnDelete(DeleteBehavior.Cascade);
-
-                UpdateR.Property(e => e.Username)
-                    .HasColumnName("username")
-                    .HasColumnType(Utility.DBTypeVARCHAR16)
-                    .HasMaxLength(16)
-                    .IsRequired(false)
-                    .HasColumnName("username");
-
-                UpdateR.Property(e => e.Name)
-                    .HasMaxLength(16).HasColumnType(Utility.DBTypeVARCHAR16)
-                    .IsRequired(false);
-
-                UpdateR.Property(e => e.Image).HasColumnName("image").HasColumnType(Utility.DBTypeVARBINARYMAX)
-                    .IsRequired(false);
-
-                UpdateR.Property(e => e.Surname).HasColumnName("surname").HasColumnType(Utility.DBTypeVARCHAR16)
-                    .HasMaxLength(16)
-                    .IsRequired(false);
-
-                UpdateR.Property(e => e.Gender).HasColumnName("gender").HasColumnType(Utility.DBTypeCHAR1)
-                    .HasMaxLength(1)
-                    .IsRequired(false);
-
-                UpdateR.Property(e => e.Biography)
-                    .HasMaxLength(200)
-                    .IsRequired(false);
-
-                UpdateR.Property(e => e.Email)
-                    .HasMaxLength(255)
-                    .IsRequired(false);
-
-                UpdateR.Property(e => e.PreferredLanguageId)
-                    .IsRequired(false);
-            });
-
-            //TODO: Implement Request Log
         }
 
         //Custom functions:
 
-        public async Task<List<CommentOwnerDTO>> GetVerseCommentsAsync(User userRequested, long verseId, bool OrderByDecrement = false)
+        public async Task<List<CommentOwnerDto>> GetVerseCommentsAsync(User userRequested, long verseId,
+            bool OrderByDecrement = false)
         {
             SqlParameter userIdParam = new("@UserId", userRequested.Id);
             SqlParameter verseIdParam = new("@VerseId", verseId);
@@ -1528,7 +1475,8 @@ namespace scriptium_backend_dotnet.DB
             try
             {
                 IQueryable<Comment>? result = Comment
-                    .FromSqlRaw("SELECT * FROM dbo.GetVerseCommentHierarchy(@UserId, @VerseId)", userIdParam, verseIdParam)
+                    .FromSqlRaw("SELECT * FROM dbo.GetVerseCommentHierarchy(@UserId, @VerseId)", userIdParam,
+                        verseIdParam)
                     .Include(c => c.User)
                     .Include(c => c.LikeComments)
                     .ThenInclude(lc => lc.Like);
@@ -1541,10 +1489,10 @@ namespace scriptium_backend_dotnet.DB
 
                 List<Comment> Comments = await result.ToListAsync();
 
-                List<CommentOwnerDTO> data = [];
+                List<CommentOwnerDto> data = [];
 
                 foreach (Comment comment in Comments)
-                    data.Add(comment.ToCommentOwnerDTO(true, userRequested));
+                    data.Add(comment.ToCommentOwnerDto(true, userRequested));
 
                 return data;
             }
@@ -1569,7 +1517,7 @@ namespace scriptium_backend_dotnet.DB
                 .Select(c => c.Id).ToHashSet();
         }
 
-        public async Task<List<CommentOwnerDTO>> GetNoteCommentsAsync(User userRequested, long NoteId,
+        public async Task<List<CommentOwnerDto>> GetNoteCommentsAsync(User userRequested, long NoteId,
             bool OrderByDecrement = false)
         {
             SqlParameter UserIdParam = new("@UserId", userRequested.Id);
@@ -1577,7 +1525,7 @@ namespace scriptium_backend_dotnet.DB
 
             var Result = Comment
                 .FromSqlRaw("SELECT * FROM dbo.GetVerseCommentHierarchy(@UserId, @NoteId)", UserIdParam, NoteIdParam)
-                .Include(c => c.User).Select(c => c.ToCommentOwnerDTO(true, userRequested));
+                .Include(c => c.User).Select(c => c.ToCommentOwnerDto(true, userRequested));
 
             if (OrderByDecrement)
                 Result = Result.OrderByDescending(c => c.CreatedAt);
@@ -1594,6 +1542,10 @@ namespace scriptium_backend_dotnet.DB
             return Comment
                 .FromSqlRaw("SELECT * FROM dbo.GetNoteCommentHierarchy(@UserId, @NoteId)", UserIdParam, NoteIdParam)
                 .Select(c => c.Id).ToHashSet();
+        }
+    }
+
+    */
         }
     }
 }

@@ -1,12 +1,16 @@
+/*
+This file is temporarily disabled. 
+Due to budgetary reasons, Scriptium is unable to provide the economic conditions necessary for legal and official procedures involving the collection, processing, and storage of user information.
+
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using scriptium_backend_dotnet.Models;
-using scriptium_backend_dotnet.Models.Util;
+using ScriptiumBackend.Models;
+using ScriptiumBackend.Models.Util;
 
-namespace scriptium_backend_dotnet
+namespace ScriptiumBackend
 {
 
-
+    [NotMapped]
     public class FreezeR
     {
         [Key]
@@ -25,3 +29,4 @@ namespace scriptium_backend_dotnet
         public virtual User User { get; set; } = null!;
     }
 }
+*/
