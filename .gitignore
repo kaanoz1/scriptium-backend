@@ -13,6 +13,7 @@ obj/
 **/appsettings.*.json
 !**/appsettings.Example.json
 !**/appsettings.Development.Example.json
+Logs/
 
 # Entity Framework Core
 *.db
@@ -35,3 +36,4 @@ publish/
 *.iml
 *.ipr
 out/
+
