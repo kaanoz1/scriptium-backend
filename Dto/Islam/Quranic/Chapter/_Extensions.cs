@@ -4,16 +4,16 @@ namespace ScriptiumBackend.Dto.Islam.Quranic.Chapter;
 
 using Model.Islam.Quranic;
 
-public static class ChapterExtensions
+public static class Extensions
 {
     extension(Chapter chapter)
     {
-        public ChapterWithVersesDto ToChapterWithVersesDto()
+        public WithVerses ToChapterWithVersesDto()
         {
             ArgumentNullException.ThrowIfNull(chapter.ChapterC);
             ArgumentNullException.ThrowIfNull(chapter.Verses);
             
-            return new ChapterWithVersesDto()
+            return new WithVerses()
             {
                 Name = chapter.ChapterC.Name,
                 Sequence = chapter.Sequence,

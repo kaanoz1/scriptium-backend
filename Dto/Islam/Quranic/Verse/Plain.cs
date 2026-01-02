@@ -2,7 +2,7 @@ using ScriptiumBackend.Interfaces;
 
 namespace ScriptiumBackend.Dto.Islam.Quranic.Verse;
 
-public class PlainVerseDto: IHasSequence
+public class Plain: IHasSequence
 {
     public int Sequence { get; set; }
 

@@ -6,11 +6,11 @@ public static class VerseExtensions
 {
     extension(Verse verse)
     {
-        public PlainVerseDto ToPlainVerseDto()
+        public Plain ToPlainVerseDto()
         {
             ArgumentNullException.ThrowIfNull(verse.VerseC);
             
-            return new PlainVerseDto()
+            return new Plain()
             {
                 Sequence = verse.VerseC.Number,
                 Simple = verse.Simple,
