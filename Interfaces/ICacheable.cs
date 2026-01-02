@@ -1,6 +1,6 @@
 namespace ScriptiumBackend.Interfaces;
 
-public class ICacheable
+public interface ICacheable
 {
     
 }

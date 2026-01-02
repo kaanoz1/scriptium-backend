@@ -12,33 +12,33 @@ namespace ScriptiumBackend.Db;
 public class ScriptiumDbContext(DbContextOptions<ScriptiumDbContext> options) : DbContext(options)
 {
     // Common Model Tables
-    public DbSet<Shared.Node> Nodes = null!;
+    public DbSet<Shared.Node> Nodes { get; set; } = null!;
 
-    public DbSet<Scripture> ScripturesC = null!;
-    public DbSet<Common.Chapter> ChaptersC = null!;
-    public DbSet<Common.Verse> VersesC = null!;
+    public DbSet<Scripture> ScripturesC { get; set; } = null!;
+    public DbSet<Common.Chapter> ChaptersC { get; set; } = null!;
+    public DbSet<Common.Verse> VersesC { get; set; } = null!;
 
-    public DbSet<Common.Word> WordsC = null!;
-    public DbSet<Common.Root> RootsC = null!;
+    public DbSet<Common.Word> WordsC { get; set; } = null!;
+    public DbSet<Common.Root> RootsC { get; set; } = null!;
 
     // Shared Model Tables
 
-    public DbSet<Shared.Language> Languages = null!;
-    public DbSet<Shared.Meaning> Meanings = null!;
-    public DbSet<Shared.Transliteration> Transliterations = null!;
-    
-    
+    public DbSet<Shared.Language> Languages { get; set; } = null!;
+    public DbSet<Shared.Meaning> Meanings { get; set; } = null!;
+    public DbSet<Shared.Transliteration> Transliterations { get; set; } = null!;
+
+
     // Utility Model Tables
 
-    public DbSet<Util.Cache> Caches = null!;
-    public DbSet<Util.CacheRecord> CacheRecords = null!;
+    public DbSet<Util.Cache> Caches { get; set; } = null!;
+    public DbSet<Util.CacheRecord> CacheRecords { get; set; } = null!;
 
 
     // Tables Related to Islamic Sources
 
-    public DbSet<Islam.Quranic.Chapter> ChaptersQ = null!;
-    public DbSet<Islam.Quranic.Verse> VersesQ = null!;
-    public DbSet<Islam.Quranic.Word> WordsQ = null!;
+    public DbSet<Islam.Quranic.Chapter> ChaptersQ { get; set; } = null!;
+    public DbSet<Islam.Quranic.Verse> VersesQ { get; set; } = null!;
+    public DbSet<Islam.Quranic.Word> WordsQ { get; set; } = null!;
 
 
     // Custom Models (Not in the DB)
@@ -64,19 +64,19 @@ public class ScriptiumDbContext(DbContextOptions<ScriptiumDbContext> options) : 
     {
         base.OnModelCreating(modelBuilder);
 
-        
+
         modelBuilder.Entity<Util.Cache>(entity =>
         {
             entity.HasIndex(e => e.Url)
                 .IsUnique();
-            
+
             entity.ToTable("u_cache");
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.Url).HasColumnName("url");
             entity.Property(e => e.Data).HasColumnName("data");
             entity.Property(e => e.CreatedAt).HasColumnName("created_at");
             entity.Property(e => e.UpdatedAt).HasColumnName("updated_at");
-            
+
             entity.HasIndex(e => e.Url).IsUnique();
         });
 
@@ -84,14 +84,13 @@ public class ScriptiumDbContext(DbContextOptions<ScriptiumDbContext> options) : 
         {
             entity.ToTable("u_cache_record");
             entity.Property(e => e.Id).HasColumnName("id");
-        
+
             entity.Property<long>("cache_id");
 
             entity.HasOne(cr => cr.Cache)
                 .WithMany(c => c.Records)
                 .HasForeignKey("cache_id")
                 .OnDelete(DeleteBehavior.Cascade);
-            
         });
 
         modelBuilder.Entity<Shared.Node>(entity =>

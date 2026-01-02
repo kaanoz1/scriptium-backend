@@ -1,41 +1,53 @@
 using System.Text.Json;
+using Microsoft.EntityFrameworkCore;
 using ScriptiumBackend.Db;
 using ScriptiumBackend.Interfaces;
+using ScriptiumBackend.Services.ServiceInterfaces;
 using Util = ScriptiumBackend.Model.Util;
 
 namespace ScriptiumBackend.Services.ConcreteServices.Cache;
 
-public class MainCacheService(ScriptiumDbContext context)
+public class MainCacheService(ScriptiumDbContext context) : ICacheService
 {
     private readonly ScriptiumDbContext _context = context;
-    public string? GetPlain(string url)
+
+    public async Task<string?> GetPlain(string url)
     {
-        // 1. Veriyi bul
-        // Not: DbSet<Cache> tanımlı değilse Set<Cache>() kullanırız.
-        var cache = _context.Caches
-            .FirstOrDefault(c => c.Url == url);
+        // 1. Veriyi bul (Async)
+        var cache = await _context.Caches
+            .FirstOrDefaultAsync(c => c.Url == url);
 
         if (cache == null) return null;
 
         // 2. Erişim kaydı (Log) oluştur
         var record = new Util.CacheRecord
         {
-            Cache = cache,
+            Cache = cache, // İlişki ID üzerinden veya obje üzerinden kurulabilir
             FetchedAt = DateTime.UtcNow
         };
 
-        _context.Set<Util.CacheRecord>().Add(record);
-        _context.SaveChanges();
+        // Log yazma işlemini de async yapıyoruz
+        await _context.Set<Util.CacheRecord>().AddAsync(record);
+        await _context.SaveChangesAsync();
 
         return cache.Data;
     }
 
-    public T? Get<T>(string url) where T : ICacheable
+    // Interface'de eksik olan GetCache metodu
+    public async Task<Util.Cache?> GetCache(string url)
     {
-        var rawData = GetPlain(url);
+         return await _context.Caches
+            .Include(c => c.Records) // Gerekirse ilişkileri de getir
+            .FirstOrDefaultAsync(c => c.Url == url);
+    }
+
+    // Generic Get metodu (Bunun Interface'de Task<T?> olması gerekir)
+    public async Task<T?> Get<T>(string url) where T : ICacheable
+    {
+        var rawData = await GetPlain(url);
 
         if (string.IsNullOrEmpty(rawData)) 
-            return null;
+            return default;
 
         try 
         {
@@ -43,32 +55,37 @@ public class MainCacheService(ScriptiumDbContext context)
         }
         catch 
         {
-            // Loglama mekanizman varsa buraya ekleyebilirsin
-            return null;
+            return default;
         }
     }
 
-    public void Save<T>(string url, T data, TimeSpan? validDuration = null) where T : ICacheable
+    public async Task<Util.Cache> Save<T>(string url, T data, TimeSpan? validDuration = null) where T : ICacheable
     {
         var duration = validDuration ?? TimeSpan.FromDays(10);
         
-        var existingCache = _context.Caches
-            .FirstOrDefault(c => c.Url == url);
+        var existingCache = await _context.Caches
+            .FirstOrDefaultAsync(c => c.Url == url);
 
         var serializedData = JsonSerializer.Serialize(data);
         var now = DateTime.UtcNow;
 
+        Util.Cache resultCache;
+
         if (existingCache != null)
         {
+            // Süre kontrolü
             if ((now - existingCache.UpdatedAt) < duration)
             {
-                return;
+                // Veri hala taze, güncellemeye gerek yok, mevcut olanı dön
+                // Ancak veriyi güncellemek istersen bu if bloğunu kaldırabilirsin.
+                return existingCache; 
             }
 
             existingCache.Data = serializedData;
             existingCache.UpdatedAt = now;
             
-            _context.Set<Util.Cache>().Update(existingCache);
+            _context.Caches.Update(existingCache);
+            resultCache = existingCache;
         }
         else
         {
@@ -82,9 +99,11 @@ public class MainCacheService(ScriptiumDbContext context)
                 Records = []
             };
 
-            _context.Set<Util.Cache>().Add(newCache);
+            await _context.Caches.AddAsync(newCache);
+            resultCache = newCache;
         }
 
-        _context.SaveChanges();
+        await _context.SaveChangesAsync();
+        return resultCache;
     }
 }

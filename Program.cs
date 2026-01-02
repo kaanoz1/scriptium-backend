@@ -1,5 +1,8 @@
 using Microsoft.EntityFrameworkCore;
+using Scalar.AspNetCore;
 using ScriptiumBackend.Db;
+using ScriptiumBackend.Services.ConcreteServices.Cache;
+using ScriptiumBackend.Services.ServiceInterfaces;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -16,6 +19,7 @@ builder.Services.AddControllers();
 
 builder.Services.AddOpenApi();
 
+builder.Services.AddScoped<ICacheService, MainCacheService>();
 
 string? connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
@@ -31,6 +35,8 @@ app.UseSerilogRequestLogging();
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
+    app.MapScalarApiReference();
+    Log.Information("Scalar API Documentation is available at: http://localhost:5005/scalar/v1");
 }
 
 app.UseHttpsRedirection();
