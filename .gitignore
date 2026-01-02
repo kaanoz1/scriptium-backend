@@ -1,0 +1,37 @@
+# Build results
+bin/
+obj/
+
+# User-specific files
+*.user
+*.userosscache
+*.suo
+
+# Sensitive configuration files
+**/appsettings.json
+**/appsettings.Development.json
+**/appsettings.*.json
+!**/appsettings.Example.json
+!**/appsettings.Development.Example.json
+
+# Entity Framework Core
+*.db
+*.db-shm
+*.db-wal
+efbundle.exe
+ef.tools.cache.json
+
+# ASP.NET Scaffolding
+ScaffoldingReadMe.txt
+
+# Publish outputs
+publish/
+*.pubxml
+*.PublishSettings
+
+#Idea settings:
+.idea/
+*.iws
+*.iml
+*.ipr
+out/
