@@ -35,6 +35,8 @@ public class ChapterController(
 
             var chapter = await _context.ChaptersQ.Include(c => c.ChapterC).Include(c => c.Verses)
                 .ThenInclude(v => v.VerseC)
+                .Include(c => c.Meanings)
+                .ThenInclude(m => m.Language)
                 .FirstOrDefaultAsync(c => c.Sequence == chapterSequence);
 
             if (chapter is null)
