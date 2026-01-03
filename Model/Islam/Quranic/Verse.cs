@@ -34,4 +34,8 @@ public class Verse
 
     [NotNull, Required, MaxLength(5_000), Column("uthmani_minimal")]
     public required string UthmaniMinimal { get; init; }
+    
+    public required List<Word> Words { get; init; }
+    
+    
 }

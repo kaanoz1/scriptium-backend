@@ -12,6 +12,13 @@ public static class Extensions
         {
             ArgumentNullException.ThrowIfNull(chapter.ChapterC);
             ArgumentNullException.ThrowIfNull(chapter.Verses);
+            ArgumentNullException.ThrowIfNull(chapter.Meanings);
+
+            if (chapter.Verses.First() is { } verse)
+            {
+                ArgumentNullException.ThrowIfNull(verse);
+                ArgumentNullException.ThrowIfNull(verse.VerseC);
+            }
             
             return new WithVerses()
             {

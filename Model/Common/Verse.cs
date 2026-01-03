@@ -13,5 +13,4 @@ public class Verse
 
     [Required, Column("number")] public required int Number { get; init; }
 
-    public required List<Word> Words { get; init; }
 }

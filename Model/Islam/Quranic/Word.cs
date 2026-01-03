@@ -18,5 +18,8 @@ public class Word
     
     [Required]
     public required List<Meaning> Meanings { get; init; }
+    
+    [Required, ForeignKey("i_q_verse_id")]
+    public required Verse Verse { get; init; }
 
 }

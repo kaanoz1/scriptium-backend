@@ -8,7 +8,7 @@ public static class WordExtensions
 {
     extension(Quranic.Word word)
     {
-        Plain ToPlainDto()
+        public Plain ToPlainDto()
         {
             ArgumentNullException.ThrowIfNull(word.WordC);
 
@@ -19,8 +19,12 @@ public static class WordExtensions
             };
         }
 
-        Meaning ToMeaningDto()
+        public Meaning ToMeaningDto()
         {
+            ArgumentNullException.ThrowIfNull(word.WordC);
+            ArgumentNullException.ThrowIfNull(word.Meanings);
+
+
             return new()
             {
                 Sequence = word.WordC.SequenceNumber,
@@ -29,8 +33,12 @@ public static class WordExtensions
             };
         }
 
-        Transliteration ToTransliterationDto()
+        public Transliteration ToTransliterationDto()
         {
+            ArgumentNullException.ThrowIfNull(word.WordC);
+            ArgumentNullException.ThrowIfNull(word.Transliterations);
+
+
             return new()
             {
                 Sequence = word.WordC.SequenceNumber,
@@ -39,8 +47,12 @@ public static class WordExtensions
             };
         }
 
-        Complete ToCompleteDto()
+        public Complete ToCompleteDto()
         {
+            ArgumentNullException.ThrowIfNull(word.WordC);
+            ArgumentNullException.ThrowIfNull(word.Meanings);
+            ArgumentNullException.ThrowIfNull(word.Transliterations);
+
             return new()
             {
                 Sequence = word.WordC.SequenceNumber,
@@ -50,8 +62,13 @@ public static class WordExtensions
             };
         }
 
-        Down ToDownDto()
+        public Down ToDownDto()
         {
+            ArgumentNullException.ThrowIfNull(word.WordC);
+            ArgumentNullException.ThrowIfNull(word.WordC.Roots);
+            ArgumentNullException.ThrowIfNull(word.Meanings);
+            ArgumentNullException.ThrowIfNull(word.Transliterations);
+
             return new()
             {
                 Meanings = word.Meanings,

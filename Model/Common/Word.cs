@@ -6,16 +6,12 @@ namespace ScriptiumBackend.Model.Common;
 [Table("c_word")]
 public class Word
 {
-    [Key, Required, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+    [Key, Required, DatabaseGenerated(DatabaseGeneratedOption.Identity), Column("id")]
     public long Id { get; set; }
 
-    [Required] public required int SequenceNumber { get; init; }
+    [Required, Column("sequence_number")] public required int SequenceNumber { get; init; }
 
-    [Required] public required string Content { get; init; }
+    [Required, Column("content")] public required string Content { get; init; }
 
     [Required] public List<Root> Roots { get; init; }
-
-    public long VerseId { get; init; } // Foreign Key
-
-    [ForeignKey(nameof(VerseId))] public required Verse Verse { get; init; }
 }

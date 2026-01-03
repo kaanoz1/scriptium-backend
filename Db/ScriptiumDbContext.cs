@@ -106,9 +106,7 @@ public class ScriptiumDbContext(DbContextOptions<ScriptiumDbContext> options) : 
 
         modelBuilder.Entity<Common.Verse>(entity =>
         {
-            entity.HasMany(v => v.Words)
-                .WithOne(w => w.Verse)
-                .OnDelete(DeleteBehavior.Cascade);
+         
         });
 
         modelBuilder.Entity<Scripture>(entity =>
@@ -188,6 +186,10 @@ public class ScriptiumDbContext(DbContextOptions<ScriptiumDbContext> options) : 
             entity.HasOne(qv => qv.Chapter)
                 .WithMany(c => c.Verses)
                 .HasForeignKey("i_q_chapter_id")
+                .OnDelete(DeleteBehavior.Cascade);
+            
+            entity.HasMany(v => v.Words)
+                .WithOne(w => w.Verse)
                 .OnDelete(DeleteBehavior.Cascade);
         });
 
@@ -308,21 +310,6 @@ public class ScriptiumDbContext(DbContextOptions<ScriptiumDbContext> options) : 
                     });
         });
 
-
-        modelBuilder.Entity<Word>(entity =>
-        {
-            entity.HasKey(e => e.Id);
-            entity.Property(e => e.Id).HasColumnName("id");
-
-            entity.Property(e => e.SequenceNumber).HasColumnName("sequence_number");
-            entity.Property(e => e.Content).HasColumnName("content");
-
-            entity.Property(e => e.VerseId).HasColumnName("verse_id");
-
-            entity.HasOne(e => e.Verse)
-                .WithMany(v => v.Words)
-                .HasForeignKey(e => e.VerseId)
-                .IsRequired();
-        });
+        
     }
 }

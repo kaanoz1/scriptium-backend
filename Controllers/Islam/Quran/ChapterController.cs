@@ -7,7 +7,7 @@ using ScriptiumBackend.Services.ServiceInterfaces;
 
 namespace ScriptiumBackend.Controllers.Islam.Quran;
 
-[ApiController]
+[ApiController, Route("api/islam/quranic")]
 public class ChapterController(
     ScriptiumDbContext context,
     ILogger<ChapterController> logger,
