@@ -1,4 +1,5 @@
 using ScriptiumBackend.Dto.Islam.Quranic.Verse;
+using ScriptiumBackend.Dto.Shared.Meaning;
 
 namespace ScriptiumBackend.Dto.Islam.Quranic.Chapter;
 
@@ -24,7 +25,7 @@ public static class Extensions
             {
                 Name = chapter.ChapterC.Name,
                 Sequence = chapter.Sequence,
-                Meanings = chapter.Meanings,
+                Meanings = chapter.Meanings.Select(m => m.ToPlainDto()).ToList(),
                 Verses = chapter.Verses.Select(v => v.ToPlainVerseDto()).ToList()
             };
         }

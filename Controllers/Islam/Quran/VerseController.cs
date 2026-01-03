@@ -36,6 +36,8 @@ public class VerseController(
             var verse = await _context.VersesQ.Include(v => v.Chapter).ThenInclude(c => c.ChapterC)
                 .Include(v => v.VerseC)
                 .Include(v => v.Words).ThenInclude(w => w.WordC).ThenInclude(wc => wc.Roots)
+                .Include(v => v.Words).ThenInclude(w => w.Meanings).ThenInclude(w => w.Language)
+                .Include(v => v.Words).ThenInclude(w => w.Transliterations).ThenInclude(t => t.Language)
                 .FirstOrDefaultAsync(v => v.Chapter.Sequence == chapterSequence && v.VerseC.Number == verseSequence);
 
             if (verse is null)
