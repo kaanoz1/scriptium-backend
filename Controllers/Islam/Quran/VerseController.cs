@@ -26,10 +26,10 @@ public class VerseController(
 
         try
         {
-            if (await _cacheService.Get<Down>(cacheKey) is { } fetchedCache)
+            if (await _cacheService.Get<Down>(cacheKey) is { } serializedCache)
             {
-                _logger.LogInformation("Cache has been found. Cache.Id: {Id}. Sending.", fetchedCache.Row.Id);
-                return Ok(new { data = fetchedCache.Data });
+                _logger.LogInformation("Cache has been found. Cache.Id: {Id}. Sending.", serializedCache.Raw.Id);
+                return Ok(new { data = serializedCache.Data });
             }
 
 

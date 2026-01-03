@@ -40,7 +40,7 @@ public class MainCacheService(ScriptiumDbContext context) : ICacheService
             .FirstOrDefaultAsync(c => c.Url == url);
     }
 
-    public async Task<FetchedCache<T>?> Get<T>(string url) // where T : ICacheable # Will be fixed.
+    public async Task<SerializedCache<T>?> Get<T>(string url) // where T : ICacheable # Will be fixed.
     {
         var rawCache = await this.GetPlainCache(url);
 
@@ -53,7 +53,7 @@ public class MainCacheService(ScriptiumDbContext context) : ICacheService
 
             ArgumentNullException.ThrowIfNull(serialized);
             
-            return new FetchedCache<T>(rawCache, serialized);
+            return new SerializedCache<T>(rawCache, serialized);
 
         }
         catch

@@ -19,7 +19,7 @@ public interface ICacheService
     /// <summary>
     /// Veriyi deserialize edilmiş obje olarak döner.
     /// </summary>
-    Task<FetchedCache<T>?> Get<T>(string url); // where T : ICacheable; # Will be fixed
+    Task<SerializedCache<T>?> Get<T>(string url); // where T : ICacheable; # Will be fixed
 
     /// <summary>
     /// Veriyi kaydeder veya günceller.

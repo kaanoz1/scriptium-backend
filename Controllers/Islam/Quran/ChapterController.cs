@@ -26,10 +26,10 @@ public class ChapterController(
 
         try
         {
-            if (await _cacheService.Get<Dto.Islam.Quranic.Chapter.WithVerses>(cacheKey) is { } fetchedCache)
+            if (await _cacheService.Get<Dto.Islam.Quranic.Chapter.WithVerses>(cacheKey) is { } serializedCache)
             {
-                _logger.LogInformation("Cache has been found. Cache.Id: {Id}. Sending.", fetchedCache.Row.Id);
-                return Ok(new { data = fetchedCache.Data });
+                _logger.LogInformation("Cache has been found. Cache.Id: {Id}. Sending.", serializedCache.Raw.Id);
+                return Ok(new { data = serializedCache.Data });
             }
 
 
@@ -66,10 +66,10 @@ public class ChapterController(
 
         try
         {
-            if (await _cacheService.Get<List<Dto.Islam.Quranic.Chapter.Complete>>(cacheKey) is { } fetchedCache)
+            if (await _cacheService.Get<List<Dto.Islam.Quranic.Chapter.Complete>>(cacheKey) is { } serializedCache)
             {
-                _logger.LogInformation("Cache has been found. Cache.Id: {Id}. Sending.", fetchedCache.Row.Id);
-                return Ok(new { data = fetchedCache.Data });
+                _logger.LogInformation("Cache has been found. Cache.Id: {Id}. Sending.", serializedCache.Raw.Id);
+                return Ok(new { data = serializedCache.Data });
             }
 
 
