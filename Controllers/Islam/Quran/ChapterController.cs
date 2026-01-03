@@ -26,10 +26,10 @@ public class ChapterController(
 
         try
         {
-            if (await _cacheService.GetCache(cacheKey) is { } cacheData)
+            if (await _cacheService.Get<Dto.Islam.Quranic.Chapter.WithVerses>(cacheKey) is { } fetchedCache)
             {
-                _logger.LogInformation("Cache has been found. Cache.Id: {Id}. Sending.", cacheData.Id);
-                return Ok(cacheData.Data);
+                _logger.LogInformation("Cache has been found. Cache.Id: {Id}. Sending.", fetchedCache.Row.Id);
+                return Ok(new { data = fetchedCache.Data });
             }
 
 
@@ -54,6 +54,40 @@ public class ChapterController(
         {
             _logger.LogError(ex, "An unexpected error occurred while processing chapter sequence: {ChapterSequence}",
                 chapterSequence);
+
+            return StatusCode(500, "Internal server error. Please try again later.");
+        }
+    }
+
+    [HttpGet("/chapter/list")]
+    public async Task<IActionResult> GetAll()
+    {
+        var cacheKey = Request.GetEncodedPathAndQuery();
+
+        try
+        {
+            if (await _cacheService.Get<List<Dto.Islam.Quranic.Chapter.Complete>>(cacheKey) is { } fetchedCache)
+            {
+                _logger.LogInformation("Cache has been found. Cache.Id: {Id}. Sending.", fetchedCache.Row.Id);
+                return Ok(new { data = fetchedCache.Data });
+            }
+
+
+            var chapters = await _context.ChaptersQ.Include(c => c.ChapterC)
+                .Include(c => c.Meanings)
+                .ThenInclude(m => m.Language).ToListAsync();
+
+            var data = chapters.Select(c => c.ToCompleteDto()).ToList();
+
+            var savedCacheRow = await _cacheService.Save(cacheKey, data);
+
+            _logger.LogInformation("Cache saved. Model name: List<Chapter>. Cache.Id: {CacheId}", savedCacheRow.Id);
+
+            return Ok(new { data });
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "An unexpected error occurred while processing chapter list");
 
             return StatusCode(500, "Internal server error. Please try again later.");
         }

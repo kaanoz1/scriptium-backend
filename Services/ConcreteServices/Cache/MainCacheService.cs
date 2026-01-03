@@ -1,5 +1,6 @@
 using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
+using ScriptiumBackend.Classes;
 using ScriptiumBackend.Db;
 using ScriptiumBackend.Interfaces;
 using ScriptiumBackend.Services.ServiceInterfaces;
@@ -26,43 +27,46 @@ public class MainCacheService(ScriptiumDbContext context) : ICacheService
             FetchedAt = DateTime.UtcNow
         };
 
-        // Log yazma işlemini de async yapıyoruz
         await _context.Set<Util.CacheRecord>().AddAsync(record);
         await _context.SaveChangesAsync();
 
         return cache.Data;
     }
 
-    // Interface'de eksik olan GetCache metodu
-    public async Task<Util.Cache?> GetCache(string url)
+    public async Task<Util.Cache?> GetPlainCache(string url)
     {
-         return await _context.Caches
-            .Include(c => c.Records) // Gerekirse ilişkileri de getir
+        return await _context.Caches
+            .Include(c => c.Records) 
             .FirstOrDefaultAsync(c => c.Url == url);
     }
 
-    // Generic Get metodu (Bunun Interface'de Task<T?> olması gerekir)
-    public async Task<T?> Get<T>(string url) where T : ICacheable
+    public async Task<FetchedCache<T>?> Get<T>(string url) // where T : ICacheable # Will be fixed.
     {
-        var rawData = await GetPlain(url);
+        var rawCache = await this.GetPlainCache(url);
 
-        if (string.IsNullOrEmpty(rawData)) 
-            return default;
+        if (rawCache is null)
+            return null;
 
-        try 
+        try
         {
-            return JsonSerializer.Deserialize<T>(rawData);
+            var serialized = JsonSerializer.Deserialize<T>(rawCache.Data);
+
+            ArgumentNullException.ThrowIfNull(serialized);
+            
+            return new FetchedCache<T>(rawCache, serialized);
+
         }
-        catch 
+        catch
         {
-            return default;
+            return null;
         }
     }
+    
 
     public async Task<Util.Cache> Save<T>(string url, T data, TimeSpan? validDuration = null) where T : ICacheable
     {
         var duration = validDuration ?? TimeSpan.FromDays(10);
-        
+
         var existingCache = await _context.Caches
             .FirstOrDefaultAsync(c => c.Url == url);
 
@@ -78,12 +82,60 @@ public class MainCacheService(ScriptiumDbContext context) : ICacheService
             {
                 // Veri hala taze, güncellemeye gerek yok, mevcut olanı dön
                 // Ancak veriyi güncellemek istersen bu if bloğunu kaldırabilirsin.
-                return existingCache; 
+                return existingCache;
             }
 
             existingCache.Data = serializedData;
             existingCache.UpdatedAt = now;
-            
+
+            _context.Caches.Update(existingCache);
+            resultCache = existingCache;
+        }
+        else
+        {
+            // Yeni kayıt
+            var newCache = new Util.Cache
+            {
+                Url = url,
+                Data = serializedData,
+                CreatedAt = now,
+                UpdatedAt = now,
+                Records = []
+            };
+
+            await _context.Caches.AddAsync(newCache);
+            resultCache = newCache;
+        }
+
+        await _context.SaveChangesAsync();
+        return resultCache;
+    }
+
+    public async Task<Util.Cache> Save<T>(string url, List<T> data, TimeSpan? validDuration = null) where T : ICacheable
+    {
+        var duration = validDuration ?? TimeSpan.FromDays(10);
+
+        var existingCache = await _context.Caches
+            .FirstOrDefaultAsync(c => c.Url == url);
+
+        var serializedData = JsonSerializer.Serialize(data);
+        var now = DateTime.UtcNow;
+
+        Util.Cache resultCache;
+
+        if (existingCache != null)
+        {
+            // Süre kontrolü
+            if ((now - existingCache.UpdatedAt) < duration)
+            {
+                // Veri hala taze, güncellemeye gerek yok, mevcut olanı dön
+                // Ancak veriyi güncellemek istersen bu if bloğunu kaldırabilirsin.
+                return existingCache;
+            }
+
+            existingCache.Data = serializedData;
+            existingCache.UpdatedAt = now;
+
             _context.Caches.Update(existingCache);
             resultCache = existingCache;
         }
