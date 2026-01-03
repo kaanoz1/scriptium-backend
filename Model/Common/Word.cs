@@ -13,5 +13,4 @@ public class Word
 
     [Required, Column("content")] public required string Content { get; init; }
 
-    [Required] public List<Root> Roots { get; init; }
 }

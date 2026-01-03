@@ -39,6 +39,7 @@ public class ScriptiumDbContext(DbContextOptions<ScriptiumDbContext> options) : 
     public DbSet<Islam.Quranic.Chapter> ChaptersQ { get; set; } = null!;
     public DbSet<Islam.Quranic.Verse> VersesQ { get; set; } = null!;
     public DbSet<Islam.Quranic.Word> WordsQ { get; set; } = null!;
+    public DbSet<Islam.Quranic.Root> RootsQ { get; set; } = null!;
 
 
     // Custom Models (Not in the DB)
@@ -104,10 +105,7 @@ public class ScriptiumDbContext(DbContextOptions<ScriptiumDbContext> options) : 
                 .OnDelete(DeleteBehavior.Restrict);
         });
 
-        modelBuilder.Entity<Common.Verse>(entity =>
-        {
-         
-        });
+        modelBuilder.Entity<Common.Verse>(entity => { });
 
         modelBuilder.Entity<Scripture>(entity =>
         {
@@ -187,7 +185,7 @@ public class ScriptiumDbContext(DbContextOptions<ScriptiumDbContext> options) : 
                 .WithMany(c => c.Verses)
                 .HasForeignKey("i_q_chapter_id")
                 .OnDelete(DeleteBehavior.Cascade);
-            
+
             entity.HasMany(v => v.Words)
                 .WithOne(w => w.Verse)
                 .OnDelete(DeleteBehavior.Cascade);
@@ -273,22 +271,22 @@ public class ScriptiumDbContext(DbContextOptions<ScriptiumDbContext> options) : 
         {
             entity.HasKey(e => e.Id);
             entity.Property(e => e.Id).HasColumnName("id");
+        });
 
-            entity.Property(e => e.Content).HasColumnName("content");
-            entity.Property(e => e.Latin).HasColumnName("latin");
-
+        modelBuilder.Entity<Islam.Quranic.Root>(entity =>
+        {
             entity.HasMany(r => r.Words)
                 .WithMany(w => w.Roots)
                 .UsingEntity<Dictionary<string, object>>(
-                    "c_mm_root_word", j =>
+                    "i_q_mm_root_word", j =>
                     {
-                        j.HasOne(typeof(Word))
+                        j.HasOne(typeof(Islam.Quranic.Word))
                             .WithMany()
                             .HasForeignKey("WordsId")
                             .HasPrincipalKey(nameof(Word.Id))
                             .OnDelete(DeleteBehavior.Restrict);
 
-                        j.HasOne(typeof(Root))
+                        j.HasOne(typeof(Islam.Quranic.Root))
                             .WithMany()
                             .HasForeignKey("RootsId")
                             .HasPrincipalKey(nameof(Root.Id))
@@ -305,11 +303,9 @@ public class ScriptiumDbContext(DbContextOptions<ScriptiumDbContext> options) : 
                         j.HasIndex("RootsId", "WordsId").IsUnique();
 
 
-                        j.Property<long>("RootsId").HasColumnName("root_id");
-                        j.Property<long>("WordsId").HasColumnName("word_id");
+                        j.Property<int>("RootsId").HasColumnName("root_id");
+                        j.Property<int>("WordsId").HasColumnName("word_id");
                     });
         });
-
-        
     }
 }

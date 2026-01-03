@@ -1,6 +1,5 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using ScriptiumBackend.Model.Common;
 using ScriptiumBackend.Model.Shared;
 
 namespace ScriptiumBackend.Model.Islam.Quranic;
@@ -21,5 +20,8 @@ public class Word
     
     [Required, ForeignKey("i_q_verse_id")]
     public required Verse Verse { get; init; }
+    
+    [Required] public required List<Root> Roots { get; init; }
+    
 
 }

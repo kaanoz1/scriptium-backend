@@ -67,7 +67,7 @@ public static class WordExtensions
         public Down ToDownDto()
         {
             ArgumentNullException.ThrowIfNull(word.WordC);
-            ArgumentNullException.ThrowIfNull(word.WordC.Roots);
+            ArgumentNullException.ThrowIfNull(word.Roots);
             ArgumentNullException.ThrowIfNull(word.Meanings);
             ArgumentNullException.ThrowIfNull(word.Transliterations);
 
@@ -77,14 +77,13 @@ public static class WordExtensions
                 Transliterations = word.Transliterations,
                 Sequence = word.WordC.SequenceNumber,
                 Text = word.WordC.Content,
-                Roots = word.WordC.Roots.Select(r => r.ToDownDto()).ToList(),
+                Roots = word.Roots.Select(r => r.ToDownDto()).ToList(),
             };
         }
 
         public UpToVerse ToUpToVerseDto()
         {
             ArgumentNullException.ThrowIfNull(word.WordC);
-            ArgumentNullException.ThrowIfNull(word.WordC.Roots);
             ArgumentNullException.ThrowIfNull(word.Meanings);
             ArgumentNullException.ThrowIfNull(word.Transliterations);
             ArgumentNullException.ThrowIfNull(word.Verse);

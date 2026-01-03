@@ -2,13 +2,14 @@ using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ScriptiumBackend.Db;
+using ScriptiumBackend.Dto.Islam.Quranic.Root;
 using ScriptiumBackend.Dto.Islam.Quranic.Verse;
 using ScriptiumBackend.Services.ServiceInterfaces;
 
 namespace ScriptiumBackend.Controllers.Islam.Quran;
 
 [ApiController, Route("api/islam/quranic")]
-public class VerseController(
+public class RootController(
     ScriptiumDbContext context,
     ILogger<VerseController> logger,
     ICacheService cacheService)
@@ -19,32 +20,33 @@ public class VerseController(
     private readonly ICacheService _cacheService = cacheService;
 
 
-    [HttpGet("/verse/{chapterSequence}/{verseSequence}")]
-    public async Task<IActionResult> Get([FromRoute] int chapterSequence, [FromRoute] int verseSequence)
+    [HttpGet("/root/{latin}")]
+    public async Task<IActionResult> Get([FromRoute] string latin)
     {
+        //TODO: Add validation.
+        
         var cacheKey = Request.GetEncodedPathAndQuery();
 
         try
         {
-            if (await _cacheService.Get<Down>(cacheKey) is { } serializedCache)
+            if (await _cacheService.Get<UpToVerse>(cacheKey) is { } serializedCache)
             {
                 _logger.LogInformation("Cache has been found. Cache.Id: {Id}. Sending.", serializedCache.Raw.Id);
                 return Ok(new { data = serializedCache.Data });
             }
 
 
-            var verse = await _context.VersesQ.Include(v => v.Chapter).ThenInclude(c => c.ChapterC)
-                .Include(v => v.VerseC)
-                .Include(v => v.Words).ThenInclude(w => w.WordC)
-                .Include(v => v.Words).ThenInclude(w => w.Roots)
-                .Include(v => v.Words).ThenInclude(w => w.Meanings).ThenInclude(w => w.Language)
-                .Include(v => v.Words).ThenInclude(w => w.Transliterations).ThenInclude(t => t.Language)
-                .FirstOrDefaultAsync(v => v.Chapter.Sequence == chapterSequence && v.VerseC.Number == verseSequence);
+            var root = await _context.RootsQ
+                .Include(r => r.Words).ThenInclude(w => w.WordC)
+                .Include(r => r.Words).ThenInclude(w => w.Transliterations).ThenInclude(t => t.Language)
+                .Include(r => r.Words).ThenInclude(w => w.Meanings).ThenInclude(m => m.Language)
+                .Include(r => r.Words).ThenInclude(w => w.Verse).ThenInclude(v => v.VerseC)
+                .FirstOrDefaultAsync(r => r.Latin == latin);
 
-            if (verse is null)
-                return NotFound("No verse found.");
+            if (root is null)
+                return NotFound("No root found.");
 
-            var data = verse.ToDownDto();
+            var data = root.ToUpToVerseDto();
 
             var savedCacheRow = await _cacheService.Save(cacheKey, data);
 
@@ -55,8 +57,8 @@ public class VerseController(
         catch (Exception ex)
         {
             _logger.LogError(ex,
-                "An unexpected error occurred while processing verse sequence: {ChapterSequence}:{VerseSequence}",
-                chapterSequence, verseSequence);
+                "An unexpected error occurred while processing root. Latin: {Latin}",
+                latin);
 
             return StatusCode(500, "Internal server error. Please try again later.");
         }
