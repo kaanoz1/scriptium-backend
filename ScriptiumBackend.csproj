@@ -31,7 +31,6 @@
     <ItemGroup>
       <Folder Include="Classes\" />
       <Folder Include="Controllers\Islam\" />
-      <Folder Include="Dto\Shared\Transliteration\" />
     </ItemGroup>
 
 </Project>

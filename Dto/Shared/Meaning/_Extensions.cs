@@ -6,7 +6,7 @@ public static class Extensions
 {
     extension(Model.Shared.Meaning meaning)
     {
-        Plain ToPlainDto()
+        public Plain ToPlainDto()
         {
             ArgumentNullException.ThrowIfNull(meaning.Language);
 
