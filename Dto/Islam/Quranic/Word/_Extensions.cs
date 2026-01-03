@@ -1,4 +1,5 @@
 using ScriptiumBackend.Dto.Islam.Quranic.Root;
+using ScriptiumBackend.Dto.Islam.Quranic.Verse;
 using ScriptiumBackend.Dto.Shared.Meaning;
 
 namespace ScriptiumBackend.Dto.Islam.Quranic.Word;
@@ -77,6 +78,24 @@ public static class WordExtensions
                 Sequence = word.WordC.SequenceNumber,
                 Text = word.WordC.Content,
                 Roots = word.WordC.Roots.Select(r => r.ToDownDto()).ToList(),
+            };
+        }
+
+        public UpToVerse ToUpToVerseDto()
+        {
+            ArgumentNullException.ThrowIfNull(word.WordC);
+            ArgumentNullException.ThrowIfNull(word.WordC.Roots);
+            ArgumentNullException.ThrowIfNull(word.Meanings);
+            ArgumentNullException.ThrowIfNull(word.Transliterations);
+            ArgumentNullException.ThrowIfNull(word.Verse);
+
+            return new()
+            {
+                Sequence = word.WordC.SequenceNumber,
+                Text = word.WordC.Content,
+                Meanings = word.Meanings.Select(m => m.ToPlainDto()).ToList(),
+                Transliterations = word.Transliterations,
+                Verse = word.Verse.ToCompleteDto()
             };
         }
     }
