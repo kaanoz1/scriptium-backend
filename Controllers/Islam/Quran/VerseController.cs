@@ -44,6 +44,11 @@ public class VerseController(
                 .Include(v => v.Words).ThenInclude(w => w.Roots)
                 .Include(v => v.Words).ThenInclude(w => w.Meanings).ThenInclude(w => w.Language)
                 .Include(v => v.Words).ThenInclude(w => w.Transliterations).ThenInclude(t => t.Language)
+                .Include(v => v.Translations).ThenInclude(t => t.Footnotes)
+                .Include(v => v.Translations).ThenInclude(t => t.Language)
+                .Include(v => v.Translations).ThenInclude(t => t.Translation).ThenInclude(t => t.Authors).ThenInclude(t => t.Language)
+                .Include(v => v.Translations).ThenInclude(t => t.Translation).ThenInclude(t => t.Authors).ThenInclude(t => t.NameTranslations)
+                .Include(v => v.Translations).ThenInclude(t => t.Translation).ThenInclude(t => t.Language)
                 .FirstOrDefaultAsync(v => v.Chapter.Sequence == chapterSequence && v.Number == verseSequence);
 
             if (verse is null)

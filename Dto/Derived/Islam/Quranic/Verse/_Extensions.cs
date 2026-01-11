@@ -24,10 +24,12 @@ public static class VerseExtensions
 
         public Complete ToCompleteDto()
         {
+            ArgumentNullException.ThrowIfNull(verse.Translations);
+            
             return new()
             {
                 Translations = verse.Translations.Select(t => t.ToCompleteDto()).ToList(),
-
+                
 
                 Sequence = verse.Number,
                 Simple = verse.Simple,
@@ -84,13 +86,14 @@ public static class VerseExtensions
         {
             ArgumentNullException.ThrowIfNull(verse.Chapter);
             ArgumentNullException.ThrowIfNull(verse.Words);
+            ArgumentNullException.ThrowIfNull(verse.Translations);
 
 
             return new()
             {
                 Translations = verse.Translations.Select(t => t.ToCompleteDto()).ToList(),
 
-
+            
                 Chapter = verse.Chapter.ToUpToQuranDto(),
                 Words = verse.Words.Select(word => word.ToDownDto()).ToList(),
 

@@ -40,6 +40,11 @@ public class ChapterController(
                 .Include(c => c.Verses)
                 .Include(c => c.Meanings)
                 .ThenInclude(m => m.Language)
+                .Include(v => v.Verses).ThenInclude(v => v.Translations).ThenInclude(t => t.Footnotes)
+                .Include(v => v.Verses).ThenInclude(v => v.Translations).ThenInclude(t => t.Language)
+                .Include(v => v.Verses).ThenInclude(v => v.Translations).ThenInclude(t => t.Translation).ThenInclude(t => t.Authors).ThenInclude(t => t.Language)
+                .Include(v => v.Verses).ThenInclude(v => v.Translations).ThenInclude(t => t.Translation).ThenInclude(t => t.Authors).ThenInclude(t => t.NameTranslations)
+                .Include(v => v.Verses).ThenInclude(v => v.Translations).ThenInclude(t => t.Translation).ThenInclude(t => t.Language)
                 .FirstOrDefaultAsync(c => c.Sequence == chapterSequence);
 
             if (chapter is null)

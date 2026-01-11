@@ -21,6 +21,11 @@ public static class Extensions
 
         public Complete ToCompleteDto()
         {
+            ArgumentNullException.ThrowIfNull(verseTranslation.Translation);
+            ArgumentNullException.ThrowIfNull(verseTranslation.Translation.Authors);
+            ArgumentNullException.ThrowIfNull(verseTranslation.Footnotes);
+            ArgumentNullException.ThrowIfNull(verseTranslation.Translation.Language);
+            
             return new()
             {
                 Text = verseTranslation.Text,

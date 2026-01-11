@@ -1,8 +1,18 @@
+using ScriptiumBackend.Dto.Sealed.Language;
+
 namespace ScriptiumBackend.Utils.Predefined.Model.Islam;
 
 public class QuranPlain
 {
-    public const char Code = 'Q';
+    public string Code { get; } = "Q";
+    public string Name { get; } = "القرآن الكريم";
 
-    public const string Name = "القرآن الكريم";
+    public List<Dto.Sealed.Meaning.Plain> Meanings { get; } =
+    [
+        new()
+        {
+            Language = Constants.Default.Language.English.ToPlainDto(),
+            Text = "Al Quran Kareem",
+        }
+    ];
 }

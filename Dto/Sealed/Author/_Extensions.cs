@@ -20,6 +20,9 @@ public static class Extensions
 
         public Complete ToCompleteDto()
         {
+            ArgumentNullException.ThrowIfNull(author.Language);
+            ArgumentNullException.ThrowIfNull(author.NameTranslations);
+            
             return new()
             {
                 Name = author.Name,

@@ -13,20 +13,20 @@ public static class Islam
 
 public static class Default
 {
-    
-
-    
     public static class Language
     {
+        public static readonly Model.Sealed.Language English = new()
+        {
+            Id = 1,
+            Code = "en",
+            Name = "English",
+            EnglishName = "English"
+        };
+
+
         public static readonly List<Model.Sealed.Language> InitialLanguages =
         [
-            new()
-            {
-                Id = 1,
-                Code = "en",
-                Name = "English",
-                EnglishName = "English"
-            }
+            English
         ];
     }
 }
@@ -35,10 +35,10 @@ public static class Configurations
 {
     public static class Logger
     {
-        public static readonly AnsiConsoleTheme Theme = new (new Dictionary<ConsoleThemeStyle, string>
+        public static readonly AnsiConsoleTheme Theme = new(new Dictionary<ConsoleThemeStyle, string>
         {
             [ConsoleThemeStyle.Text] = "\x1b[37m",
-            [ConsoleThemeStyle.SecondaryText] = "\x1b[37m", 
+            [ConsoleThemeStyle.SecondaryText] = "\x1b[37m",
             [ConsoleThemeStyle.TertiaryText] = "\x1b[37m",
             [ConsoleThemeStyle.Invalid] = "\x1b[33m",
             [ConsoleThemeStyle.Null] = "\x1b[34m",
@@ -49,9 +49,9 @@ public static class Configurations
             [ConsoleThemeStyle.Scalar] = "\x1b[32m",
             [ConsoleThemeStyle.LevelVerbose] = "\x1b[37m",
             [ConsoleThemeStyle.LevelDebug] = "\x1b[37m",
-    
-            [ConsoleThemeStyle.LevelInformation] = "\x1b[32m", 
-            [ConsoleThemeStyle.LevelWarning] = "\x1b[33m", 
+
+            [ConsoleThemeStyle.LevelInformation] = "\x1b[32m",
+            [ConsoleThemeStyle.LevelWarning] = "\x1b[33m",
             [ConsoleThemeStyle.LevelError] = "\x1b[31m",
             [ConsoleThemeStyle.LevelFatal] = "\x1b[35m",
         });

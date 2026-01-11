@@ -32,7 +32,7 @@ public static class Extensions
                 Name = chapter.Name,
                 Sequence = chapter.Sequence,
                 Meanings = chapter.Meanings.Select(m => m.ToPlainDto()).ToList(),
-                Verses = chapter.Verses.Select(v => v.ToPlainVerseDto()).ToList()
+                Verses = chapter.Verses.Select(v => v.ToCompleteDto()).ToList()
             };
         }
 

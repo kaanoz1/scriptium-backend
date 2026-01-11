@@ -43,6 +43,14 @@ public class RootController(
                 .Include(r => r.Words).ThenInclude(w => w.Transliterations).ThenInclude(t => t.Language)
                 .Include(r => r.Words).ThenInclude(w => w.Meanings).ThenInclude(m => m.Language)
                 .Include(r => r.Words).ThenInclude(w => w.Verse)
+                .Include(r => r.Words).ThenInclude(w => w.Verse).ThenInclude(v => v.Translations)
+                .ThenInclude(t => t.Translation).ThenInclude(t => t.Authors).ThenInclude(t => t.Language)
+                .Include(r => r.Words).ThenInclude(w => w.Verse).ThenInclude(v => v.Translations)
+                .ThenInclude(t => t.Translation).ThenInclude(t => t.Authors).ThenInclude(t => t.NameTranslations)
+                .Include(r => r.Words).ThenInclude(w => w.Verse).ThenInclude(v => v.Translations)
+                .ThenInclude(t => t.Translation).ThenInclude(t => t.Language)
+                .Include(r => r.Words).ThenInclude(w => w.Verse).ThenInclude(v => v.Translations)
+                .ThenInclude(t => t.Footnotes)
                 .FirstOrDefaultAsync(r => r.TextInLatin == latin);
 
             if (root is null)

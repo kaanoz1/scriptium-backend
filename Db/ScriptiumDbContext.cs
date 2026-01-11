@@ -140,7 +140,7 @@ public class ScriptiumDbContext(DbContextOptions<ScriptiumDbContext> options) : 
                 .WithMany()
                 .UsingEntity(j =>
                 {
-                    j.ToTable("mm_s_authorName__s_translations");
+                    j.ToTable("mm_s_authorName__a_translations");
 
                     j.Property<long>("Id").ValueGeneratedOnAdd().HasColumnName("id");
                     j.HasKey("Id");
