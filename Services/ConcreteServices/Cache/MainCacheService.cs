@@ -14,16 +14,14 @@ public class MainCacheService(ScriptiumDbContext context) : ICacheService
 
     public async Task<string?> GetPlain(string url)
     {
-        // 1. Veriyi bul (Async)
         var cache = await _context.Caches
             .FirstOrDefaultAsync(c => c.Url == url);
 
         if (cache == null) return null;
 
-        // 2. Erişim kaydı (Log) oluştur
         var record = new Util.CacheRecord
         {
-            Cache = cache, // İlişki ID üzerinden veya obje üzerinden kurulabilir
+            Cache = cache,
             FetchedAt = DateTime.UtcNow
         };
 
@@ -35,9 +33,24 @@ public class MainCacheService(ScriptiumDbContext context) : ICacheService
 
     public async Task<Util.Cache?> GetPlainCache(string url)
     {
-        return await _context.Caches
-            .Include(c => c.Records) 
+        var cache = await _context.Caches
+            .Include(c => c.Records)
             .FirstOrDefaultAsync(c => c.Url == url);
+
+        if (cache is null)
+            return null;
+
+        var record = new Util.CacheRecord
+        {
+            Cache = cache,
+            FetchedAt = DateTime.UtcNow
+        };
+
+        await _context.Set<Util.CacheRecord>().AddAsync(record);
+        await _context.SaveChangesAsync();
+
+
+        return cache;
     }
 
     public async Task<SerializedCache<T>?> Get<T>(string url) // where T : ICacheable # Will be fixed.
@@ -52,16 +65,25 @@ public class MainCacheService(ScriptiumDbContext context) : ICacheService
             var serialized = JsonSerializer.Deserialize<T>(rawCache.Data);
 
             ArgumentNullException.ThrowIfNull(serialized);
-            
-            return new SerializedCache<T>(rawCache, serialized);
 
+
+            var record = new Util.CacheRecord
+            {
+                Cache = rawCache,
+                FetchedAt = DateTime.UtcNow
+            };
+
+            await _context.Set<Util.CacheRecord>().AddAsync(record);
+            await _context.SaveChangesAsync();
+
+            return new SerializedCache<T>(rawCache, serialized);
         }
         catch
         {
             return null;
         }
     }
-    
+
 
     public async Task<Util.Cache> Save<T>(string url, T data, TimeSpan? validDuration = null) where T : ICacheable
     {
@@ -77,11 +99,8 @@ public class MainCacheService(ScriptiumDbContext context) : ICacheService
 
         if (existingCache != null)
         {
-            // Süre kontrolü
             if ((now - existingCache.UpdatedAt) < duration)
             {
-                // Veri hala taze, güncellemeye gerek yok, mevcut olanı dön
-                // Ancak veriyi güncellemek istersen bu if bloğunu kaldırabilirsin.
                 return existingCache;
             }
 
@@ -93,7 +112,6 @@ public class MainCacheService(ScriptiumDbContext context) : ICacheService
         }
         else
         {
-            // Yeni kayıt
             var newCache = new Util.Cache
             {
                 Url = url,
@@ -125,13 +143,9 @@ public class MainCacheService(ScriptiumDbContext context) : ICacheService
 
         if (existingCache != null)
         {
-            // Süre kontrolü
             if ((now - existingCache.UpdatedAt) < duration)
-            {
-                // Veri hala taze, güncellemeye gerek yok, mevcut olanı dön
-                // Ancak veriyi güncellemek istersen bu if bloğunu kaldırabilirsin.
                 return existingCache;
-            }
+
 
             existingCache.Data = serializedData;
             existingCache.UpdatedAt = now;
@@ -141,7 +155,6 @@ public class MainCacheService(ScriptiumDbContext context) : ICacheService
         }
         else
         {
-            // Yeni kayıt
             var newCache = new Util.Cache
             {
                 Url = url,

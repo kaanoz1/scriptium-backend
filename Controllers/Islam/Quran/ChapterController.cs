@@ -1,8 +1,9 @@
+using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ScriptiumBackend.Db;
-using ScriptiumBackend.Dto.Islam.Quranic.Chapter;
+using ScriptiumBackend.Dto.Derived.Islam.Quranic.Chapter;
 using ScriptiumBackend.Services.ServiceInterfaces;
 
 namespace ScriptiumBackend.Controllers.Islam.Quran;
@@ -20,21 +21,23 @@ public class ChapterController(
 
 
     [HttpGet("/chapter/{chapterSequence}")]
-    public async Task<IActionResult> Get([FromRoute] int chapterSequence)
+    public async Task<IActionResult> Get([FromRoute, Range(1, 114)] int chapterSequence)
     {
         var cacheKey = Request.GetEncodedPathAndQuery();
 
         try
         {
-            if (await _cacheService.Get<Dto.Islam.Quranic.Chapter.WithVerses>(cacheKey) is { } serializedCache)
+            if (await _cacheService.Get<WithVerses>(cacheKey) is { } serializedCache)
             {
                 _logger.LogInformation("Cache has been found. Cache.Id: {Id}. Sending.", serializedCache.Raw.Id);
                 return Ok(new { data = serializedCache.Data });
             }
 
 
-            var chapter = await _context.ChaptersQ.Include(c => c.ChapterC).Include(c => c.Verses)
-                .ThenInclude(v => v.VerseC)
+            var chapter = await _context.QChapters
+                .AsNoTracking()
+                .AsSplitQuery()
+                .Include(c => c.Verses)
                 .Include(c => c.Meanings)
                 .ThenInclude(m => m.Language)
                 .FirstOrDefaultAsync(c => c.Sequence == chapterSequence);
@@ -66,14 +69,16 @@ public class ChapterController(
 
         try
         {
-            if (await _cacheService.Get<List<Dto.Islam.Quranic.Chapter.Complete>>(cacheKey) is { } serializedCache)
+            if (await _cacheService.Get<List<Complete>>(cacheKey) is { } serializedCache)
             {
                 _logger.LogInformation("Cache has been found. Cache.Id: {Id}. Sending.", serializedCache.Raw.Id);
                 return Ok(new { data = serializedCache.Data });
             }
 
 
-            var chapters = await _context.ChaptersQ.Include(c => c.ChapterC)
+            var chapters = await _context.QChapters
+                .AsNoTracking()
+                .AsSplitQuery()
                 .Include(c => c.Meanings)
                 .ThenInclude(m => m.Language).ToListAsync();
 

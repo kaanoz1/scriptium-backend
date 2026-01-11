@@ -1,9 +1,9 @@
+using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ScriptiumBackend.Db;
-using ScriptiumBackend.Dto.Islam.Quranic.Root;
-using ScriptiumBackend.Dto.Islam.Quranic.Verse;
+using ScriptiumBackend.Dto.Derived.Islam.Quranic.Root;
 using ScriptiumBackend.Services.ServiceInterfaces;
 
 namespace ScriptiumBackend.Controllers.Islam.Quran;
@@ -21,10 +21,10 @@ public class RootController(
 
 
     [HttpGet("/root/{latin}")]
-    public async Task<IActionResult> Get([FromRoute] string latin)
+    public async Task<IActionResult> Get([FromRoute, StringLength(5, MinimumLength = 3), Required] string latin)
     {
         //TODO: Add validation.
-        
+
         var cacheKey = Request.GetEncodedPathAndQuery();
 
         try
@@ -36,12 +36,14 @@ public class RootController(
             }
 
 
-            var root = await _context.RootsQ
-                .Include(r => r.Words).ThenInclude(w => w.WordC)
+            var root = await _context.QRoots
+                .AsNoTracking()
+                .AsSplitQuery()
+                .Include(r => r.Words)
                 .Include(r => r.Words).ThenInclude(w => w.Transliterations).ThenInclude(t => t.Language)
                 .Include(r => r.Words).ThenInclude(w => w.Meanings).ThenInclude(m => m.Language)
-                .Include(r => r.Words).ThenInclude(w => w.Verse).ThenInclude(v => v.VerseC)
-                .FirstOrDefaultAsync(r => r.Latin == latin);
+                .Include(r => r.Words).ThenInclude(w => w.Verse)
+                .FirstOrDefaultAsync(r => r.TextInLatin == latin);
 
             if (root is null)
                 return NotFound("No root found.");

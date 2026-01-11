@@ -1,4 +1,5 @@
-using ScriptiumBackend.Model.Shared;
+using ScriptiumBackend.Dto.Sealed.Meaning;
+using ScriptiumBackend.Model.Sealed;
 
 namespace ScriptiumBackend.Interfaces;
 
@@ -9,5 +10,5 @@ public interface IHasMeaning
 
 public interface IDtoHasMeaning
 {
-    public List<Dto.Shared.Meaning.Plain> Meanings { get; set; }
+    public List<Plain> Meanings { get; set; }
 }

@@ -1,8 +1,9 @@
+using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ScriptiumBackend.Db;
-using ScriptiumBackend.Dto.Islam.Quranic.Verse;
+using ScriptiumBackend.Dto.Derived.Islam.Quranic.Verse;
 using ScriptiumBackend.Services.ServiceInterfaces;
 
 namespace ScriptiumBackend.Controllers.Islam.Quran;
@@ -20,7 +21,8 @@ public class VerseController(
 
 
     [HttpGet("/verse/{chapterSequence}/{verseSequence}")]
-    public async Task<IActionResult> Get([FromRoute] int chapterSequence, [FromRoute] int verseSequence)
+    public async Task<IActionResult> Get([FromRoute, Range(1, 114)] int chapterSequence,
+        [FromRoute, Range(0, 286)] int verseSequence)
     {
         var cacheKey = Request.GetEncodedPathAndQuery();
 
@@ -33,18 +35,21 @@ public class VerseController(
             }
 
 
-            var verse = await _context.VersesQ.Include(v => v.Chapter).ThenInclude(c => c.ChapterC)
-                .Include(v => v.VerseC)
-                .Include(v => v.Words).ThenInclude(w => w.WordC)
+            var verse = await _context.QVerses
+                .AsNoTracking()
+                .AsSplitQuery()
+                .Include(v => v.Chapter)
+                .Include(v => v.Chapter).ThenInclude(c => c.Meanings).ThenInclude(m => m.Language)
+                .Include(v => v.Words)
                 .Include(v => v.Words).ThenInclude(w => w.Roots)
                 .Include(v => v.Words).ThenInclude(w => w.Meanings).ThenInclude(w => w.Language)
                 .Include(v => v.Words).ThenInclude(w => w.Transliterations).ThenInclude(t => t.Language)
-                .FirstOrDefaultAsync(v => v.Chapter.Sequence == chapterSequence && v.VerseC.Number == verseSequence);
+                .FirstOrDefaultAsync(v => v.Chapter.Sequence == chapterSequence && v.Number == verseSequence);
 
             if (verse is null)
                 return NotFound("No verse found.");
 
-            var data = verse.ToDownDto();
+            var data = verse.ToBothDto();
 
             var savedCacheRow = await _cacheService.Save(cacheKey, data);
 

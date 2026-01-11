@@ -30,6 +30,8 @@
 
     <ItemGroup>
       <Folder Include="Controllers\Islam\" />
+      <Folder Include="Dto\Derived\" />
+      <Folder Include="Model\Derived\" />
     </ItemGroup>
 
 </Project>

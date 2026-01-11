@@ -19,13 +19,16 @@ builder.Services.AddControllers();
 
 builder.Services.AddOpenApi();
 
+builder.Services.AddValidation();
+
 builder.Services.AddScoped<ICacheService, MainCacheService>();
 
 string? connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
 builder.Services.AddDbContext<ScriptiumDbContext>(options =>
 {
-    options.UseNpgsql(connectionString ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found."));
+    options.UseNpgsql(connectionString ??
+                      throw new InvalidOperationException("Connection string 'DefaultConnection' not found."));
 });
 
 var app = builder.Build();
@@ -43,5 +46,3 @@ app.UseHttpsRedirection();
 app.MapControllers();
 
 app.Run();
-
-

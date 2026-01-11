@@ -1,4 +1,4 @@
-using ScriptiumBackend.Model.Shared;
+using ScriptiumBackend.Model.Sealed;
 
 namespace ScriptiumBackend.Interfaces;
 

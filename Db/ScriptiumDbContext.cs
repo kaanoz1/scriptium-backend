@@ -1,31 +1,36 @@
 using Microsoft.EntityFrameworkCore;
-using ScriptiumBackend.Model.Abstract.Islam;
-using ScriptiumBackend.Model.Common;
-using Common = ScriptiumBackend.Model.Common;
-using Shared = ScriptiumBackend.Model.Shared;
+using ScriptiumBackend.Model.Abstract;
+using ScriptiumBackend.Model.Derived.Islam.Quranic;
+using ScriptiumBackend.Model.Sealed;
+using ScriptiumBackend.Utils.Predefined.Model.Islam;
+using Abstract = ScriptiumBackend.Model.Abstract;
 using Util = ScriptiumBackend.Model.Util;
-using Islam = ScriptiumBackend.Model.Islam;
+using Quranic = ScriptiumBackend.Model.Derived.Islam.Quranic;
 
 
 namespace ScriptiumBackend.Db;
 
 public class ScriptiumDbContext(DbContextOptions<ScriptiumDbContext> options) : DbContext(options)
 {
-    // Common Model Tables
-    public DbSet<Shared.Node> Nodes { get; set; } = null!;
+    // Abstract Model Tables
 
-    public DbSet<Scripture> ScripturesC { get; set; } = null!;
-    public DbSet<Common.Chapter> ChaptersC { get; set; } = null!;
-    public DbSet<Common.Verse> VersesC { get; set; } = null!;
+    public DbSet<Abstract.Chapter> AChapters { get; set; } = null!;
+    public DbSet<Abstract.Verse> AVerses { get; set; } = null!;
+    public DbSet<Abstract.Word> AWords { get; set; } = null!;
+    public DbSet<Abstract.Root> ARoots { get; set; } = null!;
+    public DbSet<Abstract.Translation> ATranslations { get; set; } = null!;
+    public DbSet<TranslationUnit> ATranslationUnits { get; set; } = null!;
 
-    public DbSet<Common.Word> WordsC { get; set; } = null!;
-    public DbSet<Common.Root> RootsC { get; set; } = null!;
 
-    // Shared Model Tables
+    // Sealed Models
 
-    public DbSet<Shared.Language> Languages { get; set; } = null!;
-    public DbSet<Shared.Meaning> Meanings { get; set; } = null!;
-    public DbSet<Shared.Transliteration> Transliterations { get; set; } = null!;
+
+    public DbSet<Scripture> Scriptures { get; set; } = null!;
+    public DbSet<Footnote> Footnotes { get; set; } = null!;
+    public DbSet<Author> Authors { get; set; } = null!;
+    public DbSet<Language> Languages { get; set; } = null!;
+    public DbSet<Meaning> Meanings { get; set; } = null!;
+    public DbSet<Transliteration> Transliterations { get; set; } = null!;
 
 
     // Utility Model Tables
@@ -34,12 +39,20 @@ public class ScriptiumDbContext(DbContextOptions<ScriptiumDbContext> options) : 
     public DbSet<Util.CacheRecord> CacheRecords { get; set; } = null!;
 
 
-    // Tables Related to Islamic Sources
+    // Derived Models
 
-    public DbSet<Islam.Quranic.Chapter> ChaptersQ { get; set; } = null!;
-    public DbSet<Islam.Quranic.Verse> VersesQ { get; set; } = null!;
-    public DbSet<Islam.Quranic.Word> WordsQ { get; set; } = null!;
-    public DbSet<Islam.Quranic.Root> RootsQ { get; set; } = null!;
+    // Derived Models Related To Islam
+
+    // Derived Models Related To Quran
+
+    public DbSet<Quranic.Chapter> QChapters { get; set; } = null!;
+    public DbSet<Quranic.Root> QRoots { get; set; } = null!;
+
+    private DbSet<Quranic.Translation> QTranslations { get; set; } = null!;
+    public DbSet<Quranic.Verse> QVerses { get; set; } = null!;
+    public DbSet<Quranic.Word> QWords { get; set; } = null!;
+
+    public DbSet<VerseTranslation> QVerseTranslations { get; set; } = null!;
 
 
     // Custom Models (Not in the DB)
@@ -48,16 +61,14 @@ public class ScriptiumDbContext(DbContextOptions<ScriptiumDbContext> options) : 
     {
         get
         {
-            var chapters = ChaptersQ
-                .Include(qc => qc.ChapterC)
+            var chapters = QChapters
                 .OrderBy(qc => qc.Sequence)
                 .ToList();
 
-            return new Quran(chapters)
-            {
-                Name = "القرآن الكريم",
-                Code = 'Q'
-            };
+            var translations = QTranslations
+                .Include(t => t.Authors).ThenInclude(a => a.Language).ToList();
+
+            return new Quran(chapters, translations);
         }
     }
 
@@ -81,6 +92,24 @@ public class ScriptiumDbContext(DbContextOptions<ScriptiumDbContext> options) : 
             entity.HasIndex(e => e.Url).IsUnique();
         });
 
+        modelBuilder.Entity<ScriptiumBackend.Model.Derived.Islam.Quranic.VerseTranslation>(entity =>
+        {
+            entity.ToTable("i_q_verse_translation");
+
+            entity.HasOne(vt => vt.Translation)
+                .WithMany(t => t.VerseTranslations)
+                .HasForeignKey("i_q_translation_id")
+                .IsRequired()
+                .OnDelete(DeleteBehavior.Restrict);
+
+            entity.HasOne(vt => vt.Verse)
+                .WithMany(v => v.Translations)
+                .HasForeignKey("i_q_verse_id")
+                .IsRequired()
+                .OnDelete(DeleteBehavior.Cascade);
+        });
+
+
         modelBuilder.Entity<Util.CacheRecord>(entity =>
         {
             entity.ToTable("u_cache_record");
@@ -94,18 +123,45 @@ public class ScriptiumDbContext(DbContextOptions<ScriptiumDbContext> options) : 
                 .OnDelete(DeleteBehavior.Cascade);
         });
 
-        modelBuilder.Entity<Shared.Node>(entity =>
+
+        modelBuilder.Entity<Author>(entity =>
         {
-            entity.Property(e => e.Id).ValueGeneratedOnAdd();
+            entity.Property(e => e.Id).ValueGeneratedOnAdd().HasColumnName("id");
+            entity.HasKey(e => e.Id);
 
+            entity.Property(e => e.Name).HasColumnName("name");
 
-            entity.HasOne(n => n.Parent)
-                .WithMany(n => n.Children)
-                .HasForeignKey("parent_id")
+            entity.HasOne(e => e.Language)
+                .WithMany()
+                .HasForeignKey("s_language_id")
                 .OnDelete(DeleteBehavior.Restrict);
+
+            entity.HasMany(e => e.NameTranslations)
+                .WithMany()
+                .UsingEntity(j =>
+                {
+                    j.ToTable("mm_s_authorName__s_translations");
+
+                    j.Property<long>("Id").ValueGeneratedOnAdd().HasColumnName("id");
+                    j.HasKey("Id");
+
+                    j.Property<long>("AuthorId").HasColumnName("s_author_id");
+                    j.Property<long>("MeaningId").HasColumnName("s_meaning_id");
+
+                    j.HasOne(typeof(Author))
+                        .WithMany()
+                        .HasForeignKey("AuthorId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    j.HasOne(typeof(Meaning))
+                        .WithMany()
+                        .HasForeignKey("MeaningId")
+                        .OnDelete(DeleteBehavior.NoAction);
+
+                    j.HasIndex("AuthorId", "MeaningId").IsUnique();
+                });
         });
 
-        modelBuilder.Entity<Common.Verse>(entity => { });
 
         modelBuilder.Entity<Scripture>(entity =>
         {
@@ -115,37 +171,59 @@ public class ScriptiumDbContext(DbContextOptions<ScriptiumDbContext> options) : 
 
             entity.HasMany(e => e.Meanings).WithMany().UsingEntity(j =>
             {
-                j.ToTable("c_scripture_meanings");
+                j.ToTable("mm_s_scripture__s_meanings");
 
                 j.Property<long>("Id").HasColumnName("id");
                 j.HasKey("Id");
 
-                j.Property<short>("ScriptureId").HasColumnName("scripture_id");
-                j.Property<long>("MeaningId").HasColumnName("meaning_id");
+                j.Property<short>("ScriptureId").HasColumnName("s_scripture_id");
+                j.Property<long>("MeaningId").HasColumnName("s_meaning_id");
 
-                j.HasOne(typeof(Common.Scripture)).WithMany().HasForeignKey("ScriptureId")
+                j.HasOne(typeof(Scripture)).WithMany().HasForeignKey("ScriptureId")
                     .OnDelete(DeleteBehavior.NoAction);
 
-                j.HasOne(typeof(Shared.Meaning)).WithMany().HasForeignKey("MeaningId")
+                j.HasOne(typeof(Meaning)).WithMany().HasForeignKey("MeaningId")
                     .OnDelete(DeleteBehavior.NoAction);
 
                 j.HasIndex("ScriptureId", "MeaningId").IsUnique();
             });
         });
 
-        modelBuilder.Entity<Common.Chapter>(entity => { });
 
-        modelBuilder.Entity<Islam.Quranic.Chapter>(entity =>
+        modelBuilder.Entity<Abstract.Translation>(entity =>
         {
             entity.Property(e => e.Id).ValueGeneratedOnAdd();
             entity.HasKey(e => e.Id);
 
+            entity.Property(e => e.Description).IsRequired(false);
 
-            entity.HasOne(qc => qc.ChapterC)
-                .WithOne()
-                .HasForeignKey<Islam.Quranic.Chapter>("chapter_id")
-                .OnDelete(DeleteBehavior.Cascade);
+            entity.HasMany(t => t.Authors)
+                .WithMany(a => a.Translations)
+                .UsingEntity(j =>
+                {
+                    j.ToTable("mm_s_translation__s_author");
 
+                    j.Property<long>("Id").ValueGeneratedOnAdd().HasColumnName("id");
+                    j.HasKey("Id");
+
+                    j.Property<short>("TranslationId").HasColumnName("s_translation_id");
+                    j.Property<long>("AuthorId").HasColumnName("s_author_id");
+
+                    j.HasOne(typeof(Abstract.Translation)).WithMany()
+                        .HasForeignKey("TranslationId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    j.HasOne(typeof(Author)).WithMany()
+                        .HasForeignKey("AuthorId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    j.HasIndex("TranslationId", "AuthorId").IsUnique();
+                });
+        });
+
+
+        modelBuilder.Entity<Quranic.Chapter>(entity =>
+        {
             entity.HasMany(qc => qc.Verses)
                 .WithOne(v => v.Chapter)
                 .HasForeignKey("i_q_chapter_id")
@@ -153,20 +231,20 @@ public class ScriptiumDbContext(DbContextOptions<ScriptiumDbContext> options) : 
 
             entity.HasMany(e => e.Meanings).WithMany().UsingEntity(j =>
             {
-                j.ToTable("i_q_chapter_meanings");
+                j.ToTable("mm_i_q_chapter__s_meanings");
 
                 j.Property<long>("Id").ValueGeneratedOnAdd().HasColumnName("id");
                 j.HasKey("Id");
 
                 j.Property<short>("ChapterId").HasColumnName("i_q_chapter_id");
-                j.Property<long>("MeaningId").HasColumnName("meaning_id");
+                j.Property<long>("MeaningId").HasColumnName("s_meaning_id");
 
 
-                j.HasOne(typeof(Islam.Quranic.Chapter)).WithMany()
+                j.HasOne(typeof(Quranic.Chapter)).WithMany()
                     .HasForeignKey("ChapterId")
                     .OnDelete(DeleteBehavior.NoAction);
 
-                j.HasOne(typeof(Shared.Meaning)).WithMany()
+                j.HasOne(typeof(Meaning)).WithMany()
                     .HasForeignKey("MeaningId")
                     .OnDelete(DeleteBehavior.NoAction);
 
@@ -174,13 +252,8 @@ public class ScriptiumDbContext(DbContextOptions<ScriptiumDbContext> options) : 
             });
         });
 
-        modelBuilder.Entity<Islam.Quranic.Verse>(entity =>
+        modelBuilder.Entity<Quranic.Verse>(entity =>
         {
-            entity.HasOne(qv => qv.VerseC)
-                .WithOne()
-                .HasForeignKey<Islam.Quranic.Verse>("verse_id")
-                .OnDelete(DeleteBehavior.Cascade);
-
             entity.HasOne(qv => qv.Chapter)
                 .WithMany(c => c.Verses)
                 .HasForeignKey("i_q_chapter_id")
@@ -191,59 +264,49 @@ public class ScriptiumDbContext(DbContextOptions<ScriptiumDbContext> options) : 
                 .OnDelete(DeleteBehavior.Cascade);
         });
 
-        modelBuilder.Entity<Islam.Quranic.Word>(entity =>
+        modelBuilder.Entity<Quranic.Word>(entity =>
         {
-            entity.Property(e => e.Id).ValueGeneratedOnAdd();
-            entity.HasKey(e => e.Id);
-
-            // Common Word ile İlişki
-            entity.HasOne(qw => qw.WordC)
-                .WithMany() // Common Word'ün Quranic Word'den haberi yok
-                .HasForeignKey("word_c_id")
-                .OnDelete(DeleteBehavior.Cascade);
-
-            // MEANINGS İLİŞKİSİ (Join Table)
             entity.HasMany(e => e.Meanings)
-                .WithMany() // Meaning entity'si Word'ü bilmez
+                .WithMany()
                 .UsingEntity(j =>
                 {
-                    j.ToTable("i_q_word_meanings");
+                    j.ToTable("mm_i_q_word__s_meanings");
 
                     j.Property<long>("Id").ValueGeneratedOnAdd().HasColumnName("id");
                     j.HasKey("Id");
 
                     j.Property<int>("WordId").HasColumnName("i_q_word_id");
-                    j.Property<long>("MeaningId").HasColumnName("meaning_id");
+                    j.Property<long>("MeaningId").HasColumnName("s_meaning_id");
 
-                    j.HasOne(typeof(Islam.Quranic.Word)).WithMany()
+                    j.HasOne(typeof(Quranic.Word)).WithMany()
                         .HasForeignKey("WordId")
-                        .OnDelete(DeleteBehavior.Cascade); // Kelime silinirse ilişki silinsin
+                        .OnDelete(DeleteBehavior.Cascade);
 
-                    j.HasOne(typeof(Shared.Meaning)).WithMany()
+                    j.HasOne(typeof(Meaning)).WithMany()
                         .HasForeignKey("MeaningId")
-                        .OnDelete(DeleteBehavior.NoAction); // Anlam tablosundaki veri silinmesin
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     j.HasIndex("WordId", "MeaningId").IsUnique();
                 });
 
-            // TRANSLITERATIONS İLİŞKİSİ (Join Table)
+
             entity.HasMany(e => e.Transliterations)
-                .WithMany() // Transliteration entity'si Word'ü bilmez
+                .WithMany()
                 .UsingEntity(j =>
                 {
-                    j.ToTable("i_q_word_transliterations");
+                    j.ToTable("mm_i_q_word__s_transliterations");
 
                     j.Property<long>("Id").ValueGeneratedOnAdd().HasColumnName("id");
                     j.HasKey("Id");
 
                     j.Property<int>("WordId").HasColumnName("i_q_word_id");
-                    j.Property<long>("TransliterationId").HasColumnName("transliteration_id");
+                    j.Property<long>("TransliterationId").HasColumnName("s_transliteration_id");
 
-                    j.HasOne(typeof(Islam.Quranic.Word)).WithMany()
+                    j.HasOne(typeof(Quranic.Word)).WithMany()
                         .HasForeignKey("WordId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    j.HasOne(typeof(Shared.Transliteration)).WithMany()
+                    j.HasOne(typeof(Transliteration)).WithMany()
                         .HasForeignKey("TransliterationId")
                         .OnDelete(DeleteBehavior.NoAction);
 
@@ -252,44 +315,44 @@ public class ScriptiumDbContext(DbContextOptions<ScriptiumDbContext> options) : 
         });
 
 
-        modelBuilder.Entity<Shared.Language>(entity =>
+        modelBuilder.Entity<Language>(entity =>
         {
             entity.Property(e => e.Id).ValueGeneratedOnAdd();
 
 
             entity.HasData(Utils.Constants.Default.Language.InitialLanguages);
         });
-        modelBuilder.Entity<Shared.Meaning>(entity =>
+        modelBuilder.Entity<Meaning>(entity =>
         {
             entity.Property(e => e.Id).ValueGeneratedOnAdd();
 
             entity.Property(e => e.Content).HasColumnName("content");
-            entity.Property(e => e.LanguageId).HasColumnName("language_id");
         });
 
-        modelBuilder.Entity<Root>(entity =>
+        modelBuilder.Entity<Abstract.Root>(entity =>
         {
             entity.HasKey(e => e.Id);
             entity.Property(e => e.Id).HasColumnName("id");
+            entity.HasIndex(e => e.Text).IsUnique();
         });
 
-        modelBuilder.Entity<Islam.Quranic.Root>(entity =>
+        modelBuilder.Entity<Quranic.Root>(entity =>
         {
             entity.HasMany(r => r.Words)
                 .WithMany(w => w.Roots)
                 .UsingEntity<Dictionary<string, object>>(
-                    "i_q_mm_root_word", j =>
+                    "mm_i_q_root__i_q_word", j =>
                     {
-                        j.HasOne(typeof(Islam.Quranic.Word))
+                        j.HasOne(typeof(Quranic.Word))
                             .WithMany()
                             .HasForeignKey("WordsId")
-                            .HasPrincipalKey(nameof(Word.Id))
+                            .HasPrincipalKey(nameof(Quranic.Word.Id))
                             .OnDelete(DeleteBehavior.Restrict);
 
-                        j.HasOne(typeof(Islam.Quranic.Root))
+                        j.HasOne(typeof(Quranic.Root))
                             .WithMany()
                             .HasForeignKey("RootsId")
-                            .HasPrincipalKey(nameof(Root.Id))
+                            .HasPrincipalKey(nameof(Quranic.Root.Id))
                             .OnDelete(DeleteBehavior.Restrict);
 
 
@@ -303,8 +366,8 @@ public class ScriptiumDbContext(DbContextOptions<ScriptiumDbContext> options) : 
                         j.HasIndex("RootsId", "WordsId").IsUnique();
 
 
-                        j.Property<int>("RootsId").HasColumnName("root_id");
-                        j.Property<int>("WordsId").HasColumnName("word_id");
+                        j.Property<int>("RootsId").HasColumnName("i_q_root_id");
+                        j.Property<int>("WordsId").HasColumnName("i_q_word_id");
                     });
         });
     }
