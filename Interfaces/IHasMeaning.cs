@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using ScriptiumBackend.Dto.Sealed.Meaning;
 using ScriptiumBackend.Model.Sealed;
 

@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using ScriptiumBackend.Model.Abstract;
 using ScriptiumBackend.Model.Derived.Islam.Quranic;
@@ -37,6 +39,7 @@ public class ScriptiumDbContext(DbContextOptions<ScriptiumDbContext> options) : 
 
     public DbSet<Util.Cache> Caches { get; set; } = null!;
     public DbSet<Util.CacheRecord> CacheRecords { get; set; } = null!;
+    public DbSet<Util.SearchableItem> SearchableItems { get; set; } = null!;
 
 
     // Derived Models
@@ -48,7 +51,7 @@ public class ScriptiumDbContext(DbContextOptions<ScriptiumDbContext> options) : 
     public DbSet<Quranic.Chapter> QChapters { get; set; } = null!;
     public DbSet<Quranic.Root> QRoots { get; set; } = null!;
 
-    private DbSet<Quranic.Translation> QTranslations { get; set; } = null!;
+    public DbSet<Quranic.Translation> QTranslations { get; set; } = null!;
     public DbSet<Quranic.Verse> QVerses { get; set; } = null!;
     public DbSet<Quranic.Word> QWords { get; set; } = null!;
 
@@ -76,7 +79,19 @@ public class ScriptiumDbContext(DbContextOptions<ScriptiumDbContext> options) : 
     {
         base.OnModelCreating(modelBuilder);
 
+        modelBuilder.HasPostgresExtension("vector");
 
+        modelBuilder.HasPostgresExtension("pg_trgm");
+        
+        modelBuilder.Entity<Util.SearchableItem>(entity =>
+        {
+        
+            entity.ToTable("u_searchable_item");
+        
+            entity.Property(e => e.Embedding)
+                .HasColumnType("vector(768)");
+        });
+        
         modelBuilder.Entity<Util.Cache>(entity =>
         {
             entity.HasIndex(e => e.Url)
@@ -92,6 +107,13 @@ public class ScriptiumDbContext(DbContextOptions<ScriptiumDbContext> options) : 
             entity.HasIndex(e => e.Url).IsUnique();
         });
 
+        modelBuilder.Entity<TranslationUnit>(entity =>
+        {
+            entity.HasIndex(e => e.Text)
+                .HasMethod("gin") 
+                .HasOperators("gin_trgm_ops"); 
+        });
+        
         modelBuilder.Entity<ScriptiumBackend.Model.Derived.Islam.Quranic.VerseTranslation>(entity =>
         {
             entity.ToTable("i_q_verse_translation");
@@ -262,6 +284,29 @@ public class ScriptiumDbContext(DbContextOptions<ScriptiumDbContext> options) : 
             entity.HasMany(v => v.Words)
                 .WithOne(w => w.Verse)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            entity.HasMany(e => e.Transliterations)
+                .WithMany().UsingEntity(j =>
+                {
+                    j.ToTable("mm_i_q_verse__s_transliteration");
+
+                    j.Property<long>("Id").ValueGeneratedOnAdd().HasColumnName("id");
+                    j.HasKey("Id");
+
+                    j.Property<short>("VerseId").HasColumnName("i_q_verse_id");
+                    j.Property<long>("TransliterationId").HasColumnName("s_transliteration_id");
+
+
+                    j.HasOne(typeof(Quranic.Verse)).WithMany()
+                        .HasForeignKey("VerseId")
+                        .OnDelete(DeleteBehavior.NoAction);
+
+                    j.HasOne(typeof(Transliteration)).WithMany()
+                        .HasForeignKey("TransliterationId")
+                        .OnDelete(DeleteBehavior.NoAction);
+
+                    j.HasIndex("TransliterationId", "VerseId").IsUnique();
+                });
         });
 
         modelBuilder.Entity<Quranic.Word>(entity =>

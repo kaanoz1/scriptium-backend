@@ -9,7 +9,7 @@ public sealed class Transliteration
     [Key, Required, DatabaseGenerated(DatabaseGeneratedOption.Identity), Column("id")]
     public required long Id { get; init; }
 
-    [Required, Column("content"), StringLength(1_000)]
+    [Required, Column("content"), StringLength(2_500)]
     public required string Content { get; init; }
 
     [Required, ForeignKey("s_language_id")]

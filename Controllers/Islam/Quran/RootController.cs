@@ -1,7 +1,10 @@
+using System;
 using System.ComponentModel.DataAnnotations;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using ScriptiumBackend.Db;
 using ScriptiumBackend.Dto.Derived.Islam.Quranic.Root;
 using ScriptiumBackend.Services.ServiceInterfaces;
@@ -10,17 +13,12 @@ namespace ScriptiumBackend.Controllers.Islam.Quran;
 
 [ApiController, Route("api/islam/quranic")]
 public class RootController(
-    ScriptiumDbContext context,
+    ScriptiumDbContext db,
     ILogger<VerseController> logger,
     ICacheService cacheService)
     : Controller
 {
-    private readonly ScriptiumDbContext _context = context;
-    private readonly ILogger<VerseController> _logger = logger;
-    private readonly ICacheService _cacheService = cacheService;
-
-
-    [HttpGet("/root/{latin}")]
+    [HttpGet("root/{latin}")]
     public async Task<IActionResult> Get([FromRoute, StringLength(5, MinimumLength = 3), Required] string latin)
     {
         //TODO: Add validation.
@@ -29,14 +27,14 @@ public class RootController(
 
         try
         {
-            if (await _cacheService.Get<UpToVerse>(cacheKey) is { } serializedCache)
+            if (await cacheService.Get<UpToVerse>(cacheKey) is { } serializedCache)
             {
-                _logger.LogInformation("Cache has been found. Cache.Id: {Id}. Sending.", serializedCache.Raw.Id);
+                logger.LogInformation("Cache has been found. Cache.Id: {Id}. Sending.", serializedCache.Raw.Id);
                 return Ok(new { data = serializedCache.Data });
             }
 
 
-            var root = await _context.QRoots
+            var root = await db.QRoots
                 .AsNoTracking()
                 .AsSplitQuery()
                 .Include(r => r.Words)
@@ -51,24 +49,108 @@ public class RootController(
                 .ThenInclude(t => t.Translation).ThenInclude(t => t.Language)
                 .Include(r => r.Words).ThenInclude(w => w.Verse).ThenInclude(v => v.Translations)
                 .ThenInclude(t => t.Footnotes)
+                .Include(r => r.Words).ThenInclude(w => w.Verse).ThenInclude(v => v.Transliterations)
+                .ThenInclude(t => t.Language)
+                .Include(r => r.Words).ThenInclude(w => w.Verse).ThenInclude(v => v.Chapter)
+                .ThenInclude(c => c.Meanings).ThenInclude(m => m.Language)
                 .FirstOrDefaultAsync(r => r.TextInLatin == latin);
 
             if (root is null)
                 return NotFound("No root found.");
 
-            var data = root.ToUpToVerseDto();
+            var data = root.UpToQuran();
 
-            var savedCacheRow = await _cacheService.Save(cacheKey, data);
+            var savedCacheRow = await cacheService.Save(cacheKey, data);
 
-            _logger.LogInformation("Cache saved. Model name: Verse. Cache.Id: {CacheId}", savedCacheRow.Id);
+            logger.LogInformation("Cache saved. Model name: Verse. Cache.Id: {CacheId}", savedCacheRow.Id);
 
             return Ok(new { data });
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex,
+            logger.LogError(ex,
                 "An unexpected error occurred while processing root. Latin: {Latin}",
                 latin);
+
+            return StatusCode(500, "Internal server error. Please try again later.");
+        }
+    }
+    
+     [HttpGet("root/{latin}/plain")]
+    public async Task<IActionResult> GetPlain([FromRoute, StringLength(5, MinimumLength = 3), Required] string latin)
+    {
+        //TODO: Add validation.
+
+        var cacheKey = Request.GetEncodedPathAndQuery();
+
+        try
+        {
+            if (await cacheService.Get<UpToVerse>(cacheKey) is { } serializedCache)
+            {
+                logger.LogInformation("Cache has been found. Cache.Id: {Id}. Sending.", serializedCache.Raw.Id);
+                return Ok(new { data = serializedCache.Data });
+            }
+
+
+            var root = await db.QRoots
+                .AsNoTracking()
+                .AsSplitQuery()
+                .FirstOrDefaultAsync(r => r.TextInLatin == latin);
+
+            if (root is null)
+                return NotFound("No root found.");
+
+            var data = root.ToPlainDto();
+
+            var savedCacheRow = await cacheService.Save(cacheKey, data);
+
+            logger.LogInformation("Cache saved. Model name: Verse. Cache.Id: {CacheId}", savedCacheRow.Id);
+
+            return Ok(new { data });
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex,
+                "An unexpected error occurred while processing root. Latin: {Latin}",
+                latin);
+
+            return StatusCode(500, "Internal server error. Please try again later.");
+        }
+    }
+
+
+    [HttpGet("root/list")]
+    public async Task<IActionResult> List()
+    {
+        var cacheKey = Request.GetEncodedPathAndQuery();
+
+        try
+        {
+            if (await cacheService.Get<List<Plain>>(cacheKey) is { } serializedCache)
+            {
+                logger.LogInformation("Cache has been found. Cache.Id: {Id}. Sending.", serializedCache.Raw.Id);
+                return Ok(new { data = serializedCache.Data });
+            }
+
+
+            var roots = await db.QRoots
+                .AsNoTracking()
+                .AsSplitQuery()
+                .ToListAsync();
+
+
+            var data = roots.Select(r => r.ToPlainDto()).ToList();
+
+            var savedCacheRow = await cacheService.Save(cacheKey, data);
+
+            logger.LogInformation("Cache saved. Model name: Verse. Cache.Id: {CacheId}", savedCacheRow.Id);
+
+            return Ok(new { data });
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex,
+                "An unexpected error occurred while processing root list.");
 
             return StatusCode(500, "Internal server error. Please try again later.");
         }

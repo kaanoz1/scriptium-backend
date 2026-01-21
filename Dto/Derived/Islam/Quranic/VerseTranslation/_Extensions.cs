@@ -1,3 +1,7 @@
+using System;
+using System.Linq;
+using ScriptiumBackend.Dto.Derived.Islam.Quranic.Translation;
+using ScriptiumBackend.Dto.Derived.Islam.Quranic.Verse;
 using ScriptiumBackend.Dto.Sealed.Author;
 using ScriptiumBackend.Dto.Sealed.Footnote;
 using ScriptiumBackend.Dto.Sealed.Language;
@@ -25,15 +29,28 @@ public static class Extensions
             ArgumentNullException.ThrowIfNull(verseTranslation.Translation.Authors);
             ArgumentNullException.ThrowIfNull(verseTranslation.Footnotes);
             ArgumentNullException.ThrowIfNull(verseTranslation.Translation.Language);
-            
+
             return new()
             {
                 Text = verseTranslation.Text,
-                Authors = verseTranslation.Translation.Authors
-                    .Select(a => a.ToCompleteDto()).ToList(),
                 Footnotes = verseTranslation.Footnotes.Select(f => f.ToPlainDto())
                     .ToList(),
-                Language = verseTranslation.Translation.Language.ToPlainDto(),
+                Translation = verseTranslation.Translation.ToComplete(),
+            };
+        }
+
+        public WithVerse ToWithVerse()
+        {
+            ArgumentNullException.ThrowIfNull(verseTranslation.Translation);
+            ArgumentNullException.ThrowIfNull(verseTranslation.Footnotes);
+            ArgumentNullException.ThrowIfNull(verseTranslation.Verse);
+
+            return new()
+            {
+                Text = verseTranslation.Text,
+                Footnotes = verseTranslation.Footnotes.Select(f => f.ToPlainDto()).ToList(),
+                Verse = verseTranslation.Verse.ToTransliterationUpToQuran(),
+                Translation = verseTranslation.Translation.ToComplete(),
             };
         }
     }

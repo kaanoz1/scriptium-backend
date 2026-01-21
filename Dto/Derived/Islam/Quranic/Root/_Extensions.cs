@@ -1,3 +1,5 @@
+using System;
+using System.Linq;
 using ScriptiumBackend.Dto.Derived.Islam.Quranic.Word;
 
 namespace ScriptiumBackend.Dto.Derived.Islam.Quranic.Root;
@@ -44,6 +46,16 @@ public static class RootExtensions
                 Latin = root.TextInLatin,
                 Text = root.Text,
                 Words = root.Words.Select(w => w.ToUpToVerseDto()).ToList(),
+            };
+        }
+
+        public UpToQuran UpToQuran()
+        {
+            return new()
+            {
+                Latin = root.TextInLatin,
+                Text = root.Text,
+                Words = root.Words.Where(w => w.Verse.Number > 0).Select(w => w.UpToQuran()).ToList(),
             };
         }
     }

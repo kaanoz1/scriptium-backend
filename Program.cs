@@ -1,11 +1,25 @@
 using Microsoft.EntityFrameworkCore;
+using Npgsql;
 using Scalar.AspNetCore;
 using ScriptiumBackend.Db;
+using ScriptiumBackend.Services.ConcreteServices.BackgroundServices;
 using ScriptiumBackend.Services.ConcreteServices.Cache;
+using ScriptiumBackend.Services.ConcreteServices.Embedding;
 using ScriptiumBackend.Services.ServiceInterfaces;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
+
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", policy =>
+    {
+        policy.AllowAnyOrigin()
+            .AllowAnyMethod()
+            .AllowAnyHeader();
+    });
+});
 
 Log.Logger = new LoggerConfiguration()
     .MinimumLevel.Information()
@@ -22,16 +36,20 @@ builder.Services.AddOpenApi();
 builder.Services.AddValidation();
 
 builder.Services.AddScoped<ICacheService, MainCacheService>();
+builder.Services.AddHttpClient<IEmbeddingService, OllamaEmbeddingService>();
+builder.Services.AddHostedService<IndexingWorker>();
 
-string? connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
 builder.Services.AddDbContext<ScriptiumDbContext>(options =>
 {
     options.UseNpgsql(connectionString ??
-                      throw new InvalidOperationException("Connection string 'DefaultConnection' not found."));
+                      throw new InvalidOperationException("Connection string 'DefaultConnection' not found."),
+        npgsqlOptions => { npgsqlOptions.UseVector(); });
 });
 
 var app = builder.Build();
+app.UseCors("AllowAll");
 
 app.UseSerilogRequestLogging();
 

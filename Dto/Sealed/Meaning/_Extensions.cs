@@ -1,3 +1,4 @@
+using System;
 using ScriptiumBackend.Dto.Sealed.Language;
 
 namespace ScriptiumBackend.Dto.Sealed.Meaning;

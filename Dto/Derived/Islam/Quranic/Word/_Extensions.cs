@@ -1,3 +1,5 @@
+using System;
+using System.Linq;
 using ScriptiumBackend.Dto.Derived.Islam.Quranic.Root;
 using ScriptiumBackend.Dto.Derived.Islam.Quranic.Verse;
 using ScriptiumBackend.Dto.Sealed.Meaning;
@@ -89,6 +91,18 @@ public static class WordExtensions
                 Meanings = word.Meanings.Select(m => m.ToPlainDto()).ToList(),
                 Transliterations = word.Transliterations.Select(t =>t.ToPlainDto()).ToList(),
                 Verse = word.Verse.ToCompleteDto()
+            };
+        }
+
+        public UpToQuran UpToQuran()
+        {
+            return new()
+            {
+                Sequence = word.Sequence,
+                Meanings = word.Meanings.Select(m => m.ToPlainDto()).ToList(),
+                Text =  word.Text,
+                Transliterations =  word.Transliterations.Select(t => t.ToPlainDto()).ToList(),
+                Verse = word.Verse.UpToQuranDto(),
             };
         }
     }

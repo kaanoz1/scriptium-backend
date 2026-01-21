@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace ScriptiumBackend.Dto.Sealed.Author;
 
 public class Complete : Plain

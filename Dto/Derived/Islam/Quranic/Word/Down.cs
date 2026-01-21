@@ -1,4 +1,6 @@
 
+using System.Collections.Generic;
+
 namespace ScriptiumBackend.Dto.Derived.Islam.Quranic.Word;
 
 

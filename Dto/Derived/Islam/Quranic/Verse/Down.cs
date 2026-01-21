@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using ScriptiumBackend.Interfaces;
 
 namespace ScriptiumBackend.Dto.Derived.Islam.Quranic.Verse;

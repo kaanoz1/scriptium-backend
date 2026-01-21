@@ -1,3 +1,5 @@
+using System;
+using System.Linq;
 using ScriptiumBackend.Dto.Derived.Islam.Quranic.Verse;
 using ScriptiumBackend.Dto.Sealed.Meaning;
 using ScriptiumBackend.Utils.Predefined.Model.Islam;
@@ -47,6 +49,30 @@ public static class Extensions
                 Name = chapter.Name,
                 Sequence = chapter.Sequence,
                 Scripture = new QuranPlain(),
+            };
+        }
+
+        public Plain ToPlainDto()
+        {
+            return new()
+            {
+                Name = chapter.Name,
+                Sequence = chapter.Sequence,
+            };
+        }
+
+        public WithVerseCount ToVerseCountDto()
+        {
+            ArgumentNullException.ThrowIfNull(chapter.Meanings);
+            ArgumentNullException.ThrowIfNull(chapter.Verses);
+
+            return new()
+            {
+                Name = chapter.Name,
+                Sequence = chapter.Sequence,
+                Meanings = chapter.Meanings.Select(m => m.ToPlainDto()).ToList(),
+
+                VerseCount = chapter.Verses.Where(v => v.Number > 0).ToList().Count,
             };
         }
     }

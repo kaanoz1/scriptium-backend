@@ -1,4 +1,7 @@
+using System;
+using System.Collections.Generic;
 using System.Text.Json;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using ScriptiumBackend.Classes;
 using ScriptiumBackend.Db;
@@ -53,7 +56,7 @@ public class MainCacheService(ScriptiumDbContext context) : ICacheService
         return cache;
     }
 
-    public async Task<SerializedCache<T>?> Get<T>(string url) // where T : ICacheable # Will be fixed.
+    public async Task<SerializedCache<T>?> Get<T>(string url)
     {
         var rawCache = await this.GetPlainCache(url);
 
@@ -62,10 +65,14 @@ public class MainCacheService(ScriptiumDbContext context) : ICacheService
 
         try
         {
-            var serialized = JsonSerializer.Deserialize<T>(rawCache.Data);
+            var options = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            };
+
+            var serialized = JsonSerializer.Deserialize<T>(rawCache.Data, options);
 
             ArgumentNullException.ThrowIfNull(serialized);
-
 
             var record = new Util.CacheRecord
             {
@@ -78,8 +85,9 @@ public class MainCacheService(ScriptiumDbContext context) : ICacheService
 
             return new SerializedCache<T>(rawCache, serialized);
         }
-        catch
+        catch (Exception ex)
         {
+            Console.WriteLine($"Cache Deserialization Error ({url}): {ex.Message}");
             return null;
         }
     }

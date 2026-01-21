@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace ScriptiumBackend.Utils.Predefined.Model.Islam;
 
 using Model = ScriptiumBackend.Model;

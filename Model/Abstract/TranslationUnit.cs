@@ -1,15 +1,15 @@
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using ScriptiumBackend.Interfaces;
 using ScriptiumBackend.Model.Sealed;
+using ScriptiumBackend.Model.Util;
 
 namespace ScriptiumBackend.Model.Abstract;
 
 [Table("a_translationUnit")]
-public abstract class TranslationUnit
+public abstract class TranslationUnit : SearchableItem, ISearchableContent
 {
-    [Key, Required, DatabaseGenerated(DatabaseGeneratedOption.Identity), Column("id")]
-    public required long Id { get; init; }
-
     [Required, Column("text"), StringLength(2500)]
     public required string Text { get; init; }
 
@@ -17,4 +17,6 @@ public abstract class TranslationUnit
 
     [Required, ForeignKey("s_language_id")]
     public required Language Language { get; init; }
+    
+    public string GetContentForEmbedding() => Text;
 }

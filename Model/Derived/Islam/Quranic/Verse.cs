@@ -1,6 +1,8 @@
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Diagnostics.CodeAnalysis;
+using ScriptiumBackend.Model.Sealed;
 
 namespace ScriptiumBackend.Model.Derived.Islam.Quranic;
 
@@ -33,4 +35,6 @@ public class Verse : Abstract.Verse
     public required List<Word> Words { get; init; }
 
     public required List<VerseTranslation> Translations { get; init; }
+
+    public required List<Transliteration> Transliterations { get; init; }
 }

@@ -6,5 +6,5 @@ public class Plain: IHasSequence
 {
     public required string Name { get; init; }
 
-    public int Sequence { get; set; }
+    public required int Sequence { get; set; }
 }
