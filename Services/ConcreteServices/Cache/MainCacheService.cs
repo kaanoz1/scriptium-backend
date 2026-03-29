@@ -13,11 +13,16 @@ namespace ScriptiumBackend.Services.ConcreteServices.Cache;
 
 public class MainCacheService(ScriptiumDbContext context) : ICacheService
 {
-    private readonly ScriptiumDbContext _context = context;
+    private static readonly JsonSerializerOptions JsonOptions = new()
+    {
+        PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+        PropertyNameCaseInsensitive = true,
+        WriteIndented = false
+    };
 
     public async Task<string?> GetPlain(string url)
     {
-        var cache = await _context.Caches
+        var cache = await context.Caches
             .FirstOrDefaultAsync(c => c.Url == url);
 
         if (cache == null) return null;
@@ -28,15 +33,15 @@ public class MainCacheService(ScriptiumDbContext context) : ICacheService
             FetchedAt = DateTime.UtcNow
         };
 
-        await _context.Set<Util.CacheRecord>().AddAsync(record);
-        await _context.SaveChangesAsync();
+        await context.Set<Util.CacheRecord>().AddAsync(record);
+        await context.SaveChangesAsync();
 
         return cache.Data;
     }
 
     public async Task<Util.Cache?> GetPlainCache(string url)
     {
-        var cache = await _context.Caches
+        var cache = await context.Caches
             .Include(c => c.Records)
             .FirstOrDefaultAsync(c => c.Url == url);
 
@@ -49,8 +54,8 @@ public class MainCacheService(ScriptiumDbContext context) : ICacheService
             FetchedAt = DateTime.UtcNow
         };
 
-        await _context.Set<Util.CacheRecord>().AddAsync(record);
-        await _context.SaveChangesAsync();
+        await context.Set<Util.CacheRecord>().AddAsync(record);
+        await context.SaveChangesAsync();
 
 
         return cache;
@@ -65,12 +70,7 @@ public class MainCacheService(ScriptiumDbContext context) : ICacheService
 
         try
         {
-            var options = new JsonSerializerOptions
-            {
-                PropertyNameCaseInsensitive = true
-            };
-
-            var serialized = JsonSerializer.Deserialize<T>(rawCache.Data, options);
+            var serialized = JsonSerializer.Deserialize<T>(rawCache.Data, JsonOptions);
 
             ArgumentNullException.ThrowIfNull(serialized);
 
@@ -80,8 +80,8 @@ public class MainCacheService(ScriptiumDbContext context) : ICacheService
                 FetchedAt = DateTime.UtcNow
             };
 
-            await _context.Set<Util.CacheRecord>().AddAsync(record);
-            await _context.SaveChangesAsync();
+            await context.Set<Util.CacheRecord>().AddAsync(record);
+            await context.SaveChangesAsync();
 
             return new SerializedCache<T>(rawCache, serialized);
         }
@@ -97,10 +97,11 @@ public class MainCacheService(ScriptiumDbContext context) : ICacheService
     {
         var duration = validDuration ?? TimeSpan.FromDays(10);
 
-        var existingCache = await _context.Caches
+        var existingCache = await context.Caches
             .FirstOrDefaultAsync(c => c.Url == url);
 
-        var serializedData = JsonSerializer.Serialize(data);
+
+        var serializedData = JsonSerializer.Serialize(data, JsonOptions);
         var now = DateTime.UtcNow;
 
         Util.Cache resultCache;
@@ -115,7 +116,7 @@ public class MainCacheService(ScriptiumDbContext context) : ICacheService
             existingCache.Data = serializedData;
             existingCache.UpdatedAt = now;
 
-            _context.Caches.Update(existingCache);
+            context.Caches.Update(existingCache);
             resultCache = existingCache;
         }
         else
@@ -129,11 +130,11 @@ public class MainCacheService(ScriptiumDbContext context) : ICacheService
                 Records = []
             };
 
-            await _context.Caches.AddAsync(newCache);
+            await context.Caches.AddAsync(newCache);
             resultCache = newCache;
         }
 
-        await _context.SaveChangesAsync();
+        await context.SaveChangesAsync();
         return resultCache;
     }
 
@@ -141,10 +142,10 @@ public class MainCacheService(ScriptiumDbContext context) : ICacheService
     {
         var duration = validDuration ?? TimeSpan.FromDays(10);
 
-        var existingCache = await _context.Caches
+        var existingCache = await context.Caches
             .FirstOrDefaultAsync(c => c.Url == url);
 
-        var serializedData = JsonSerializer.Serialize(data);
+        var serializedData = JsonSerializer.Serialize(data, JsonOptions);
         var now = DateTime.UtcNow;
 
         Util.Cache resultCache;
@@ -158,7 +159,7 @@ public class MainCacheService(ScriptiumDbContext context) : ICacheService
             existingCache.Data = serializedData;
             existingCache.UpdatedAt = now;
 
-            _context.Caches.Update(existingCache);
+            context.Caches.Update(existingCache);
             resultCache = existingCache;
         }
         else
@@ -172,11 +173,11 @@ public class MainCacheService(ScriptiumDbContext context) : ICacheService
                 Records = []
             };
 
-            await _context.Caches.AddAsync(newCache);
+            await context.Caches.AddAsync(newCache);
             resultCache = newCache;
         }
 
-        await _context.SaveChangesAsync();
+        await context.SaveChangesAsync();
         return resultCache;
     }
 }

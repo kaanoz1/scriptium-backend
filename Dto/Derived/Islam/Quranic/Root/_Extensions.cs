@@ -58,5 +58,17 @@ public static class RootExtensions
                 Words = root.Words.Where(w => w.Verse.Number > 0).Select(w => w.UpToQuran()).ToList(),
             };
         }
+
+        public WithWordCount ToWithWordCount()
+        {
+            ArgumentNullException.ThrowIfNull(root.Words);
+
+            return new()
+            {
+                Latin = root.TextInLatin,
+                Text = root.Text,
+                Occurrences = root.Words.Count,
+            };
+        }
     }
 }

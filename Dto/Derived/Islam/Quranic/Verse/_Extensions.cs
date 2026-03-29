@@ -65,7 +65,7 @@ public static class VerseExtensions
                 SimplePlain = verse.SimplePlain,
                 Uthmani = verse.Uthmani,
                 UthmaniMinimal = verse.UthmaniMinimal,
-                Word = verse.Words.Select(word => word.ToDownDto()).ToList()
+                Words = verse.Words.Select(word => word.ToDownDto()).ToList()
             };
         }
 

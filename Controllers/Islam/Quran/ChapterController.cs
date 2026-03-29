@@ -119,7 +119,7 @@ public class ChapterController(
 
         try
         {
-            if (await cacheService.Get<List<Complete>>(cacheKey) is { } serializedCache)
+            if (await cacheService.Get<List<WithVerseCount>>(cacheKey) is { } serializedCache)
             {
                 logger.LogInformation("Cache has been found. Cache.Id: {Id}. Sending.", serializedCache.Raw.Id);
                 return Ok(new { data = serializedCache.Data });

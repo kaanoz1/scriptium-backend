@@ -13,6 +13,7 @@ public static class Extensions
 
             return new()
             {
+                Id = translation.Id,
                 Name = translation.Name,
                 Description = translation.Description,
                 Language = translation.Language.ToPlainDto(),
@@ -26,6 +27,7 @@ public static class Extensions
 
             return new()
             {
+                Id = translation.Id,
                 Name = translation.Name,
                 Description = translation.Description,
                 Language = translation.Language.ToPlainDto(),

@@ -13,7 +13,7 @@ public class QuranPlain
         new()
         {
             Language = Constants.Default.Language.English.ToPlainDto(),
-            Text = "Al Quran Kareem",
+            Text = "Qur'an",
         }
     ];
 }

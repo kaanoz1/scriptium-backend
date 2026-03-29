@@ -27,7 +27,7 @@ public class RootController(
 
         try
         {
-            if (await cacheService.Get<UpToVerse>(cacheKey) is { } serializedCache)
+            if (await cacheService.Get<UpToQuran>(cacheKey) is { } serializedCache)
             {
                 logger.LogInformation("Cache has been found. Cache.Id: {Id}. Sending.", serializedCache.Raw.Id);
                 return Ok(new { data = serializedCache.Data });
@@ -75,8 +75,8 @@ public class RootController(
             return StatusCode(500, "Internal server error. Please try again later.");
         }
     }
-    
-     [HttpGet("root/{latin}/plain")]
+
+    [HttpGet("root/{latin}/plain")]
     public async Task<IActionResult> GetPlain([FromRoute, StringLength(5, MinimumLength = 3), Required] string latin)
     {
         //TODO: Add validation.
@@ -140,6 +140,44 @@ public class RootController(
 
 
             var data = roots.Select(r => r.ToPlainDto()).ToList();
+
+            var savedCacheRow = await cacheService.Save(cacheKey, data);
+
+            logger.LogInformation("Cache saved. Model name: Verse. Cache.Id: {CacheId}", savedCacheRow.Id);
+
+            return Ok(new { data });
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex,
+                "An unexpected error occurred while processing root list.");
+
+            return StatusCode(500, "Internal server error. Please try again later.");
+        }
+    }
+
+    [HttpGet("root/list/advanced")]
+    public async Task<IActionResult> ListAdvanced()
+    {
+        var cacheKey = Request.GetEncodedPathAndQuery();
+
+        try
+        {
+            if (await cacheService.Get<List<WithWordCount>>(cacheKey) is { } serializedCache)
+            {
+                logger.LogInformation("Cache has been found. Cache.Id: {Id}. Sending.", serializedCache.Raw.Id);
+                return Ok(new { data = serializedCache.Data });
+            }
+
+
+            var roots = await db.QRoots.Include(r => r.Words).OrderBy(r => r.Words.Count)
+                .AsNoTracking()
+                .IgnoreAutoIncludes()
+                .AsSplitQuery()
+                .ToListAsync();
+
+
+            var data = roots.Select(r => r.ToWithWordCount()).ToList();
 
             var savedCacheRow = await cacheService.Save(cacheKey, data);
 

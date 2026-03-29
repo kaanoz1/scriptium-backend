@@ -30,15 +30,21 @@ public class TranslationController(
             }
 
 
-            var translations = await db.QTranslations
+            var qTranslations = await db.QTranslations
                 .Include(t => t.Language)
                 .Include(t => t.Authors).ThenInclude(a => a.Language)
                 .Include(t => t.Authors).ThenInclude(a => a.NameTranslations).ThenInclude(nt => nt.Language)
                 .Select(t => t.ToComplete()).ToListAsync();
 
-            await cacheService.Save(cacheKey, translations);
+            await cacheService.Save(cacheKey, qTranslations);
 
-            return Ok(new { data = translations });
+            return Ok(new
+            {
+                data = new
+                {
+                    Quran = qTranslations
+                }
+            });
         }
         catch (Exception ex)
         {

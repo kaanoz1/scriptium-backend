@@ -26,7 +26,7 @@ public class VerseController(
 
         try
         {
-            if (await cacheService.Get<Down>(cacheKey) is { } serializedCache)
+            if (await cacheService.Get<Both>(cacheKey) is { } serializedCache)
             {
                 logger.LogInformation("Cache has been found. Cache.Id: {Id}. Sending.", serializedCache.Raw.Id);
                 return Ok(new { data = serializedCache.Data });

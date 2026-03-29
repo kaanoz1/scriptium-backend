@@ -3,6 +3,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using Pgvector;
 using ScriptiumBackend.Services.ServiceInterfaces;
+using ScriptiumBackend.Utils.Environment;
 
 namespace ScriptiumBackend.Services.ConcreteServices.Embedding;
 
@@ -12,12 +13,13 @@ public class OllamaEmbeddingService : IEmbeddingService
     private readonly ILogger<OllamaEmbeddingService> _logger;
     private const string ModelName = "nomic-embed-text";
 
-    public OllamaEmbeddingService(HttpClient httpClient, ILogger<OllamaEmbeddingService> logger, IConfiguration configuration)
+    public OllamaEmbeddingService(HttpClient httpClient, ILogger<OllamaEmbeddingService> logger
+    )
     {
         _httpClient = httpClient;
         _logger = logger;
-        
-        var baseUrl = configuration["OLLAMA_BASE_URL"] ?? "http://localhost:11434";
+
+        var baseUrl = ScriptiumEnvironmentGuard.GetOllamaBaseUrl();
         _httpClient.BaseAddress = new Uri(baseUrl);
     }
 
@@ -43,14 +45,14 @@ public class OllamaEmbeddingService : IEmbeddingService
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Ollama embedding generation failed for text: {TextSnippet}...", text[..Math.Min(text.Length, 20)]);
+            _logger.LogError(ex, "Ollama embedding generation failed for text: {TextSnippet}...",
+                text[..Math.Min(text.Length, 20)]);
             return null;
         }
     }
 
     private class OllamaResponse
     {
-        [JsonPropertyName("embedding")]
-        public float[]? Embedding { get; set; }
+        [JsonPropertyName("embedding")] public float[]? Embedding { get; init; }
     }
 }
