@@ -40,10 +40,7 @@ public class TranslationController(
 
             return Ok(new
             {
-                data = new
-                {
-                    Quran = qTranslations
-                }
+                data = qTranslations
             });
         }
         catch (Exception ex)
