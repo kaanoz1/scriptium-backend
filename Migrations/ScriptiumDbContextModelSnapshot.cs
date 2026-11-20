@@ -289,6 +289,591 @@ namespace ScriptiumBackend.Migrations
                     b.UseTptMappingStrategy();
                 });
 
+            modelBuilder.Entity("ScriptiumBackend.Model.Derived.Islam.Hadith.ArabicOnly.Book", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    b.Property<int?>("AuthorDeathYear")
+                        .HasColumnType("integer")
+                        .HasColumnName("author_death_year");
+
+                    b.Property<string>("AuthorName")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("author_name");
+
+                    b.Property<int>("AuthorNo")
+                        .HasColumnType("integer")
+                        .HasColumnName("author_no");
+
+                    b.Property<string>("City")
+                        .HasColumnType("text")
+                        .HasColumnName("city");
+
+                    b.Property<string>("Edition")
+                        .HasColumnType("text")
+                        .HasColumnName("edition");
+
+                    b.Property<int>("HadithCount")
+                        .HasColumnType("integer")
+                        .HasColumnName("hadith_count");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("name");
+
+                    b.Property<string>("Publisher")
+                        .HasColumnType("text")
+                        .HasColumnName("publisher");
+
+                    b.Property<short>("i_h_ao_book_category_id")
+                        .HasColumnType("smallint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("i_h_ao_book_category_id");
+
+                    b.ToTable("i_h_ao_book");
+                });
+
+            modelBuilder.Entity("ScriptiumBackend.Model.Derived.Islam.Hadith.ArabicOnly.BookCategory", b =>
+                {
+                    b.Property<short>("Id")
+                        .HasColumnType("smallint")
+                        .HasColumnName("id");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("name");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("i_h_ao_book_category");
+                });
+
+            modelBuilder.Entity("ScriptiumBackend.Model.Derived.Islam.Hadith.ArabicOnly.Hadith", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    b.Property<short>("Grade")
+                        .HasColumnType("smallint")
+                        .HasColumnName("grade");
+
+                    b.Property<int?>("MatnEnd")
+                        .HasColumnType("integer")
+                        .HasColumnName("matn_end");
+
+                    b.Property<int?>("MatnStart")
+                        .HasColumnType("integer")
+                        .HasColumnName("matn_start");
+
+                    b.Property<int>("Number")
+                        .HasColumnType("integer")
+                        .HasColumnName("number");
+
+                    b.Property<int>("Page")
+                        .HasColumnType("integer")
+                        .HasColumnName("page");
+
+                    b.Property<string>("SearchText")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("search_text");
+
+                    b.Property<int?>("Takhrij")
+                        .HasColumnType("integer")
+                        .HasColumnName("takhrij");
+
+                    b.Property<string>("TarafText")
+                        .HasColumnType("text")
+                        .HasColumnName("taraf_text");
+
+                    b.Property<string>("Text")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("text");
+
+                    b.Property<short>("Type")
+                        .HasColumnType("smallint")
+                        .HasColumnName("type");
+
+                    b.Property<int>("i_h_ao_book_id")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("i_h_ao_meaning_group_id")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SearchText")
+                        .HasDatabaseName("IX_i_h_ao_hadith_search_text_fts")
+                        .HasAnnotation("Npgsql:TsVectorConfig", "simple");
+
+                    NpgsqlIndexBuilderExtensions.HasMethod(b.HasIndex("SearchText"), "GIN");
+
+                    b.HasIndex("i_h_ao_book_id", "Number")
+                        .IsUnique();
+
+                    b.HasIndex("i_h_ao_meaning_group_id", "Takhrij");
+
+                    b.ToTable("i_h_ao_hadith");
+                });
+
+            modelBuilder.Entity("ScriptiumBackend.Model.Derived.Islam.Hadith.ArabicOnly.HadithNarratorMention", b =>
+                {
+                    b.Property<int>("i_h_ao_hadith_id")
+                        .HasColumnType("integer");
+
+                    b.Property<short>("Sequence")
+                        .HasColumnType("smallint")
+                        .HasColumnName("sequence");
+
+                    b.Property<int>("End")
+                        .HasColumnType("integer")
+                        .HasColumnName("end");
+
+                    b.Property<int>("Start")
+                        .HasColumnType("integer")
+                        .HasColumnName("start");
+
+                    b.Property<int?>("i_h_ao_narrator_id")
+                        .HasColumnType("integer");
+
+                    b.HasKey("i_h_ao_hadith_id", "Sequence");
+
+                    b.HasIndex("i_h_ao_narrator_id");
+
+                    b.ToTable("i_h_ao_hadith_narrator_mention");
+                });
+
+            modelBuilder.Entity("ScriptiumBackend.Model.Derived.Islam.Hadith.ArabicOnly.HadithQuranQuote", b =>
+                {
+                    b.Property<int>("i_h_ao_hadith_id")
+                        .HasColumnType("integer");
+
+                    b.Property<short>("Sequence")
+                        .HasColumnType("smallint")
+                        .HasColumnName("sequence");
+
+                    b.Property<short?>("Chapter")
+                        .HasColumnType("smallint")
+                        .HasColumnName("chapter");
+
+                    b.Property<int>("End")
+                        .HasColumnType("integer")
+                        .HasColumnName("end");
+
+                    b.Property<int>("Start")
+                        .HasColumnType("integer")
+                        .HasColumnName("start");
+
+                    b.Property<short?>("VerseEnd")
+                        .HasColumnType("smallint")
+                        .HasColumnName("verse_end");
+
+                    b.Property<short?>("VerseStart")
+                        .HasColumnType("smallint")
+                        .HasColumnName("verse_start");
+
+                    b.HasKey("i_h_ao_hadith_id", "Sequence");
+
+                    b.HasIndex("Chapter", "VerseStart", "VerseEnd");
+
+                    b.ToTable("i_h_ao_hadith_quran_quote");
+                });
+
+            modelBuilder.Entity("ScriptiumBackend.Model.Derived.Islam.Hadith.ArabicOnly.MeaningGroup", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    b.Property<int>("CompanionCount")
+                        .HasColumnType("integer")
+                        .HasColumnName("companion_count");
+
+                    b.Property<short>("Grade")
+                        .HasColumnType("smallint")
+                        .HasColumnName("grade");
+
+                    b.Property<int>("HadithCount")
+                        .HasColumnType("integer")
+                        .HasColumnName("hadith_count");
+
+                    b.Property<bool>("IsQudsi")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_qudsi");
+
+                    b.Property<int>("RepeatCount")
+                        .HasColumnType("integer")
+                        .HasColumnName("repeat_count");
+
+                    b.Property<string>("Text")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Grade");
+
+                    b.ToTable("i_h_ao_meaning_group");
+                });
+
+            modelBuilder.Entity("ScriptiumBackend.Model.Derived.Islam.Hadith.ArabicOnly.Narrator", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    b.Property<string>("AgeRaw")
+                        .HasColumnType("text")
+                        .HasColumnName("age_raw");
+
+                    b.Property<int?>("BirthYear")
+                        .HasColumnType("integer")
+                        .HasColumnName("birth_year");
+
+                    b.Property<string>("BirthYearRaw")
+                        .HasColumnType("text")
+                        .HasColumnName("birth_year_raw");
+
+                    b.Property<string>("DeathPlace")
+                        .HasColumnType("text")
+                        .HasColumnName("death_place");
+
+                    b.Property<int?>("DeathYear")
+                        .HasColumnType("integer")
+                        .HasColumnName("death_year");
+
+                    b.Property<string>("DeathYearRaw")
+                        .HasColumnType("text")
+                        .HasColumnName("death_year_raw");
+
+                    b.Property<short>("Generation")
+                        .HasColumnType("smallint")
+                        .HasColumnName("generation");
+
+                    b.Property<int>("HadithCount")
+                        .HasColumnType("integer")
+                        .HasColumnName("hadith_count");
+
+                    b.Property<bool>("HasIkhtilat")
+                        .HasColumnType("boolean")
+                        .HasColumnName("has_ikhtilat");
+
+                    b.Property<bool>("HasTadlis")
+                        .HasColumnType("boolean")
+                        .HasColumnName("has_tadlis");
+
+                    b.Property<bool>("IsBukhari")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_bukhari");
+
+                    b.Property<bool>("IsMuslim")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_muslim");
+
+                    b.Property<bool>("IsStub")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_stub");
+
+                    b.Property<string>("Lineage")
+                        .HasColumnType("text")
+                        .HasColumnName("lineage");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("name");
+
+                    b.Property<string>("Nickname")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("nickname");
+
+                    b.Property<string>("Profession")
+                        .HasColumnType("text")
+                        .HasColumnName("profession");
+
+                    b.Property<string>("Rank")
+                        .HasColumnType("text")
+                        .HasColumnName("rank");
+
+                    b.Property<short>("RankNo")
+                        .HasColumnType("smallint")
+                        .HasColumnName("rank_no");
+
+                    b.Property<string>("Residence")
+                        .HasColumnType("text")
+                        .HasColumnName("residence");
+
+                    b.Property<int>("RiwayaCount")
+                        .HasColumnType("integer")
+                        .HasColumnName("riwaya_count");
+
+                    b.Property<string>("SearchName")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("search_name");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("HadithCount");
+
+                    b.HasIndex("SearchName")
+                        .HasDatabaseName("IX_i_h_ao_narrator_search_name_trgm");
+
+                    NpgsqlIndexBuilderExtensions.HasMethod(b.HasIndex("SearchName"), "gin");
+                    NpgsqlIndexBuilderExtensions.HasOperators(b.HasIndex("SearchName"), new[] { "gin_trgm_ops" });
+
+                    b.ToTable("i_h_ao_narrator");
+                });
+
+            modelBuilder.Entity("ScriptiumBackend.Model.Derived.Islam.Hadith.ArabicOnly.NarratorLink", b =>
+                {
+                    b.Property<int>("teacher_id")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("student_id")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("ChainCount")
+                        .HasColumnType("integer")
+                        .HasColumnName("chain_count");
+
+                    b.HasKey("teacher_id", "student_id");
+
+                    b.HasIndex("student_id");
+
+                    b.ToTable("i_h_ao_narrator_link");
+                });
+
+            modelBuilder.Entity("ScriptiumBackend.Model.Derived.Islam.Hadith.ArabicOnly.Sanad", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    b.Property<short>("Grade")
+                        .HasColumnType("smallint")
+                        .HasColumnName("grade");
+
+                    b.Property<short?>("Length")
+                        .HasColumnType("smallint")
+                        .HasColumnName("length");
+
+                    b.Property<short?>("MaxRank")
+                        .HasColumnType("smallint")
+                        .HasColumnName("max_rank");
+
+                    b.Property<int?>("Takhrij")
+                        .HasColumnType("integer")
+                        .HasColumnName("takhrij");
+
+                    b.Property<string>("Verdict")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("verdict");
+
+                    b.Property<int>("i_h_ao_hadith_id")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("i_h_ao_meaning_group_id")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("i_h_ao_hadith_id");
+
+                    b.HasIndex("i_h_ao_meaning_group_id");
+
+                    b.ToTable("i_h_ao_sanad");
+                });
+
+            modelBuilder.Entity("ScriptiumBackend.Model.Derived.Islam.Hadith.ArabicOnly.SanadNarrator", b =>
+                {
+                    b.Property<int>("i_h_ao_sanad_id")
+                        .HasColumnType("integer");
+
+                    b.Property<short>("Position")
+                        .HasColumnType("smallint")
+                        .HasColumnName("position");
+
+                    b.Property<int>("i_h_ao_hadith_id")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("i_h_ao_narrator_id")
+                        .HasColumnType("integer");
+
+                    b.HasKey("i_h_ao_sanad_id", "Position");
+
+                    b.HasIndex("i_h_ao_hadith_id");
+
+                    b.HasIndex("i_h_ao_narrator_id", "i_h_ao_hadith_id");
+
+                    b.ToTable("i_h_ao_sanad_narrator");
+                });
+
+            modelBuilder.Entity("ScriptiumBackend.Model.Derived.Islam.Hadith.ArabicOnly.Scholar", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    b.Property<int>("DeathYear")
+                        .HasColumnType("integer")
+                        .HasColumnName("death_year");
+
+                    b.Property<short>("Generation")
+                        .HasColumnType("smallint")
+                        .HasColumnName("generation");
+
+                    b.Property<string>("KnownAs")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("known_as");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("name");
+
+                    b.Property<string>("Nickname")
+                        .HasColumnType("text")
+                        .HasColumnName("nickname");
+
+                    b.Property<string>("Notes")
+                        .HasColumnType("text")
+                        .HasColumnName("notes");
+
+                    b.Property<string>("Rank")
+                        .HasColumnType("text")
+                        .HasColumnName("rank");
+
+                    b.Property<short>("RankNo")
+                        .HasColumnType("smallint")
+                        .HasColumnName("rank_no");
+
+                    b.Property<int>("StatementCount")
+                        .HasColumnType("integer")
+                        .HasColumnName("statement_count");
+
+                    b.Property<string>("Title")
+                        .HasColumnType("text")
+                        .HasColumnName("title");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("i_h_ao_scholar");
+                });
+
+            modelBuilder.Entity("ScriptiumBackend.Model.Derived.Islam.Hadith.ArabicOnly.ScholarStatement", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    b.Property<string>("Text")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("text");
+
+                    b.Property<int>("i_h_ao_narrator_id")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("i_h_ao_scholar_id")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("i_h_ao_narrator_id");
+
+                    b.HasIndex("i_h_ao_scholar_id");
+
+                    b.ToTable("i_h_ao_scholar_statement");
+                });
+
+            modelBuilder.Entity("ScriptiumBackend.Model.Derived.Islam.Hadith.ArabicOnly.Taraf", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    b.Property<short>("Grade")
+                        .HasColumnType("smallint")
+                        .HasColumnName("grade");
+
+                    b.Property<bool>("IsQudsi")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_qudsi");
+
+                    b.Property<string>("Text")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("text");
+
+                    b.Property<int?>("i_h_ao_meaning_group_id")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("i_h_ao_meaning_group_id")
+                        .IsUnique();
+
+                    b.ToTable("i_h_ao_taraf");
+                });
+
+            modelBuilder.Entity("ScriptiumBackend.Model.Derived.Islam.Hadith.ArabicOnly.Topic", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    b.Property<int>("Left")
+                        .HasColumnType("integer")
+                        .HasColumnName("lft");
+
+                    b.Property<short>("Level")
+                        .HasColumnType("smallint")
+                        .HasColumnName("level");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("name");
+
+                    b.Property<int>("Right")
+                        .HasColumnType("integer")
+                        .HasColumnName("rgt");
+
+                    b.Property<int>("TreeId")
+                        .HasColumnType("integer")
+                        .HasColumnName("tree_id");
+
+                    b.Property<int?>("i_h_ao_meaning_group_id")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("parent_id")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("i_h_ao_meaning_group_id");
+
+                    b.HasIndex("parent_id");
+
+                    b.HasIndex("TreeId", "Left");
+
+                    b.ToTable("i_h_ao_topic");
+                });
+
             modelBuilder.Entity("ScriptiumBackend.Model.Sealed.Author", b =>
                 {
                     b.Property<long>("Id")
@@ -854,6 +1439,174 @@ namespace ScriptiumBackend.Migrations
                     b.Navigation("Language");
                 });
 
+            modelBuilder.Entity("ScriptiumBackend.Model.Derived.Islam.Hadith.ArabicOnly.Book", b =>
+                {
+                    b.HasOne("ScriptiumBackend.Model.Derived.Islam.Hadith.ArabicOnly.BookCategory", "Category")
+                        .WithMany("Books")
+                        .HasForeignKey("i_h_ao_book_category_id")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Category");
+                });
+
+            modelBuilder.Entity("ScriptiumBackend.Model.Derived.Islam.Hadith.ArabicOnly.Hadith", b =>
+                {
+                    b.HasOne("ScriptiumBackend.Model.Derived.Islam.Hadith.ArabicOnly.Book", "Book")
+                        .WithMany("Hadiths")
+                        .HasForeignKey("i_h_ao_book_id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ScriptiumBackend.Model.Derived.Islam.Hadith.ArabicOnly.MeaningGroup", "MeaningGroup")
+                        .WithMany("Hadiths")
+                        .HasForeignKey("i_h_ao_meaning_group_id")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.Navigation("Book");
+
+                    b.Navigation("MeaningGroup");
+                });
+
+            modelBuilder.Entity("ScriptiumBackend.Model.Derived.Islam.Hadith.ArabicOnly.HadithNarratorMention", b =>
+                {
+                    b.HasOne("ScriptiumBackend.Model.Derived.Islam.Hadith.ArabicOnly.Hadith", "Hadith")
+                        .WithMany("NarratorMentions")
+                        .HasForeignKey("i_h_ao_hadith_id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ScriptiumBackend.Model.Derived.Islam.Hadith.ArabicOnly.Narrator", "Narrator")
+                        .WithMany()
+                        .HasForeignKey("i_h_ao_narrator_id")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.Navigation("Hadith");
+
+                    b.Navigation("Narrator");
+                });
+
+            modelBuilder.Entity("ScriptiumBackend.Model.Derived.Islam.Hadith.ArabicOnly.HadithQuranQuote", b =>
+                {
+                    b.HasOne("ScriptiumBackend.Model.Derived.Islam.Hadith.ArabicOnly.Hadith", "Hadith")
+                        .WithMany("QuranQuotes")
+                        .HasForeignKey("i_h_ao_hadith_id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Hadith");
+                });
+
+            modelBuilder.Entity("ScriptiumBackend.Model.Derived.Islam.Hadith.ArabicOnly.NarratorLink", b =>
+                {
+                    b.HasOne("ScriptiumBackend.Model.Derived.Islam.Hadith.ArabicOnly.Narrator", "Student")
+                        .WithMany()
+                        .HasForeignKey("student_id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ScriptiumBackend.Model.Derived.Islam.Hadith.ArabicOnly.Narrator", "Teacher")
+                        .WithMany()
+                        .HasForeignKey("teacher_id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Student");
+
+                    b.Navigation("Teacher");
+                });
+
+            modelBuilder.Entity("ScriptiumBackend.Model.Derived.Islam.Hadith.ArabicOnly.Sanad", b =>
+                {
+                    b.HasOne("ScriptiumBackend.Model.Derived.Islam.Hadith.ArabicOnly.Hadith", "Hadith")
+                        .WithMany("Sanads")
+                        .HasForeignKey("i_h_ao_hadith_id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ScriptiumBackend.Model.Derived.Islam.Hadith.ArabicOnly.MeaningGroup", "MeaningGroup")
+                        .WithMany("Sanads")
+                        .HasForeignKey("i_h_ao_meaning_group_id")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.Navigation("Hadith");
+
+                    b.Navigation("MeaningGroup");
+                });
+
+            modelBuilder.Entity("ScriptiumBackend.Model.Derived.Islam.Hadith.ArabicOnly.SanadNarrator", b =>
+                {
+                    b.HasOne("ScriptiumBackend.Model.Derived.Islam.Hadith.ArabicOnly.Hadith", "Hadith")
+                        .WithMany()
+                        .HasForeignKey("i_h_ao_hadith_id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ScriptiumBackend.Model.Derived.Islam.Hadith.ArabicOnly.Narrator", "Narrator")
+                        .WithMany()
+                        .HasForeignKey("i_h_ao_narrator_id")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("ScriptiumBackend.Model.Derived.Islam.Hadith.ArabicOnly.Sanad", "Sanad")
+                        .WithMany("Narrators")
+                        .HasForeignKey("i_h_ao_sanad_id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Hadith");
+
+                    b.Navigation("Narrator");
+
+                    b.Navigation("Sanad");
+                });
+
+            modelBuilder.Entity("ScriptiumBackend.Model.Derived.Islam.Hadith.ArabicOnly.ScholarStatement", b =>
+                {
+                    b.HasOne("ScriptiumBackend.Model.Derived.Islam.Hadith.ArabicOnly.Narrator", "Narrator")
+                        .WithMany("Statements")
+                        .HasForeignKey("i_h_ao_narrator_id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ScriptiumBackend.Model.Derived.Islam.Hadith.ArabicOnly.Scholar", "Scholar")
+                        .WithMany("Statements")
+                        .HasForeignKey("i_h_ao_scholar_id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Narrator");
+
+                    b.Navigation("Scholar");
+                });
+
+            modelBuilder.Entity("ScriptiumBackend.Model.Derived.Islam.Hadith.ArabicOnly.Taraf", b =>
+                {
+                    b.HasOne("ScriptiumBackend.Model.Derived.Islam.Hadith.ArabicOnly.MeaningGroup", "MeaningGroup")
+                        .WithOne("Taraf")
+                        .HasForeignKey("ScriptiumBackend.Model.Derived.Islam.Hadith.ArabicOnly.Taraf", "i_h_ao_meaning_group_id")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.Navigation("MeaningGroup");
+                });
+
+            modelBuilder.Entity("ScriptiumBackend.Model.Derived.Islam.Hadith.ArabicOnly.Topic", b =>
+                {
+                    b.HasOne("ScriptiumBackend.Model.Derived.Islam.Hadith.ArabicOnly.MeaningGroup", "MeaningGroup")
+                        .WithMany("Topics")
+                        .HasForeignKey("i_h_ao_meaning_group_id")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.HasOne("ScriptiumBackend.Model.Derived.Islam.Hadith.ArabicOnly.Topic", "Parent")
+                        .WithMany("Children")
+                        .HasForeignKey("parent_id")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("MeaningGroup");
+
+                    b.Navigation("Parent");
+                });
+
             modelBuilder.Entity("ScriptiumBackend.Model.Sealed.Author", b =>
                 {
                     b.HasOne("ScriptiumBackend.Model.Sealed.Language", "Language")
@@ -1055,6 +1808,56 @@ namespace ScriptiumBackend.Migrations
                     b.Navigation("Translation");
 
                     b.Navigation("Verse");
+                });
+
+            modelBuilder.Entity("ScriptiumBackend.Model.Derived.Islam.Hadith.ArabicOnly.Book", b =>
+                {
+                    b.Navigation("Hadiths");
+                });
+
+            modelBuilder.Entity("ScriptiumBackend.Model.Derived.Islam.Hadith.ArabicOnly.BookCategory", b =>
+                {
+                    b.Navigation("Books");
+                });
+
+            modelBuilder.Entity("ScriptiumBackend.Model.Derived.Islam.Hadith.ArabicOnly.Hadith", b =>
+                {
+                    b.Navigation("NarratorMentions");
+
+                    b.Navigation("QuranQuotes");
+
+                    b.Navigation("Sanads");
+                });
+
+            modelBuilder.Entity("ScriptiumBackend.Model.Derived.Islam.Hadith.ArabicOnly.MeaningGroup", b =>
+                {
+                    b.Navigation("Hadiths");
+
+                    b.Navigation("Sanads");
+
+                    b.Navigation("Taraf");
+
+                    b.Navigation("Topics");
+                });
+
+            modelBuilder.Entity("ScriptiumBackend.Model.Derived.Islam.Hadith.ArabicOnly.Narrator", b =>
+                {
+                    b.Navigation("Statements");
+                });
+
+            modelBuilder.Entity("ScriptiumBackend.Model.Derived.Islam.Hadith.ArabicOnly.Sanad", b =>
+                {
+                    b.Navigation("Narrators");
+                });
+
+            modelBuilder.Entity("ScriptiumBackend.Model.Derived.Islam.Hadith.ArabicOnly.Scholar", b =>
+                {
+                    b.Navigation("Statements");
+                });
+
+            modelBuilder.Entity("ScriptiumBackend.Model.Derived.Islam.Hadith.ArabicOnly.Topic", b =>
+                {
+                    b.Navigation("Children");
                 });
 
             modelBuilder.Entity("ScriptiumBackend.Model.Util.Cache", b =>
