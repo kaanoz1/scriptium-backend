@@ -131,11 +131,11 @@ public class NarratorController(
 
     [HttpGet("narrator/{id:int}/teachers")]
     public Task<IActionResult> Teachers([FromRoute] int id, [FromQuery] int page = 1, [FromQuery] int pageSize = 50) =>
-        Uncached(() => db.Teachers(id).ToPagedAsync(page, pageSize));
+        Uncached<Paged<NarratorLinkItem>>(async () => await db.Teachers(id).ToPagedAsync(page, pageSize));
 
     [HttpGet("narrator/{id:int}/students")]
     public Task<IActionResult> Students([FromRoute] int id, [FromQuery] int page = 1, [FromQuery] int pageSize = 50) =>
-        Uncached(() => db.Students(id).ToPagedAsync(page, pageSize));
+        Uncached<Paged<NarratorLinkItem>>(async () => await db.Students(id).ToPagedAsync(page, pageSize));
 
     private IQueryable<HadithModel> HadithsOf(int narratorId)
     {
